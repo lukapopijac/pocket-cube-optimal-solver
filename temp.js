@@ -1,75 +1,102 @@
-var add1 = function(x) {x&=3; return x==2 ? 0 : x+1};  // add 1 mod 3 on last 2 bits
-var add2 = function(x) {x&=3; return x==0 ? 2 : x-1};  // add 2 mod 3 on last 2 bits
+var drr = new Int32Array(1<<18);
+for(var i=0; i<drr.length; i++) {
+	drr[i] = i;
+}
 
+var frr = new Int32Array(1<<21);
+for(var i=0; i<frr.length; i++) {
+	frr[i] = i;
+}
 
-var rot1 = [1, 2, 0, 0];
-var rot2 = [2, 0, 1, 0];
+function tostr(x) {
+	console.log(((1<<24) + x).toString(2).slice(1));
+}
 
-//var ad1 = x => rot1[x&3];
-//var ad2 = x => rot2[x&3];
+var p0 = parseInt('111000000000000000000000', 2);
+var p1 = parseInt('000111000000000000000000', 2);
+var p2 = parseInt('000000111000000000000000', 2);
+var p3 = parseInt('000000000111000000000000', 2);
+var pu = parseInt('000000000000111111111111', 2);
+var pur = parseInt('000000000000111111111111', 2);
+var pul = parseInt('111111111111000000000000', 2);
 
-var ad1 = function(x) {return rot1[x&3]};
-var ad2 = function(x) {return rot2[x&3]};
+var p = parseInt('101000010110011100111001', 2);
+var q = p;
 
+var t0 = performance.now();
+var t1 = performance.now();
+var time = t1-t0;
+console.log(t1-t0, time);
 
-var agd1 = function() {
-	var r = [1,2,0,0];
-	return x => r[x&3];
-}();
-
-var agd2 = () => {
-	var r = [2,0,1,0];
-	return x => r[x&3];
-}();
-
-
-var ard1 = function(x) {
-	x&=3;
-	return x==0 ? 1 : x==1 ? 2 : 0;
-};
-var ard2 = function(x) {
-	x&=3;
-	return x==0 ? 2 : x==1 ? 0 : 1;
-};
-
-
-
+time = 0;
 console.time('a');
-for(var k=0; k<500; k++) {
-	for(var i=0; i<1000000; i++) {
-		var a1 = add1(i);
-		var a2 = add2(i);
+for(var j=0; j<1000; j++) {
+	for(var i=0; i<10000; ++i) {
+		t0 = performance.now();
+		q ^= p&pu | p>>3&p1 | p>>6&p3 | p<<3&p2 | p<<6&p0;
+		t1 = performance.now();
+		time += t1-t0;
 	}
 }
 console.timeEnd('a');
+console.log(time);
+tostr(q);
+tostr(p&pu | p>>3&p1 | p>>6&p3 | p<<3&p2 | p<<6&p0);
 
 
+//var b = p&pul;
+//console.log('hash ', (b^b>>3^b>>6) & 262143);
+//console.log((p&pur) | drr[(b^b>>3^b>>6) & 262143])
+
+var b = p&pul;
+drr[(b^b>>3^b>>6) & 262143] = parseInt('010101110000000000000000', 2);
+
+q = p;
+time = 0;
 console.time('b');
-for(var k=0; k<500; k++) {
-	for(var i=0; i<1000000; i++) {
-		var a1 = ad1(i);
-		var a2 = ad2(i);
+for(var j=0; j<1000; j++) {
+	for(var i=0; i<10000; ++i) {
+		t0 = performance.now();
+		var b = p&pul;
+		q ^= (p&pur) | drr[(b^b>>3^b>>6) & 262143];
+		t1 = performance.now();
+		time += t1-t0;
 	}
 }
 console.timeEnd('b');
+console.log(time);
+tostr(q);
+tostr((p&pur) | drr[(b^b>>3^b>>6) & 262143]);
 
 
+frr[(p&pul)>>3] = parseInt('010101110000000000000000', 2);
+q = p;
+time = 0;
 console.time('c');
-for(var k=0; k<500; k++) {
-	for(var i=0; i<1000000; i++) {
-		var a1 = agd1(i);
-		var a2 = agd2(i);
+for(var j=0; j<1000; j++) {
+	for(var i=0; i<10000; ++i) {
+		t0 = performance.now();
+		//q ^= (p&pur) | frr[(p&pul)>>3];
+		t1 = performance.now();
+		time += t1-t0;
 	}
 }
 console.timeEnd('c');
+console.log(time);
+tostr(q);
+tostr((p&pur) | frr[(p&pul)>>3]);
 
+// -----------------------------------------------------
+console.log('+++++++++++++++++++');
 
+q = p;
+var r;
+var t0 = performance.now();
+r = speed1();
+var t1 = performance.now();
+console.log(t1-t0);
+console.log(r);
 
-console.time('d');
-for(var k=0; k<500; k++) {
-	for(var i=0; i<1000000; i++) {
-		var a1 = ard1(i);
-		var a2 = ard2(i);
-	}
+function speed1() {
+	return p&pu | p>>3&p1 | p>>6&p3 | p<<3&p2 | p<<6&p0;
 }
-console.timeEnd('d');

@@ -9,10 +9,10 @@
 */
 
 
-var state = {
-	p: parseInt('000001010011100101110111', 2),  // solved permutation (3 bits per cubie)
-	o: parseInt('0000000000000000', 2)           // solved orientation (2 bits per cubie)
-};
+//var state = {
+//	p: parseInt('000001010011100101110111', 2),  // solved permutation (3 bits per cubie)
+//	o: parseInt('0000000000000000', 2)           // solved orientation (2 bits per cubie)
+//};
 
 var move = function() {
 	var p0 = parseInt('111000000000000000000000', 2);
@@ -49,6 +49,16 @@ var move = function() {
 	
 	var add1 = function(x) {x&=3; return x==2 ? 0 : x+1};  // add 1 mod 3 on last 2 bits
 	var add2 = function(x) {x&=3; return x==0 ? 2 : x-1};  // add 2 mod 3 on last 2 bits
+	
+	//var add1 = function() {
+	//	var r = [1,2,0,0];
+	//	return x => r[x&3];
+	//}();
+    //
+	//var add2 = function() {
+	//	var r = [2,0,1,0];
+	//	return x => r[x&3];
+	//}();
 	
 	return {
 		U1: function(s) { // 0 > 1       1 > 3       3 > 2       2 > 0
