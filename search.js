@@ -1,4 +1,12 @@
-function search(node, depth, maxdepth) {
+function searchID(startNode) { // iterative deepening search
+	for(var i=0; i<=11; i++) { 
+		var solution = searchDFS(startNode, 0, i);
+		if(solution) return solution;
+	}
+	return null;
+}
+
+function searchDFS(node, depth, maxdepth) {
 	if(isGoal(node)) return node;
 	if(depth == maxdepth) return null;
 	var successors = expand(node);
@@ -6,56 +14,75 @@ function search(node, depth, maxdepth) {
 		var succ = successors[i];
 		var f = depth + 1 + heuristics(succ);
 		if(f <= maxdepth) {
-			var res = search(succ, depth+1, maxdepth);
-			if(res) return res;
+			var res = searchDFS(succ, depth+1, maxdepth);
+			//if(res) return res;
 		}
 	}
 	return null;
 }
 
 
-function isGoal(node) {
-	return node.isSolved();
+function isGoal(state) {
+	return state.isSolved();
 }
 
 
-function expand(node) {
+function expand(state) {
 	expanded++;
 	var moves = [];
-	switch(node.lastMove[0]) {
+	var lastSide = state.lastMove && state.lastMove[0];
+	switch(lastSide) {
 		case 'U': moves = ['F1', 'F2', 'F3', 'R1', 'R2', 'R3']; break;
 		case 'F': moves = ['U1', 'U2', 'U3', 'R1', 'R2', 'R3']; break;
 		case 'R': moves = ['U1', 'U2', 'U3', 'F1', 'F2', 'F3']; break;
 		default: moves = ['U1', 'U2', 'U3', 'F1', 'F2', 'F3', 'R1', 'R2', 'R3'];
 	}
-	return moves.map(x => node.generateNextState(x));
+	return moves.map(x => state.move(x));
 }
 
-function heuristics(node) {
+function heuristics(state) {
 	return 0;
 }
 
-
+function movesToString(state) {
+	var moves = [];
+	while(state.prevState) {
+		moves.push(state.lastMove);
+		state = state.prevState;
+	}
+	return moves.reverse();
+}
 
 function main() {
 	var startState = new State()
-		.generateNextState('U1')
-		.generateNextState('F2')
-		//.generateNextState('R1')
-		//.generateNextState('F3')
-		//.generateNextState('U1');
+		.move('U1')
+		.move('F2')
+		.move('R1')
+		.move('F3')
+		.move('R2')
+		.move('U1')
+		.move('R3')
+		.move('U2')
+		.move('R1')
+		.move('F2')
+	
+	console.log('start state', startState);
+	
+	startState = startState.normalize()
+		.move('x2')
+		.move('x2')
+	
 	startState.prevState = null;
-	startState.lastMove = '..';
-	for(var i=0; i<7; i++) { 
-		var solution = search(startState, 0, i);
-		if(solution) {
-			console.log(i);
-			console.log(solution);
-			break;
-		}
-	}
-	console.log('end');
-	console.log(expanded);
+	startState.lastMove = null;
+	
+	console.log('normalized state', startState);
+	
+	console.time('search time');
+	var solution = searchID(startState);
+	console.timeEnd('search time');
+	console.log('expanded', expanded);
+	console.log('solution', solution);
+	if(solution) console.log('steps', movesToString(solution));
 }
 
 
