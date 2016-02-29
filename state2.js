@@ -72,3 +72,5 @@ State.prototype.normalize = function() {
 		}
 	}
 };
+
+module.exports = State;

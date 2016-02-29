@@ -1,5 +1,7 @@
+var State = require('./state2');
+
 function searchID(startNode) { // iterative deepening search
-	for(var i=0; i<=11; i++) { 
+	for(var i=0; i<=8; i++) { 
 		var solution = searchDFS(startNode, 0, i);
 		if(solution) return solution;
 	}
