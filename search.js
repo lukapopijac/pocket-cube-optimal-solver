@@ -1,7 +1,8 @@
 var State = require('./state2');
+var PriorityQueue = require('./priorityqueue');
 
 function searchID(startNode) { // iterative deepening search
-	for(var i=0; i<=8; i++) { 
+	for(var i=8; i<=8; i++) { 
 		var solution = searchDFS(startNode, 0, i);
 		if(solution) return solution;
 	}
@@ -22,6 +23,24 @@ function searchDFS(node, depth, maxdepth) {
 	}
 	return null;
 }
+
+
+//var pq = new PriorityQueue(maxdepth);
+function searchAstar(node, depth, maxdepth) {
+	if(isGoal(node)) return node;
+	if(depth == maxdepth) return null;
+	var successors = expand(node);
+	for(var i=0; i<successors.length; ++i) {
+		var succ = successors[i];
+		var f = depth + 1 + heuristics(succ);
+		if(f <= maxdepth) {
+			var res = searchDFS(succ, depth+1, maxdepth);
+			//if(res) return res;
+		}
+	}
+	return null;
+}
+
 
 
 function isGoal(state) {

@@ -21,5 +21,8 @@
     "express": "^4.13.4",
     "gulp": "3.9.1",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "bson": "^0.4.21"
   }
 }

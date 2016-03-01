@@ -20,9 +20,9 @@
 
 class PriorityQueue {
 	constructor(maxPriority) {
-		this.maxPriority = maxPriority || 0;
 		this.q = [];
-		for(let i=0; i<=maxPriority; i++) this.q.push([]);
+		this.q.length = maxPriority+1;
+		for(let i=0; i<this.q.length; i++) this.q[i] = [];
 	}
 	
 	push(val, priority) {
@@ -30,10 +30,17 @@ class PriorityQueue {
 	}
 	
 	pop() {
-		for(let i=0; i<this.maxPriority; i++) {
+		for(let i=0; i<this.q.length; i++) {
 			if(this.q[i].length) return this.q[i].pop();
 		}
 		return null;
+	}
+	
+	isEmpty() {
+		for(let i=0; i<this.q.length; i++) {
+			if(this.q[i].length) return false;
+		}
+		return true;
 	}
 }
 

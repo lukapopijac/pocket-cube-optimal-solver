@@ -73,4 +73,11 @@ State.prototype.normalize = function() {
 	}
 };
 
+State.prototype.key = function() {
+	var b = '';
+	for(var j=0; j<7; j++) b += this.p[j];
+	for(var j=0; j<6; j++) b += this.o[j];
+	return b;
+};
+
 module.exports = State;
