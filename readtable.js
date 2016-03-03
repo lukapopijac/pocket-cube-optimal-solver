@@ -1,8 +1,24 @@
-var bson = require('bson');
-var BSON = new bson.BSONPure.BSON();
-
 var fs = require('fs');
-var table = BSON.deserialize(fs.readFileSync('table.bin'));
+var zlib = require('zlib');
 
-//console.log(table);
-console.log(Object.keys(table).length);
+function readTable(filename) {
+	if(!filename) filename = 'table11.gz';
+	return new Promise(function(resolve, reject) {
+		zlib.inflate(fs.readFileSync(filename), (err, buffer) => {
+			if(err) return reject(err);
+			
+			var table = JSON.parse(buffer.toString());
+		
+			//var keys = Object.keys(table);
+			//for(var i=0; i<10; i++) {
+			//	console.log(keys[i], table[keys[i]]);
+			//}	
+			//console.log(keys.length);
+			
+			return resolve(table);
+		});
+	});
+};
+
+
+module.exports = readTable;

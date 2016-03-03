@@ -29,21 +29,20 @@ function expand(state) {
 
 function main() {
 	console.time('time');
-	generateStates(new State(), 0, 7);
+	generateStates(new State(), 0, 11);
 	console.timeEnd('time');
-	//console.log(table);
 	console.log(Object.keys(table).length);
 }
 
 main();
 
-var bson = require('bson');
-var BSON = new bson.BSONPure.BSON();
-
-var ser = BSON.serialize(table, false, true, false);
-
 var fs = require('fs');
-fs.writeFile('table.bin', ser, (err) => { 
-	if(err) throw err;
-	console.log('saved'); 
+
+var zlib = require('zlib');
+
+zlib.deflate(JSON.stringify(table), (err, buffer) => {
+	fs.writeFile('table11.gz', buffer, (err) => { 
+		if(err) throw err;
+		console.log('saved'); 
+	});	
 });
