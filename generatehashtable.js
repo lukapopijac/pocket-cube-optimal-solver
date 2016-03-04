@@ -1,5 +1,15 @@
 var State = require('./state2');
 var readTable = require('./readtable');
+var fs = require('fs');
+var zlib = require('zlib');
+
+//var buf = zlib.deflateSync(JSON.stringify([2,6,4,2,5,7,8,3]));
+//console.log(buf);
+//fs.writeFileSync('hashtable2yy.gz', buf);
+//
+//var buf2 = fs.readFileSync('hashtable2yy.gz');
+//var st = zlib.inflateSync(buf2);
+//console.log(JSON.parse(st)[3]);
 
 readTable('table11.gz').then(function(table) {
 	var keys = Object.keys(table);
@@ -15,11 +25,18 @@ readTable('table11.gz').then(function(table) {
 		var p = s.slice(0,7);
 		var o = s.slice(7);
 		
-		addToHashTable(hashTable1, hash1(p, o), val);
-		//addToHashTable(hashTable2, hash2(p, o), val);
-		//addToHashTable(hashTable3, hash3(p, o), val);
+		//addToHashTable(hashTable1, hash1(p, o), val);
+		addToHashTable(hashTable2, hash2(p, o), val);
+		addToHashTable(hashTable3, hash3(p, o), val);
 	}
 	console.timeEnd();
+	
+	
+	var buf = zlib.deflateSync(JSON.stringify(hashTable2));
+	fs.writeFileSync('hashtable2.gz', buf);
+	
+	buf = zlib.deflateSync(JSON.stringify(hashTable3));
+	fs.writeFileSync('hashtable3.gz', buf);
 	
 	average(hashTable1);
 	average(hashTable2);
