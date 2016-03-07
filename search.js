@@ -26,6 +26,34 @@ function searchDFS(node, depth, maxdepth) {
 
 
 
+function searchIDAstar(startNode) { // iterative deepening A* search
+	var maxdepth = heuristics(startNode);
+	while(maxdepth <= 11) {
+		var res = searchIDAstar_inner(startNode, 0, maxdepth);
+		if(!Number.isInteger(res)) return res;  // success!
+		maxdepth = res;
+	}
+	return null;
+}
+
+function searchIDAstar_inner(node, depth, maxdepth) {
+	var f = depth + heuristics(node);
+	if(f > maxdepth) return f;
+	if(isGoal(node)) return node;
+	var min = 10000;
+	var successors = expand(node);
+	for(var i=0; i<successors.length; ++i) {
+		var succ = successors[i];
+		var res = searchIDAstar_inner(succ, depth+1, maxdepth);
+		if(!Number.isInteger(res)) return res;  // success!
+		if(res<min) min = res;
+	}
+	return min;
+}
+
+
+
+
 function searchBFS(startNode, startDepth, maxdepth) {	
 	q.push([startNode, startDepth], 0);
 	while(!q.isEmpty()) {
@@ -63,6 +91,10 @@ function searchAstar(startNode, startDepth, maxdepth) {
 	}
 	return null;
 }
+
+
+
+
 
 
 
@@ -125,24 +157,16 @@ function movesToString(state) {
 }
 
 function main() {
-	//var startState = new State()
-	//	.move('U1')
-	//	.move('F2')
-	//	.move('R1')
-	//	.move('F3')
-	//	.move('R2')
-	//	.move('U1')
-	//	.move('R3')
-	//	.move('U2')
-	//	.move('R1')
-	//	.move('F2')
-	
-	
 	//var startState = new State().moves("R' F' R U2 R' U2 F' R' U R' F' U2 R'");
 	//var startState = new State().moves("R' F' R' U2 R U' F2 U' R2 U2 F' R2 U");
-	var startState = new State().moves("U R F' R' F' U' R' U R2 F2 R F2 R'");
+	//var startState = new State().moves("U R F' R' F' U' R' U R2 F2 R F2 R'");
 	//var startState = new State().moves("U' F2 R U F' R U F R U2 R2 U' F'");
 	//var startState = new State().moves("U2 R2 F2 U' R' F2 U R U' R' F R F");
+	//var startState = new State().moves("F U' F' U' R2 U' R2 U' F2 U2 F2 R2 F' R U");
+	//var startState = new State().moves("U R' U R2 U2 F R U2 F U' R U2 F' U F");
+	//var startState = new State().moves("U2 R2 U2 R2 F U2 F' U' R F' R2 U' F R2 U'");
+	//var startState = new State().moves("R2 U' R' F' U2 F U2 R' F2 R2 F R' U2 F' R'");
+	var startState = new State().moves("R U' R F' U F R' F2 U' F U F' U' F' U'");
 	
 	
 	//console.log('start state', startState);
@@ -158,25 +182,28 @@ function main() {
 
 	q = new PriorityQueue(11);
 	var solution = searchAstar(startState, 0, 11);
+	var solution = searchIDAstar(startState);
 	var solution = searchID(startState);
 	q = new PriorityQueue(11);
 	var solution = searchBFS(startState, 0, 11);
 
-	var n = 1;
-
-
+	var n = 10000;
+	
+	
+	// ---------- ID DFS
 	expanded = 0;
 	console.time('ID DFS');
 	for(var j=0; j<n; j++) {
 		var solution = searchID(startState);
 	}
 	console.timeEnd('ID DFS');
-	console.log('expanded', expanded);
+	console.log('expanded', expanded/n);
 	if(solution) console.log('steps', movesToString(solution));
 	console.log('---------');
 	
 
 	
+	// ---------- A*
 	expanded = 0;
 	console.time('A*');
 	for(var j=0; j<n; j++) {
@@ -184,23 +211,35 @@ function main() {
 		var solution = searchAstar(startState, 0, 11);
 	}
 	console.timeEnd('A*');
-	console.log('expanded', expanded);
+	console.log('expanded', expanded/n);
+	if(solution) console.log('steps', movesToString(solution));
+	console.log('---------');
+
+
+	// ---------- IDA*
+	expanded = 0;
+	console.time('IDA*');
+	for(var j=0; j<n; j++) {
+		var solution = searchIDAstar(startState);
+	}
+	console.timeEnd('IDA*');
+	console.log('expanded', expanded/n);
 	if(solution) console.log('steps', movesToString(solution));
 	console.log('---------');
 
 	
 	
-	
-	expanded = 0;
-	console.time('BFS');
-	for(var j=0; j<n; j++) {
-		q = new PriorityQueue(11);
-		var solution = searchBFS(startState, 0, 11);
-	}
-	console.timeEnd('BFS');
-	console.log('expanded', expanded);
-	if(solution) console.log('steps', movesToString(solution));
-	console.log('---------');
+	// ---------- BFS
+	//expanded = 0;
+	//console.time('BFS');
+	//for(var j=0; j<n; j++) {
+	//	q = new PriorityQueue(11);
+	//	var solution = searchBFS(startState, 0, 11);
+	//}
+	//console.timeEnd('BFS');
+	//console.log('expanded', expanded);
+	//if(solution) console.log('steps', movesToString(solution));
+	//console.log('---------');
 	
 	
 	
