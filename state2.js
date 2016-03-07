@@ -43,6 +43,21 @@ State.prototype.move = function(move) {
 };
 
 
+State.prototype.moves = function(moves) {
+	if(typeof moves == 'string') {
+		moves = moves.split(' ').map(x => {
+			if(x.length==1) return x+'1';
+			if(x[1]=="'") return x[0]+'3';
+			return x;
+		});
+	}
+	var s = this;
+	for(var i=0; i<moves.length; i++) {
+		s = s.move(moves[i]);
+	}
+	return s;
+};
+
 State.prototype.toString = function() {
 	return '[' + this.p + '] [' + this.o + ']';
 };

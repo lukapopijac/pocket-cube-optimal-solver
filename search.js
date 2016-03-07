@@ -2,7 +2,7 @@ var State = require('./state2');
 var PriorityQueue = require('./priorityqueue');
 
 function searchID(startNode) { // iterative deepening search
-	for(var i=8; i<=11; i++) { 
+	for(var i=0; i<=11; i++) { 
 		var solution = searchDFS(startNode, 0, i);
 		if(solution) return solution;
 	}
@@ -125,17 +125,25 @@ function movesToString(state) {
 }
 
 function main() {
-	var startState = new State()
-		.move('U1')
-		.move('F2')
-		.move('R1')
-		.move('F3')
-		.move('R2')
-		.move('U1')
-		.move('R3')
-		.move('U2')
-		.move('R1')
-		.move('F2')
+	//var startState = new State()
+	//	.move('U1')
+	//	.move('F2')
+	//	.move('R1')
+	//	.move('F3')
+	//	.move('R2')
+	//	.move('U1')
+	//	.move('R3')
+	//	.move('U2')
+	//	.move('R1')
+	//	.move('F2')
+	
+	
+	//var startState = new State().moves("R' F' R U2 R' U2 F' R' U R' F' U2 R'");
+	//var startState = new State().moves("R' F' R' U2 R U' F2 U' R2 U2 F' R2 U");
+	var startState = new State().moves("U R F' R' F' U' R' U R2 F2 R F2 R'");
+	//var startState = new State().moves("U' F2 R U F' R U F R U2 R2 U' F'");
+	//var startState = new State().moves("U2 R2 F2 U' R' F2 U R U' R' F R F");
+	
 	
 	//console.log('start state', startState);
 	
@@ -154,21 +162,24 @@ function main() {
 	q = new PriorityQueue(11);
 	var solution = searchBFS(startState, 0, 11);
 
-	
+	var n = 1;
+
+
 	expanded = 0;
 	console.time('ID DFS');
-	for(var j=0; j<100; j++) {
+	for(var j=0; j<n; j++) {
 		var solution = searchID(startState);
 	}
 	console.timeEnd('ID DFS');
 	console.log('expanded', expanded);
 	if(solution) console.log('steps', movesToString(solution));
 	console.log('---------');
+	
 
 	
 	expanded = 0;
 	console.time('A*');
-	for(var j=0; j<100; j++) {
+	for(var j=0; j<n; j++) {
 		q = new PriorityQueue(11);
 		var solution = searchAstar(startState, 0, 11);
 	}
@@ -178,9 +189,11 @@ function main() {
 	console.log('---------');
 
 	
+	
+	
 	expanded = 0;
 	console.time('BFS');
-	for(var j=0; j<100; j++) {
+	for(var j=0; j<n; j++) {
 		q = new PriorityQueue(11);
 		var solution = searchBFS(startState, 0, 11);
 	}
