@@ -1,4 +1,4 @@
-var State = require('./state2');
+﻿var State = require('./state2');
 var PriorityQueue = require('./priorityqueue');
 
 function searchID(startNode) { // iterative deepening search
@@ -28,19 +28,25 @@ function searchDFS(node, depth, maxdepth) {
 
 function searchIDAstar(startNode) { // iterative deepening A* search
 	var maxdepth = heuristics(startNode);
-	while(maxdepth <= 11) {
+	do {
 		var res = searchIDAstar_inner(startNode, 0, maxdepth);
 		if(!Number.isInteger(res)) return res;  // success!
 		maxdepth = res;
-	}
-	return null;
+	} while(!isNaN(res));
+	return res;
 }
+
+
+//for(maxdepth = heuristics(startNode); res is number; maxdepth = res) {
+//	res = search(maxdepth)
+//}
+
 
 function searchIDAstar_inner(node, depth, maxdepth) {
 	var f = depth + heuristics(node);
 	if(f > maxdepth) return f;
 	if(isGoal(node)) return node;
-	var min = 10000;
+	var min = 100;
 	var successors = expand(node);
 	for(var i=0; i<successors.length; ++i) {
 		var succ = successors[i];
@@ -187,33 +193,33 @@ function main() {
 	q = new PriorityQueue(11);
 	var solution = searchBFS(startState, 0, 11);
 
-	var n = 10000;
+	var n = 1;
 	
 	
 	// ---------- ID DFS
-	expanded = 0;
-	console.time('ID DFS');
-	for(var j=0; j<n; j++) {
-		var solution = searchID(startState);
-	}
-	console.timeEnd('ID DFS');
-	console.log('expanded', expanded/n);
-	if(solution) console.log('steps', movesToString(solution));
-	console.log('---------');
+	//expanded = 0;
+	//console.time('ID DFS');
+	//for(var j=0; j<n; j++) {
+	//	var solution = searchID(startState);
+	//}
+	//console.timeEnd('ID DFS');
+	//console.log('expanded', expanded/n);
+	//if(solution) console.log('steps', movesToString(solution));
+	//console.log('---------');
 	
 
 	
 	// ---------- A*
-	expanded = 0;
-	console.time('A*');
-	for(var j=0; j<n; j++) {
-		q = new PriorityQueue(11);
-		var solution = searchAstar(startState, 0, 11);
-	}
-	console.timeEnd('A*');
-	console.log('expanded', expanded/n);
-	if(solution) console.log('steps', movesToString(solution));
-	console.log('---------');
+	//expanded = 0;
+	//console.time('A*');
+	//for(var j=0; j<n; j++) {
+	//	q = new PriorityQueue(11);
+	//	var solution = searchAstar(startState, 0, 11);
+	//}
+	//console.timeEnd('A*');
+	//console.log('expanded', expanded/n);
+	//if(solution) console.log('steps', movesToString(solution));
+	//console.log('---------');
 
 
 	// ---------- IDA*
