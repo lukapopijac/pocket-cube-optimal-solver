@@ -2,16 +2,14 @@
 
 const State = require('./state2');
 
-let path = [];
-
 
 function searchIDAstar(startNode) { // iterative deepening A* search
 	var maxdepth = heuristics(startNode);
-	do {
+	while(true) {
 		var t = search(startNode, 0, maxdepth);
 		if(!Number.isInteger(t)) return t;  // success!
 		maxdepth = t;
-	} while(!isNaN(t));
+	}
 	return t;
 }
 
@@ -38,10 +36,12 @@ function isGoal(state) {
 }
 
 
+
+
 function expand(state) {
 	expanded++;
-	var moves = [];
-	var lastSide = state.lastMove && state.lastMove[0];
+	let moves;
+	let lastSide = state.lastMove && state.lastMove[0];
 	switch(lastSide) {
 		case 'U': moves = ['F1', 'F2', 'F3', 'R1', 'R2', 'R3']; break;
 		case 'F': moves = ['U1', 'U2', 'U3', 'R1', 'R2', 'R3']; break;
@@ -50,6 +50,7 @@ function expand(state) {
 	}
 	return moves.map(x => state.move(x));
 }
+
 
 
 var fs = require('fs');

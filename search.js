@@ -1,4 +1,4 @@
-﻿var State = require('./state2');
+var State = require('./state2');
 var PriorityQueue = require('./priorityqueue');
 
 function searchID(startNode) { // iterative deepening search
@@ -35,11 +35,6 @@ function searchIDAstar(startNode) { // iterative deepening A* search
 	} while(!isNaN(res));
 	return res;
 }
-
-
-//for(maxdepth = heuristics(startNode); res is number; maxdepth = res) {
-//	res = search(maxdepth)
-//}
 
 
 function searchIDAstar_inner(node, depth, maxdepth) {
@@ -210,16 +205,16 @@ function main() {
 
 	
 	// ---------- A*
-	//expanded = 0;
-	//console.time('A*');
-	//for(var j=0; j<n; j++) {
-	//	q = new PriorityQueue(11);
-	//	var solution = searchAstar(startState, 0, 11);
-	//}
-	//console.timeEnd('A*');
-	//console.log('expanded', expanded/n);
-	//if(solution) console.log('steps', movesToString(solution));
-	//console.log('---------');
+	expanded = 0;
+	console.time('A*');
+	for(var j=0; j<n; j++) {
+		q = new PriorityQueue(11);
+		var solution = searchAstar(startState, 0, 11);
+	}
+	console.timeEnd('A*');
+	console.log('expanded', expanded/n);
+	if(solution) console.log('steps', movesToString(solution));
+	console.log('---------');
 
 
 	// ---------- IDA*
