@@ -87,6 +87,14 @@ class State {
 		}
 	}
 	
+	key() {
+		let b = '';
+		for(let j=0; j<7; j++) b += this.p[j];
+		for(let j=0; j<6; j++) b += this.o[j];
+		return b;
+	}
+
+	
 }
 
 
