@@ -4,27 +4,18 @@ var assert = require('assert');
 describe('fileTable', function() {
 	var fileTable = require('../filetable');
 
-	it('small map object', function() {
-		let map_in = new Map();
-		for(let i=0; i<10; i++) map_in.set(Math.random()*1000000|0, Math.random()*100|0);
-
-		fileTable.toFile('map-small-test.gz', map_in);
-		
-		let map_out = fileTable.fromFile('map-small-test.gz');
-		
-		assert.deepEqual(Array.from(map_in), Array.from(map_out));
-	});
-
-	it.skip('big map object', function() {
-		let map_in = new Map();
-		for(let i=0; i<4e6; i++) map_in.set(Math.floor(Math.random()*1e15), Math.random()*12|0);
-
-		fileTable.toFile('map-big-test.gz', map_in);
-		
-		let map_out = fileTable.fromFile('map-big-test.gz');
-		
-		assert.deepEqual(Array.from(map_in), Array.from(map_out));
-	});
+	function areMapsEqual(map1, map2) {
+		if(map1.size != map2.size) return false;
+		return [...map1].every(x => x[1] === map2.get(x[0]))
+	}
 	
-	
+	it('map object', function() {
+		let map_in = new Map();
+		for(let i=0; i<10000; i++) map_in.set((1+Math.sin(i))*1000000|0, (1+Math.cos(i))*6|0);
+		
+		fileTable.toFile('test/map-test.gz', map_in);
+		let map_out = fileTable.fromFile('test/map-test.gz', 'Map');
+		
+		assert(areMapsEqual(map_in, map_out));
+	});
 });

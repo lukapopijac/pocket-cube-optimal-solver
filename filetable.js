@@ -7,7 +7,6 @@ var fs = require('fs');
 
 function toFile(filename, obj) {
 	let type = obj.constructor.name;
-	let dictionary = '';
 	let buf;
 	if(type == 'Map') {
 		buf = new Buffer(JSON.stringify(Array.from(obj)));
