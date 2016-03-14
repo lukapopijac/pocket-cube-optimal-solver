@@ -1,6 +1,7 @@
 'use strict';
 
 const State = require('./state2');
+const filetable = require('./filetable');
 
 
 function searchIDAstar(startNode) { // iterative deepening A* search
@@ -29,8 +30,6 @@ function search(node, depth, maxdepth) {
 
 
 
-
-
 function isGoal(state) {
 	return state.isSolved();
 }
@@ -53,35 +52,30 @@ function expand(state) {
 
 
 
-var fs = require('fs');
-var zlib = require('zlib');
 
-var buf = fs.readFileSync('hashtable3.gz');
-var hashTable = JSON.parse(zlib.inflateSync(buf));
-
-function hash2(p, o) {
-	//avg 6.926641268004115    len 124416 124416
-	return (
-		(((p[0]&1) + (p[1]&6))<<6) + 
-		(((p[2]&2) + (p[3]&5))<<3) + 
-		((p[4]&3) + (p[5]&4))
-	  ) * 243 + 
-	  (o[0] + 3*o[1] + 9*o[2] + 27*o[3] + 81*o[5]);
-}
-
-function hash3(p, o) {
-	//avg 7.613141932441701    len 373248 373248
-	return (
+var heuristics = function() {
+	let hashTable = filetable.fromFile('tables/hashtable3.gz', 'Uint8Array');
+	
+	function hash2(p, o) { //avg 6.926641268004115    len 124416 124416
+		return (
 			(((p[0]&1) + (p[1]&6))<<6) + 
 			(((p[2]&2) + (p[3]&5))<<3) + 
 			((p[4]&3) + (p[5]&4))
-		) * 729 + 
-		(o[0] + 3*o[1] + 9*o[2] + 27*o[3] + 81*o[4] + 243*o[5]);
-}
-
-function heuristics(state) {
-	return hashTable[hash3(state.p, state.o)];
-}
+		  ) * 243 + 
+		  (o[0] + 3*o[1] + 9*o[2] + 27*o[3] + 81*o[5]);
+	}
+	
+	function hash3(p, o) { //avg 7.613141932441701    len 373248 373248
+		return (
+				(((p[0]&1) + (p[1]&6))<<6) + 
+				(((p[2]&2) + (p[3]&5))<<3) + 
+				((p[4]&3) + (p[5]&4))
+			) * 729 + 
+			(o[0] + 3*o[1] + 9*o[2] + 27*o[3] + 81*o[4] + 243*o[5]);
+	}
+	
+	return state => hashTable[hash3(state.p, state.o)];
+}();
 
 function movesToString(state) {
 	var moves = [];
