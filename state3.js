@@ -65,9 +65,7 @@ class State {
 		return true;
 	}
 	
-	/** Rotate cube so cubie 7 is in its right place and orientation.
-		Returns newly generated state with move history.
-	*/
+	// Rotate cube so cubie 7 is in its right place and orientation.
 	static getNormalizationMoves(state) {
 		if(state.p[7]==7 && state.o[7]==0) return [];
 		let moves = ['x1', 'x2', 'x3', 'y1', 'y2', 'y3', 'z1', 'z2', 'z3'];
