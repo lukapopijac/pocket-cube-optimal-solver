@@ -65,7 +65,7 @@ class State {
 		return true;
 	}
 	
-	// Rotate cube so cubie 7 is in its right place and orientation.
+	// Get moves needed to rotate cube so cubie 7 is in its right place and orientation.
 	static getNormalizationMoves(state) {
 		if(state.p[7]==7 && state.o[7]==0) return [];
 		let moves = ['x1', 'x2', 'x3', 'y1', 'y2', 'y3', 'z1', 'z2', 'z3'];
@@ -86,6 +86,14 @@ class State {
 				if(s2.p[7]==7 && s2.o[7]==0) return [move1, move2];
 			}
 		}
+	}
+	
+	// Rotate cube so cubie 7 is in its right place and orientation
+	normalize() {
+		let moves = State.getNormalizationMoves(this);
+		let state = State.generateState(moves, this);
+		this.p = state.p;
+		this.o = state.o;
 	}
 	
 }

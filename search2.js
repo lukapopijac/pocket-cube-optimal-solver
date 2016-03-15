@@ -87,16 +87,7 @@ function movesToString(state) {
 }
 
 function main() {
-	//var startState = new State().moves("R' F' R U2 R' U2 F' R' U R' F' U2 R'");
-	//var startState = new State().moves("R' F' R' U2 R U' F2 U' R2 U2 F' R2 U");
-	//var startState = new State().moves("U R F' R' F' U' R' U R2 F2 R F2 R'");
-	//var startState = new State().moves("U' F2 R U F' R U F R U2 R2 U' F'");
-	//var startState = new State().moves("U2 R2 F2 U' R' F2 U R U' R' F R F");
-	//var startState = new State().moves("F U' F' U' R2 U' R2 U' F2 U2 F2 R2 F' R U");
-	//var startState = new State().moves("U R' U R2 U2 F R U2 F U' R U2 F' U F");
-	//var startState = new State().moves("U2 R2 U2 R2 F U2 F' U' R F' R2 U' F R2 U'");
-	//var startState = new State().moves("R2 U' R' F' U2 F U2 R' F2 R2 F R' U2 F' R'");
-	var startState = new State().moves("R U' R F' U F R' F2 U' F U F' U' F' U'");
+	var startState = new State().moves("U R U' R2 U' R' F' U F2 R F'");
 	
 	searchIDAstar(startState)
 	//console.log('start state', startState);
@@ -107,7 +98,7 @@ function main() {
 	
 	//console.log('normalized state', startState);
 	
-	var n = 1000;
+	var n = 100;
 	
 	
 	// ---------- IDA*
