@@ -1,36 +1,13 @@
 'use strict';
-
 const State = require('./state3');
-const fileTable = require('./fileTable');
-
-const hashTable = fileTable.fromFile('tables/hashtable3.gz', 'Uint8Array');
-
-function hash2(p, o) { //avg 6.926641268004115    len 124416 124416
-	return (
-		(((p[0]&1) + (p[1]&6))<<6) + 
-		(((p[2]&2) + (p[3]&5))<<3) + 
-		((p[4]&3) + (p[5]&4))
-	  ) * 243 + 
-	  (o[0] + 3*o[1] + 9*o[2] + 27*o[3] + 81*o[5]);
-}
-
-function hash3(p, o) { //avg 7.613141932441701    len 373248 373248
-	return (
-			(((p[0]&1) + (p[1]&6))<<6) + 
-			(((p[2]&2) + (p[3]&5))<<3) + 
-			((p[4]&3) + (p[5]&4))
-		) * 729 + 
-		(o[0] + 3*o[1] + 9*o[2] + 27*o[3] + 81*o[4] + 243*o[5]);
-}
-
-
-
+const table = require('./patterndatabase')('hash3-state3');
 
 class SearchState {
 	constructor(state, prevSearchState, lastMove) {
 		this.state = state || new State();
 		this.prevSearchState = prevSearchState || null;
 		this.lastMove = lastMove || null;
+		this.h = -1;
 	}
 	
 	expand() {
@@ -47,8 +24,9 @@ class SearchState {
 		);
 	}
 	
-	heuristics(min) {
-		return hashTable[hash3(this.state.p, this.state.o)];
+	heuristics() {
+		if(this.h<0) this.h = table(this.state);
+		return this.h;
 	}
 	
 	isGoal() {

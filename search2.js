@@ -30,6 +30,27 @@ function search(node, depth, maxdepth) {
 
 
 
+var q;
+function searchAstar(startNode, startDepth, maxdepth) {	
+	q.push([startNode, startDepth], 0);
+	while(!q.isEmpty()) {
+		var nodeDepth = q.pop();
+		var node = nodeDepth[0];
+		var depth = nodeDepth[1];
+		
+		if(isGoal(node)) return node;
+		var successors = expand(node);
+		for(var i=0; i<successors.length; ++i) {
+			var succ = successors[i];
+			var f = depth + 1 + heuristics(succ);
+			if(f <= maxdepth) q.push([succ, depth+1], f);
+		}
+	}
+	return null;
+}
+
+
+
 function isGoal(state) {
 	return state.isSolved();
 }
@@ -89,7 +110,6 @@ function movesToString(state) {
 function main() {
 	var startState = new State().moves("U R U' R2 U' R' F' U F2 R F'");
 	
-	searchIDAstar(startState)
 	//console.log('start state', startState);
 	
 	startState = startState.normalize();
@@ -98,7 +118,24 @@ function main() {
 	
 	//console.log('normalized state', startState);
 	
-	var n = 100;
+	var n = 10;
+	
+	var PriorityQueue = require('./priorityqueue');
+	searchIDAstar(startState)
+	q = new PriorityQueue(11);
+	var solution = searchAstar(startState, 0, 11);
+	
+	// ---------- A*
+	expanded = 0;
+	console.time('A*');
+	for(var j=0; j<n; j++) {
+		q = new PriorityQueue(11);
+		var solution = searchAstar(startState, 0, 11);
+	}
+	console.timeEnd('A*');
+	console.log('expanded', expanded/n);
+	if(solution) console.log('steps', movesToString(solution));
+	console.log('---------');
 	
 	
 	// ---------- IDA*

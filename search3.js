@@ -6,22 +6,23 @@ const SearchState = require('./searchstate');
 
 function searchIDAstar(startState) { // iterative deepening A* search
 	let startNode = new SearchState(startState);
-	let maxdepth = startNode.heuristics();
+	let maxdepth = 1//startNode.heuristics();
 	while(true) {
 		let t = search(startNode, 0, maxdepth);
 		if(!Number.isInteger(t)) return t;  // success!
 		maxdepth = t;
 	}
-	return t;
+	return null;
 }
 
 let expanded = 0;
 function search(node, depth, maxdepth) {
-	let f = depth + node.heuristics();
+	let f = depth //+ node.heuristics();
 	if(f > maxdepth) return f;
 	if(node.isGoal()) return node;
 	let min = 100;
 	let successors = node.expand();
+	//successors.sort((a,b) => a.heuristics()-b.heuristics());
 	expanded++;
 	for(let i=0; i<successors.length; ++i) {
 		let t = search(successors[i], depth+1, maxdepth);
@@ -42,7 +43,8 @@ function movesToString(state) {
 }
 
 function main() {
-	let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
+	//let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
+	let startState = State.generateState("U R U' R2 U' R'");
 	
 	//let startState = State.generateState("F");
 	//console.log(startState.toString());
@@ -51,7 +53,7 @@ function main() {
 	
 	searchIDAstar(startState);
 	
-	var n = 100;
+	var n = 10;
 	// ---------- IDA*
 	expanded = 0;
 	console.time('IDA*');
