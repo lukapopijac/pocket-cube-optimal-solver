@@ -70,18 +70,12 @@ class State {
 			o = o & ~(0b11<<2*i) | v<<2*i;
 		}
 		
-		//console.log('generate next state');
-		//console.log('start state ' + state);
-		//console.log('move ', move);
 		var ss = new State(p2, p1, p0, o);
-		//console.log('end state ' + ss);
-		//console.log('---------------------');
 		
 		return ss;
 	}
 	
 	static generateState(moves, startState) {
-		//console.log(moves, startState);
 		if(typeof moves == 'string') {
 			moves = moves.split(' ').map(x => {
 				if(x.length==1) return x+'1';
@@ -120,24 +114,19 @@ class State {
 	
 	// Get moves needed to rotate cube so cubie 7 is in its right place and orientation.
 	static getNormalizationMoves(state) {
-		//console.log('get normalization moves');
-		//console.log(state.toString());
 		if(state._isNormalized()) return [];
 		let moves = ['x1', 'x2', 'x3', 'y1', 'y2', 'y3', 'z1', 'z2', 'z3'];
 		
 		// one move
 		for(let move1 of moves) {
 			let s1 = State.generateNextState(state, move1);
-			//console.log(move1, s1.toString());
 			if(s1._isNormalized()) return [move1];
 		}
 		
 		// two moves
 		for(let move1 of moves) {
-			//console.log(move1);
 			let s1 = State.generateNextState(state, move1);
 			for(let move2 of moves) {
-				//console.log('    ', move2);
 				if(move2[0] == move1[0]) continue;  // same axis of rotation
 				let s2 = State.generateNextState(s1, move2);
 				if(s2._isNormalized()) return [move1, move2];
@@ -147,9 +136,7 @@ class State {
 	
 	// Rotate cube so cubie 7 is in its right place and orientation
 	normalize() {
-		//console.log('normalize', this+'');
 		let moves = State.getNormalizationMoves(this);
-		//console.log(moves);
 		let state = State.generateState(moves, this);
 		this.p2 = state.p2;
 		this.p1 = state.p1;

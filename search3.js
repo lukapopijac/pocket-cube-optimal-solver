@@ -44,26 +44,12 @@ function movesToString(state) {
 
 function main() {
 	//let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
-	let startState = new State();
-	
-	console.log(startState.toString());
-	
-	let moves = State.getNormalizationMoves(startState);
-	
-	console.log(moves);
-	let s = State.generateNextState(startState, 'x1');
-	
-	console.log(s.toString());
-	
-	return;
-	//let startState = State.generateState("F");
-	//console.log(startState.toString());
+	let startState = State.generateState("U R U' R2 U' R' F' U");
 	startState.normalize();
-	//console.log(startState.toString());
 	
 	searchIDAstar(startState);
 	
-	var n = 10;
+	var n = 1;
 	// ---------- IDA*
 	expanded = 0;
 	console.time('IDA*');

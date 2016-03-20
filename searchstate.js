@@ -1,5 +1,5 @@
 'use strict';
-const State = require('./state3');
+const State = require('./state4');
 const table = require('./patterndatabase')('hash3-state3');
 
 class SearchState {

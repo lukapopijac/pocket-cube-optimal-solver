@@ -1,5 +1,4 @@
 'use strict';
-const State3 = require('./state3');
 const fileTable = require('./fileTable');
 
 function hash2state3(state) { //avg 6.926641268004115    len 124416 124416
