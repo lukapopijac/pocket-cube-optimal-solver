@@ -1,6 +1,6 @@
 'use strict';
 
-const State = require('./state3');
+const State = require('./state4');
 const filetable = require('./filetable');
 const SearchState = require('./searchstate');
 
@@ -44,8 +44,18 @@ function movesToString(state) {
 
 function main() {
 	//let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
-	let startState = State.generateState("U R U' R2 U' R'");
+	let startState = new State();
 	
+	console.log(startState.toString());
+	
+	let moves = State.getNormalizationMoves(startState);
+	
+	console.log(moves);
+	let s = State.generateNextState(startState, 'x1');
+	
+	console.log(s.toString());
+	
+	return;
 	//let startState = State.generateState("F");
 	//console.log(startState.toString());
 	startState.normalize();
