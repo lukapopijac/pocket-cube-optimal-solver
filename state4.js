@@ -32,56 +32,9 @@ class State {
 
 	/** Generates new State instance
 	*/
-	//generateNextState(move) {
-	//	let t = transP[move];
-	//	return new State(t[this.p2], t[this.p1], t[this.p0], transO[move][this.o]);
-	//}
-	
-	/** Generates new State instance
-	*/
 	generateNextState(move) {
-		var a, b;
-		switch(move) {
-			case 'U1': a = [2,0,3,1,4,5,6,7]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'U2': a = [3,2,1,0,4,5,6,7]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'U3': a = [1,3,0,2,4,5,6,7]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'F1': a = [1,5,2,3,0,4,6,7]; b = [1,2,0,0,2,1,0,0]; break;
-			case 'F2': a = [5,4,2,3,1,0,6,7]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'F3': a = [4,0,2,3,5,1,6,7]; b = [1,2,0,0,2,1,0,0]; break;
-			case 'R1': a = [4,1,0,3,6,5,2,7]; b = [2,0,1,0,1,0,2,0]; break;
-			case 'R2': a = [6,1,4,3,2,5,0,7]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'R3': a = [2,1,6,3,0,5,4,7]; b = [2,0,1,0,1,0,2,0]; break;
-			case 'x1': a = [4,5,0,1,6,7,2,3]; b = [2,1,1,2,1,2,2,1]; break;
-			case 'x2': a = [6,7,4,5,2,3,0,1]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'x3': a = [2,3,6,7,0,1,4,5]; b = [2,1,1,2,1,2,2,1]; break;
-			case 'y1': a = [2,0,3,1,6,4,7,5]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'y2': a = [3,2,1,0,7,6,5,4]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'y3': a = [1,3,0,2,5,7,4,6]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'z1': a = [1,5,3,7,0,4,2,6]; b = [1,2,2,1,2,1,1,2]; break;
-			case 'z2': a = [5,4,7,6,1,0,3,2]; b = [0,0,0,0,0,0,0,0]; break;
-			case 'z3': a = [4,0,6,2,5,1,7,3]; b = [1,2,2,1,2,1,1,2]; break;
-		}
-		
-		let p2 = this.p2;
-		let	p1 = this.p1;
-		let p0 = this.p0;  // new permutation
-		let o = 0;         // new orientation
-		
-		for(let i=0; i<8; i++) {
-			let bit = 1<<a[i];
-			let m = 1<<i;
-			
-			if(bit & this.p2) p2|=m; else p2&=~m;
-			if(bit & this.p1) p1|=m; else p1&=~m;
-			if(bit & this.p0) p0|=m; else p0&=~m;
-			
-			let v = this.o>>(2*a[i]) & 0b11;
-			if(b[i]==1) v = v==0b00 ? 0b01 : v==0b01 ? 0b11 : 0b00;
-			if(b[i]==2) v = v==0b00 ? 0b11 : v==0b01 ? 0b00 : 0b01;
-			o |= v<<2*i;
-		}
-		
-		return new State(p2, p1, p0, o);
+		let t = transP[move];
+		return new State(t[this.p2], t[this.p1], t[this.p0], transO[move][this.o]);
 	}
 	
 	static generateState(moves, startState) {
