@@ -1,6 +1,6 @@
 'use strict';
 const State = require('./state4');
-const table = require('./patterndatabase')('hash3-state3');
+const table = require('./patterndatabase').getTable('hash3-state4');
 
 class SearchState {
 	constructor(state, prevSearchState, lastMove) {
