@@ -8,7 +8,7 @@ class State {
 	
 	/** Generates new State instance
 	*/
-	static generateNextState(state, move) {
+	generateNextState(move) {
 		var a, b;
 		switch(move) {
 			case 'U1': a = [2,0,3,1,4,5,6,7]; b = [0,0,0,0,0,0,0,0]; break;
@@ -35,8 +35,8 @@ class State {
 		var o = [0,0,0,0,0,0,0,0];
 		
 		for(var i=0; i<8; ++i) {
-			p[i] = state.p[a[i]];
-			o[i] = (state.o[a[i]] + b[i]) % 3;
+			p[i] = this.p[a[i]];
+			o[i] = (this.o[a[i]] + b[i]) % 3;
 		}
 		
 		return new State(p, o);	
@@ -51,7 +51,7 @@ class State {
 			});
 		}
 		let s = startState ? startState : new State();
-		moves.forEach(move => {s = State.generateNextState(s, move)});
+		moves.forEach(move => {s = s.generateNextState(move)});
 		return s;
 	}
 	
@@ -72,17 +72,17 @@ class State {
 		
 		// one move
 		for(let move1 of moves) {
-			let s1 = State.generateNextState(state, move1);
+			let s1 = state.generateNextState(move1);
 			if(s1.p[7]==7 && s1.o[7]==0) return [move1];
 		}
 		
 		// two moves
 		for(let move1 of moves) {
-			let s1 = State.generateNextState(state, move1);
+			let s1 = state.generateNextState(move1);
 			if(s1.p[7]==7 && s1.o[7]==0) return [move1];
 			for(let move2 of moves) {
 				if(move2[0] == move1[0]) continue;  // same axis of rotation
-				let s2 = State.generateNextState(s1, move2);
+				let s2 = s1.generateNextState(move2);
 				if(s2.p[7]==7 && s2.o[7]==0) return [move1, move2];
 			}
 		}

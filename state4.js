@@ -28,7 +28,7 @@ class State {
 	
 	/** Generates new State instance
 	*/
-	static generateNextState(state, move) {
+	generateNextState(move) {
 		var a, b;
 		switch(move) {
 			case 'U1': a = [2,0,3,1,4,5,6,7]; b = [0,0,0,0,0,0,0,0]; break;
@@ -51,28 +51,26 @@ class State {
 			case 'z3': a = [4,0,6,2,5,1,7,3]; b = [1,2,2,1,2,1,1,2]; break;
 		}
 		
-		let p2 = state.p2;
-		let	p1 = state.p1;
-		let p0 = state.p0;  // new permutation
-		let o = 0;          // new orientation
+		let p2 = this.p2;
+		let	p1 = this.p1;
+		let p0 = this.p0;  // new permutation
+		let o = 0;         // new orientation
 		
 		for(let i=0; i<8; i++) {
 			let bit = 1<<a[i];
 			let m = 1<<i;
 			
-			if(bit & state.p2) p2|=m; else p2&=~m;
-			if(bit & state.p1) p1|=m; else p1&=~m;
-			if(bit & state.p0) p0|=m; else p0&=~m;
+			if(bit & this.p2) p2|=m; else p2&=~m;
+			if(bit & this.p1) p1|=m; else p1&=~m;
+			if(bit & this.p0) p0|=m; else p0&=~m;
 			
-			let v = state.o>>(2*a[i]) & 0b11;
+			let v = this.o>>(2*a[i]) & 0b11;
 			if(b[i]==1) v = v==0b00 ? 0b01 : v==0b01 ? 0b11 : 0b00;
 			if(b[i]==2) v = v==0b00 ? 0b11 : v==0b01 ? 0b00 : 0b01;
 			o = o & ~(0b11<<2*i) | v<<2*i;
 		}
 		
-		var ss = new State(p2, p1, p0, o);
-		
-		return ss;
+		return new State(p2, p1, p0, o);
 	}
 	
 	static generateState(moves, startState) {
@@ -84,7 +82,7 @@ class State {
 			});
 		}
 		let s = startState ? startState : new State();
-		moves.forEach(move => {s = State.generateNextState(s, move)});
+		moves.forEach(move => {s = s.generateNextState(move)});
 		return s;
 	}
 	
@@ -119,16 +117,16 @@ class State {
 		
 		// one move
 		for(let move1 of moves) {
-			let s1 = State.generateNextState(state, move1);
+			let s1 = state.generateNextState(move1);
 			if(s1._isNormalized()) return [move1];
 		}
 		
 		// two moves
 		for(let move1 of moves) {
-			let s1 = State.generateNextState(state, move1);
+			let s1 = state.generateNextState(move1);
 			for(let move2 of moves) {
 				if(move2[0] == move1[0]) continue;  // same axis of rotation
-				let s2 = State.generateNextState(s1, move2);
+				let s2 = s1.generateNextState(move2);
 				if(s2._isNormalized()) return [move1, move2];
 			}
 		}

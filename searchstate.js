@@ -1,10 +1,9 @@
 'use strict';
-const State = require('./state4');
 const table = require('./patterndatabase').getTable('hash3-state4');
 
 class SearchState {
 	constructor(state, prevSearchState, lastMove) {
-		this.state = state || new State();
+		this.state = state;
 		this.prevSearchState = prevSearchState || null;
 		this.lastMove = lastMove || null;
 		this.h = -1;
@@ -20,7 +19,7 @@ class SearchState {
 			default: moves = ['U1', 'U2', 'U3', 'F1', 'F2', 'F3', 'R1', 'R2', 'R3'];
 		}
 		return moves.map(move => 
-			new SearchState(State.generateNextState(this.state, move), this, move)
+			new SearchState(this.state.generateNextState(move), this, move)
 		);
 	}
 	

@@ -1,5 +1,4 @@
 'use strict';
-
 const State = require('./state4');
 const filetable = require('./filetable');
 const SearchState = require('./searchstate');
@@ -49,7 +48,7 @@ function main() {
 	
 	searchIDAstar(startState);
 	
-	var n = 100;
+	var n = 1;
 	// ---------- IDA*
 	expanded = 0;
 	console.time('IDA*');
