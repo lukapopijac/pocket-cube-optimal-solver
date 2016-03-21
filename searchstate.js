@@ -1,6 +1,13 @@
 'use strict';
 const table = require('./patterndatabase').getTable('hash3-state4');
 
+const expandMoves = {
+	'U': ['F1', 'F2', 'F3', 'R1', 'R2', 'R3'],
+	'F': ['U1', 'U2', 'U3', 'R1', 'R2', 'R3'],
+	'R': ['U1', 'U2', 'U3', 'F1', 'F2', 'F3'],
+	'': ['U1', 'U2', 'U3', 'F1', 'F2', 'F3', 'R1', 'R2', 'R3']
+};
+
 class SearchState {
 	constructor(state, prevSearchState, lastMove) {
 		this.state = state;
@@ -10,15 +17,8 @@ class SearchState {
 	}
 	
 	expand() {
-		let moves;
-		let lastSide = this.lastMove && this.lastMove[0];
-		switch(lastSide) {
-			case 'U': moves = ['F1', 'F2', 'F3', 'R1', 'R2', 'R3']; break;
-			case 'F': moves = ['U1', 'U2', 'U3', 'R1', 'R2', 'R3']; break;
-			case 'R': moves = ['U1', 'U2', 'U3', 'F1', 'F2', 'F3']; break;
-			default: moves = ['U1', 'U2', 'U3', 'F1', 'F2', 'F3', 'R1', 'R2', 'R3'];
-		}
-		return moves.map(move => 
+		let lastSide = this.lastMove && this.lastMove[0] || '';
+		return expandMoves[lastSide].map(move => 
 			new SearchState(this.state.generateNextState(move), this, move)
 		);
 	}

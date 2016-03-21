@@ -8,7 +8,7 @@ function searchIDAstar(startState) { // iterative deepening A* search
 	let maxdepth = startNode.heuristics();
 	while(true) {
 		let t = search(startNode, 0, maxdepth);
-		if(!Number.isInteger(t)) return t;  // success!
+		if(isNaN(t)) return t;  // success!
 		maxdepth = t;
 	}
 	return null;
@@ -25,7 +25,7 @@ function search(node, depth, maxdepth) {
 	expanded++;
 	for(let i=0; i<successors.length; ++i) {
 		let t = search(successors[i], depth+1, maxdepth);
-		if(!Number.isInteger(t)) return t;  // success!
+		if(isNaN(t)) return t;  // success!
 		if(t<min) min = t;
 	}
 	return min;

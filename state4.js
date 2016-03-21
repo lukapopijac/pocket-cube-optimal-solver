@@ -29,7 +29,7 @@ class State {
 		this.p0 = p0 || 0b10101010;
 		this.o = o || 0b0000000000000000;
 	}
-
+	
 	/** Generates new State instance
 	*/
 	generateNextState(move) {
@@ -66,8 +66,7 @@ class State {
 	
 	// works only for normalized state
 	isSolved() {
-		return this.p2==0b11110000 && this.p1==0b11001100 && this.p0==0b10101010 && 
-		       this.o==0b0000000000000000;
+		return this.o==0b0000000000000000 && this.p2==0b11110000 && this.p1==0b11001100 && this.p0==0b10101010;
 	}
 	
 	_isNormalized() {
@@ -75,19 +74,19 @@ class State {
 	}
 	
 	// Get moves needed to rotate cube so cubie 7 is in its right place and orientation.
-	static getNormalizationMoves(state) {
-		if(state._isNormalized()) return [];
+	getNormalizationMoves() {
+		if(this._isNormalized()) return [];
 		let moves = ['x1', 'x2', 'x3', 'y1', 'y2', 'y3', 'z1', 'z2', 'z3'];
 		
 		// one move
 		for(let move1 of moves) {
-			let s1 = state.generateNextState(move1);
+			let s1 = this.generateNextState(move1);
 			if(s1._isNormalized()) return [move1];
 		}
 		
 		// two moves
 		for(let move1 of moves) {
-			let s1 = state.generateNextState(move1);
+			let s1 = this.generateNextState(move1);
 			for(let move2 of moves) {
 				if(move2[0] == move1[0]) continue;  // same axis of rotation
 				let s2 = s1.generateNextState(move2);
@@ -98,12 +97,13 @@ class State {
 	
 	// Rotate cube so cubie 7 is in its right place and orientation
 	normalize() {
-		let moves = State.getNormalizationMoves(this);
+		let moves = this.getNormalizationMoves();
 		let state = State.generateState(moves, this);
 		this.p2 = state.p2;
 		this.p1 = state.p1;
 		this.p0 = state.p0;
 		this.o = state.o;
+		return moves;
 	}
 	
 }
