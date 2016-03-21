@@ -48,7 +48,7 @@ function main() {
 	
 	searchIDAstar(startState);
 	
-	var n = 1;
+	var n = 10;
 	// ---------- IDA*
 	expanded = 0;
 	console.time('IDA*');

@@ -18,6 +18,10 @@ Codes for orientations 0,1,2 are 00,01,11. The reason is to be able to determine
 is cubie correctly oriented only by looking at one bit, the right one.
 */
 
+const transforms = require('./transforms');
+let transP = transforms.p;
+let transO = transforms.o;
+
 class State {
 	constructor(p2, p1, p0, o) {
 		this.p2 = p2 || 0b11110000;
@@ -25,6 +29,13 @@ class State {
 		this.p0 = p0 || 0b10101010;
 		this.o = o || 0b0000000000000000;
 	}
+
+	/** Generates new State instance
+	*/
+	//generateNextState(move) {
+	//	let t = transP[move];
+	//	return new State(t[this.p2], t[this.p1], t[this.p0], transO[move][this.o]);
+	//}
 	
 	/** Generates new State instance
 	*/
@@ -67,7 +78,7 @@ class State {
 			let v = this.o>>(2*a[i]) & 0b11;
 			if(b[i]==1) v = v==0b00 ? 0b01 : v==0b01 ? 0b11 : 0b00;
 			if(b[i]==2) v = v==0b00 ? 0b11 : v==0b01 ? 0b00 : 0b01;
-			o = o & ~(0b11<<2*i) | v<<2*i;
+			o |= v<<2*i;
 		}
 		
 		return new State(p2, p1, p0, o);
@@ -97,7 +108,7 @@ class State {
 		let os = (131072+this.o).toString(2).match(/.{1,2}/g).reverse().map(x => x=='00' ? 0 : x=='01' ? 1 : 2);
 		os.pop();
 		
-		return '[' + ps + '] [' + os + ']';
+		return '[' + ps + '][' + os + ']';
 	}
 	
 	// works only for normalized state

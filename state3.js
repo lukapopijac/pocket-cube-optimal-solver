@@ -56,7 +56,7 @@ class State {
 	}
 	
 	toString() {
-		return '[' + this.p + '] [' + this.o + ']';
+		return '[' + this.p + '][' + this.o + ']';
 	}
 	
 	// works only for normalized state
