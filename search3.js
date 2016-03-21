@@ -1,6 +1,5 @@
 'use strict';
 const State = require('./state4');
-const filetable = require('./filetable');
 const SearchState = require('./searchstate');
 
 function searchIDAstar(startState) { // iterative deepening A* search
