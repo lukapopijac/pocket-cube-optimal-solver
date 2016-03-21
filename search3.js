@@ -41,13 +41,14 @@ function movesToString(state) {
 }
 
 function main() {
-	let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
-	//let startState = State.generateState("U R U' R2 U' R'");
+	//let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
+	let startState = State.generateState("U R F2 U R F2 R U F' R");
+	
 	startState.normalize();
 	
 	searchIDAstar(startState);
 	
-	var n = 10;
+	var n = 1;
 	// ---------- IDA*
 	expanded = 0;
 	console.time('IDA*');
