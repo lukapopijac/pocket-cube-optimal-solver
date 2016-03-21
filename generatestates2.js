@@ -35,12 +35,12 @@ function generateKey(state) {
 
 function main() {
 	console.time('generate states');
-	generateStates(new State(), 0, 11);
+	generateStates(new State(), 0, 8);
 	console.timeEnd('generate states');
 	console.log(table.size);
 	
 	console.time('save to file');
-	filetable.toFile('tables/table11.gz', table);
+	filetable.toFile('tables/table08.gz', table);
 	console.timeEnd('save to file');
 }
 
