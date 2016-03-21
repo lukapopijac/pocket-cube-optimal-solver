@@ -45,16 +45,16 @@ function hash3state4(state) { //avg 7.599945880341972    len 373247 373248
 
 function getTable(id) {
 	if(id=='hash2-state3') {
-		let hashTable2 = fileTable.fromFile('tables/hash2state3.gz', 'Uint8Array');
-		return state => hashTable2[hash2state3(state)];
+		let hashTable = fileTable.fromFile('tables/hash2state3.gz', 'Uint8Array');
+		return state => hashTable[hash2state3(state)];
 	}
 	if(id=='hash3-state3') {
-		let hashTable3 = fileTable.fromFile('tables/hash3state3.gz', 'Uint8Array');
-		return state => hashTable3[hash3state3(state)];
+		let hashTable = fileTable.fromFile('tables/hash3state3.gz', 'Uint8Array');
+		return state => hashTable[hash3state3(state)];
 	}
 	if(id=='hash3-state4') {
-		let hashTable3 = fileTable.fromFile('tables/hash3state4.gz', 'Uint8Array');
-		return state => hashTable3[hash3state4(state)];
+		let hashTable = fileTable.fromFile('tables/hash3state4.gz', 'Uint8Array');
+		return state => hashTable[hash3state4(state)];
 	}
 }
 
