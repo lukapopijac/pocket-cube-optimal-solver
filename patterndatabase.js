@@ -26,7 +26,7 @@ function hash3state3(state) { //avg 7.613141932441701    len 373248 373248
 }
 
 
-function hash3state4(state) { //avg 7.599945880341972    len 373247 373248
+function hash3state4(state) { //avg 7.599925518689986    len 373248 373248
 	let p2 = state.p2;
 	let p1 = state.p1;
 	let p0 = state.p0;
@@ -43,6 +43,33 @@ function hash3state4(state) { //avg 7.599945880341972    len 373247 373248
 }
 
 
+
+function hash4state4(state) { //avg 7.836841034606937    len 727542 746496
+	return ( (state.p2^(state.p1<<2)^(state.p0<<4))&0b1111111111 )
+		* 729 + hash4state4oLookUp[state.o&0b111111111111];
+}
+
+var hash4state4oLookUp = new Uint16Array(4096);
+(function() {
+	var is = [0,1,3];
+	var k = 0;
+	for(var i0 of is) {
+		for(var i1 of is) {
+			for(var i2 of is) {
+				for(var i3 of is) {
+					for(var i4 of is) {
+						for(var i5 of is) {
+							var o = i0 | i1<<2 | i2<<4 | i3<<6 | i4<<8 | i5<<10;
+							hash4state4oLookUp[o] = k++;
+						}
+					}
+				}
+			}
+		}
+	}
+})();
+
+
 function getTable(id) {
 	if(id=='hash2-state3') {
 		let hashTable = fileTable.fromFile('tables/hash2state3.gz', 'Uint8Array');
@@ -55,6 +82,10 @@ function getTable(id) {
 	if(id=='hash3-state4') {
 		let hashTable = fileTable.fromFile('tables/hash3state4.gz', 'Uint8Array');
 		return state => hashTable[hash3state4(state)];
+	}
+	if(id=='hash4-state4') {
+		let hashTable = fileTable.fromFile('tables/hash4state4.gz', 'Uint8Array');
+		return state => hashTable[hash4state4(state)];
 	}
 }
 
@@ -96,6 +127,25 @@ function generateTable(id) {
 			return {p2, p1, p0, o: v};
 		};
 	}
+	if(id=='hash4-state4') {
+		hashFunction = hash4state4;
+		hashTable = new Uint8Array(746496).fill(255);
+		fileName = 'tables/hash4state4.gz';
+		poToState = function(p, o) {
+			let p2=0, p1=0, p0=0, v=0;
+			for(let i=0; i<8; i++) {
+				let pi = p[i];
+				if(pi&0b100) p2 |= 1<<i;
+				if(pi&0b010) p1 |= 1<<i;
+				if(pi&0b001) p0 |= 1<<i;
+				
+				let oi = o[i];
+				if(oi==1) v |= 0b01<<2*i;
+				if(oi==2) v |= 0b11<<2*i;
+			}
+			return {p2, p1, p0, o: v};
+		};
+	}
 	
 	table = table || fileTable.fromFile('tables/table11.gz', 'Map');
 	let keys = table.keys();
@@ -121,7 +171,7 @@ function average(hashTable) {
 	let k = 0;
 	for(let i=0; i<hashTable.length; ++i) {
 		let v = hashTable[i];
-		if(v>0) {
+		if(v<15) {
 			s += v;
 			k++;
 		}
