@@ -1,5 +1,5 @@
 'use strict';
-const table = require('./patterndatabase').getTable('hash3-state4');
+const table = require('./patterndatabase').getTable('hash5');
 
 const expandMoves = {
 	'U': ['F1', 'F2', 'F3', 'R1', 'R2', 'R3'],
