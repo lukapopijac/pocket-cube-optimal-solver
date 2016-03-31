@@ -1,4 +1,5 @@
 'use strict';
+console.time('all');
 const State = require('./state');
 const SearchState = require('./searchstate');
 
@@ -71,8 +72,8 @@ function main2() {
 
 function main() {
 	//let startState = State.generateState("U R U' F R F2");
-	let startState = State.generateState("F' U F U R2 U F' U' F U' R2");
-	//let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
+	//let startState = State.generateState("F' U F U R2 U F' U' F U' R2");
+	let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
 	//let startState = State.generateState("U R F2 U R F2 R U F' R");
 	//let startState = State.generateState("U3 R2 F1 U1 F1 R3");
 	
@@ -81,7 +82,7 @@ function main() {
 	searchIterativeDeepening(startState);
 	console.log('----------------------------------------');
 	
-	var n = 100;
+	var n = 1;
 	expanded = 0;
 	console.time('search');
 	var solution;
@@ -95,3 +96,5 @@ function main() {
 }
 
 main();
+
+console.timeEnd('all');
