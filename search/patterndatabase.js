@@ -44,7 +44,6 @@ function generateTable(id) {
 		table = table || fileTable.fromFile('tables/table11.gz', 'Map');
 		let keys = table.keys();
 		
-		console.time('generate hash table, ' + id);
 		for(let key of keys) {  // key represents state
 			let val = table.get(key);
 			
@@ -59,16 +58,14 @@ function generateTable(id) {
 			
 			addToHashTable(hashTable, hashes[id](state), val);
 		}
-		average(hashTable);
+		//average(hashTable);
 		fileTable.toFile('tables/' + id + '.gz', hashTable);
-		console.timeEnd('generate hash table, ' + id);
 	}
 	if(id=='hash6') {
 		let hashTable = new Uint8Array(32768).fill(255);
 		table = table || fileTable.fromFile('tables/table11.gz', 'Map');
 		let keys = table.keys();
 		
-		console.time('generate hash table, ' + id);
 		for(let key of keys) {  // key represents state
 			let val = table.get(key);
 			
@@ -83,16 +80,14 @@ function generateTable(id) {
 			
 			addToHashTable(hashTable, hashes[id](state), val);
 		}
-		average(hashTable);
+		//average(hashTable);
 		fileTable.toFile('tables/' + id + '.gz', hashTable);
-		console.timeEnd('generate hash table, ' + id);
 	}	
 	if(id=='hash7') {
 		let hashTable = new Uint8Array(512).fill(255);
 		table = table || fileTable.fromFile('tables/table11.gz', 'Map');
 		let keys = table.keys();
 		
-		console.time('generate hash table, ' + id);
 		for(let key of keys) {  // key represents state
 			let val = table.get(key);
 			
@@ -107,9 +102,8 @@ function generateTable(id) {
 			
 			addToHashTable(hashTable, hashes[id](state), val);
 		}
-		average(hashTable);
+		//average(hashTable);
 		fileTable.toFile('tables/' + id + '.gz', hashTable);
-		console.timeEnd('generate hash table, ' + id);
 	}
 
 }
@@ -117,6 +111,7 @@ function generateTable(id) {
 function addToHashTable(hashTable, idx, val) {
 	if(val < hashTable[idx]) hashTable[idx] = val;
 }
+
 
 function average(hashTable) {
 	let s = 0;

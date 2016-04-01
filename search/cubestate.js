@@ -29,7 +29,7 @@ const transforms = require('./transforms');
 let transP = transforms.p;
 let transO = transforms.o;
 
-class State {
+class CubeState {
 	constructor(p2, p1, p0, o) {
 		this.p2 = p2 || 0b11110000;
 		this.p1 = p1 || 0b11001100;
@@ -37,11 +37,11 @@ class State {
 		this.o = o || 0b0000000000000000;
 	}
 	
-	/** Generates new State instance
+	/** Generates new CubeState instance
 	*/
 	generateNextState(move) {
 		let t = transP[move];
-		return new State(t[this.p2], t[this.p1], t[this.p0], transO[move][this.o]);
+		return new CubeState(t[this.p2], t[this.p1], t[this.p0], transO[move][this.o]);
 	}
 	
 	static generateState(moves, startState) {
@@ -52,7 +52,7 @@ class State {
 				return x;
 			});
 		}
-		let s = startState ? startState : new State();
+		let s = startState ? startState : new CubeState();
 		moves.forEach(move => {s = s.generateNextState(move)});
 		return s;
 	}
@@ -105,7 +105,7 @@ class State {
 	// Rotate cube so cubie 7 is in its right place and orientation
 	normalize() {
 		let moves = this.getNormalizationMoves();
-		let state = State.generateState(moves, this);
+		let state = CubeState.generateState(moves, this);
 		this.p2 = state.p2;
 		this.p1 = state.p1;
 		this.p0 = state.p0;
@@ -116,4 +116,4 @@ class State {
 }
 
 
-module.exports = State;
+module.exports = CubeState;

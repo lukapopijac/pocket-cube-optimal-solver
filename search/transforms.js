@@ -1,3 +1,14 @@
+/** 
+This file defines transformations for each move as a look-up table,
+rather than a function. To boost performance. Because I'm Batman!
+This is to be used for each move in the search algorithm.
+
+Example:
+If (p2, p1, p0, o) defines a state of a pocket cube, 
+and we want to perform move U3, the new state will be 
+(transP.U3[p2], transP.U3[p1], transP.U3[p0], transO.U3[o]).
+*/
+
 'use strict';
 
 const transP = {
@@ -64,6 +75,8 @@ function generatePTransforms() {
 }
 
 
+// it would be more elegant to write this in recursive way, 
+// but who cares, this is easier, faster and less error-prone 
 function generateOTransforms() {
 	var is = [0,1,2];
 	for(var i0 of is) {

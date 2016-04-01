@@ -1,33 +1,31 @@
 'use strict';
-console.time('all');
-const State = require('./state');
+const CubeState = require('./cubestate');
 const SearchState = require('./searchstate');
 
-function searchIterativeDeepening(startState) {
+function cubeSearch(startState) {
 	let startNode = new SearchState(startState);
-	let maxdepth = startNode.heuristics();
-	while(maxdepth<=11) {
-		//console.log(maxdepth);
-		let t = search(startNode, 0, maxdepth);
+	let maxDepth = startNode.heuristics();
+	while(maxDepth<=11) {  // 11 moves is the worst case solution
+		let t = search(startNode, 0, maxDepth);
 		if(isNaN(t)) return t;  // success!
-		maxdepth++;
+		maxDepth++;
 	}
 	return null;
 }
 
-let expanded = 0;
-function search(node, depth, maxdepth) {
+function search(node, depth, maxDepth) {
 	let h = node.heuristics();
-	if(depth + h > maxdepth) return h;
+	if(depth + h > maxDepth) return h;
 	if(node.isGoal()) return node;
 	let successors = node.expand();
-	expanded++;
     for(var i=0; i<successors.length; i++) {
-		let t = search(successors[i], depth+1, maxdepth);
+		let t = search(successors[i], depth+1, maxDepth);
 		if(isNaN(t)) return t;  // success!
 		if(t-1>h) {
 			h = t-1;
-			if(depth+h>maxdepth) return h;
+			// don't examine other successors if we can already 
+			// conclude that the current node can be pruned
+			if(depth+h>maxDepth) return h;
 		}
 	}
 	return h;
@@ -50,7 +48,7 @@ function generateRandomState() {
 	for(var i=0; i<20; i++) {
 		moves.push(legalMoves[Math.random()*9|0]);
 	}
-	var state = State.generateState(moves);
+	var state = CubeState.generateState(moves);
 	state.normalize();
 	return state;
 }
@@ -71,30 +69,26 @@ function main2() {
 }
 
 function main() {
-	//let startState = State.generateState("U R U' F R F2");
-	//let startState = State.generateState("F' U F U R2 U F' U' F U' R2");
-	let startState = State.generateState("U R U' R2 U' R' F' U F2 R F'");
-	//let startState = State.generateState("U R F2 U R F2 R U F' R");
-	//let startState = State.generateState("U3 R2 F1 U1 F1 R3");
+	//let startState = CubeState.generateState("U R U' F R F2");
+	//let startState = CubeState.generateState("F' U F U R2 U F' U' F U' R2");
+	let startState = CubeState.generateState("U R U' R2 U' R' F' U F2 R F'");
+	//let startState = CubeState.generateState("U R F2 U R F2 R U F' R");
+	//let startState = CubeState.generateState("U3 R2 F1 U1 F1 R3");
 	
 	startState.normalize();
 	
-	searchIterativeDeepening(startState);
+	cubeSearch(startState);
 	console.log('----------------------------------------');
 	
 	var n = 1;
-	expanded = 0;
 	console.time('search');
 	var solution;
 	for(var j=0; j<n; j++) {
-		solution = searchIterativeDeepening(startState);
+		solution = cubeSearch(startState);
 	}
 	console.timeEnd('search');
-	console.log('expanded', expanded/n);
 	console.log('steps', movesToString(solution));
 	console.log('----------------------------------------');
 }
 
-main();
-
-console.timeEnd('all');
+module.exports = cubeSearch;
