@@ -68,7 +68,7 @@ class CubeState {
 		let os = (131072+this.o).toString(2).match(/.{1,2}/g).reverse().map(x => x=='00' ? 0 : x=='01' ? 1 : 2);
 		os.pop();
 		
-		return '[' + ps + '][' + os + ']';
+		return '[' + ps + '] [' + os + ']';
 	}
 	
 	// works only for normalized state

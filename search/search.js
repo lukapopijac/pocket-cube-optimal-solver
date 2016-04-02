@@ -16,7 +16,7 @@ function cubeSearch(startState) {
 function search(node, depth, maxDepth) {
 	let h = node.heuristics();
 	if(depth + h > maxDepth) return h;
-	if(node.isGoal()) return node;
+	if(node.isGoal()) return node.getMoves();
 	let successors = node.expand();
     for(var i=0; i<successors.length; i++) {
 		let t = search(successors[i], depth+1, maxDepth);
@@ -32,16 +32,6 @@ function search(node, depth, maxDepth) {
 }
 
 
-function movesToString(state) {
-	var moves = [];
-	while(state.prevSearchState) {
-		moves.push(state.lastMove);
-		state = state.prevSearchState;
-	}
-	return moves.reverse().join(' ');
-}
-
-
 function generateRandomState() {
 	var legalMoves = ['U1', 'U2', 'U3', 'F1', 'F2', 'F3', 'R1', 'R2', 'R3'];
 	var moves = [];
@@ -53,20 +43,6 @@ function generateRandomState() {
 	return state;
 }
 
-function main2() {
-	for(var i=0; i<1000; i++) {
-		var state = generateRandomState();
-		
-		var moves1// = movesToString(searchIDAstar(state));
-		var moves2// = movesToString(searchIDAstar3(state));
-		if(moves1 != moves2) {
-			console.log(i);
-			console.log(moves1);
-			console.log(moves2);			
-			console.log('-----------');
-		}
-	}
-}
 
 function main() {
 	//let startState = CubeState.generateState("U R U' F R F2");
@@ -87,7 +63,7 @@ function main() {
 		solution = cubeSearch(startState);
 	}
 	console.timeEnd('search');
-	console.log('steps', movesToString(solution));
+	console.log('steps', solution);
 	console.log('----------------------------------------');
 }
 

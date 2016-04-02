@@ -31,6 +31,16 @@ class SearchState {
 	isGoal() {
 		return this.state.isSolved();
 	}
+	
+	getMoves() {
+		let moves = [];
+		let state = this;
+		while(state.prevSearchState) {
+			moves.push(state.lastMove);
+			state = state.prevSearchState;
+		}
+		return moves.reverse();
+	}
 }
 
 

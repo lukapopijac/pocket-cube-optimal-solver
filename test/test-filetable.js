@@ -7,7 +7,7 @@ function compareArrays(a1, a2) {
 }
 
 describe('filetable.js', function() {
-	var fileTable = require('../filetable');
+	var fileTable = require('../search/filetable');
 
 	function compareMaps(map1, map2) {
 		if(map1.size !== map2.size) return false;
