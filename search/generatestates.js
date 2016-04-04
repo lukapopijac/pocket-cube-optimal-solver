@@ -1,5 +1,5 @@
 'use strict';
-const State = require('./state');
+const State = require('./cubestate');
 const SearchState = require('./searchstate');
 const fileTable = require('./filetable');
 
@@ -19,9 +19,8 @@ function generateKey(state) {
 	return state.p0&63 | (state.p1&63)<<6 | (state.p2&63)<<12 | (state.o&4095)<<18;
 }
 
-
 function main() {
-	let maxDepth = 11;
+	let maxDepth = 8;
 	console.time('generate states');
 	generateStates(new SearchState(new State()), 0, maxDepth);
 	console.timeEnd('generate states');
@@ -32,5 +31,16 @@ function main() {
 	fileTable.toFile('tables/table' + n + '.gz', table);
 	console.timeEnd('save to file');
 }
+//main();
 
-main();
+function generateAllCubeStates() {
+	let fileName = 'cubestates-depth11.gz';
+	process.stdout.write('Generating ' + '\x1b[1m' + fileName + '\x1b[0m' + '...');
+	let d0 = Date.now();
+	generateStates(new SearchState(new State()), 0, 11);
+	fileTable.toFile('tables/' + fileName, table);
+	let d1 = Date.now();
+	console.log('...done! (' + (d1-d0) + 'ms)');
+}
+
+module.exports = generateAllCubeStates;

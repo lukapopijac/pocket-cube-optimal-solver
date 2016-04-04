@@ -5,7 +5,7 @@
 var zlib = require('zlib');
 var fs = require('fs');
 
-function toFile(filename, t) {
+function toFile(fileName, t) {
 	let buf;
 	if(t instanceof Map) {
 		buf = new Buffer(JSON.stringify(Array.from(t)));
@@ -15,11 +15,11 @@ function toFile(filename, t) {
 		buf = new Buffer(t);
 	}
 	
-	fs.writeFileSync(filename, zlib.deflateSync(buf));
+	fs.writeFileSync(fileName, zlib.deflateSync(buf));
 }
 
-function fromFile(filename, type) {
-	let buf = zlib.inflateSync(fs.readFileSync(filename));
+function fromFile(fileName, type) {
+	let buf = zlib.inflateSync(fs.readFileSync(fileName));
 	
 	if(type == 'Map') return new Map(JSON.parse(buf));
 	if(global[type] && new global[type]().buffer instanceof ArrayBuffer) {  // typed array
@@ -29,4 +29,13 @@ function fromFile(filename, type) {
 	return JSON.parse(buf);
 }
 
-module.exports = { toFile, fromFile };
+function exists(fileName) {
+	try {
+		fs.accessSync(fileName);
+	} catch(e) {
+		return false;
+	}
+	return true;
+}
+
+module.exports = { toFile, fromFile, exists };

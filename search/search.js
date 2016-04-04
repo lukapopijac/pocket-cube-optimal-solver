@@ -1,6 +1,8 @@
 'use strict';
 const CubeState = require('./cubestate');
+const patternDB = require('./patterndatabase').getTable('hash5');
 const SearchState = require('./searchstate');
+SearchState.setPatternDatabase(patternDB);
 
 function cubeSearch(startState) {
 	let startNode = new SearchState(startState);

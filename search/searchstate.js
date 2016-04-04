@@ -1,5 +1,6 @@
 'use strict';
-const table = require('./patterndatabase').getTable('hash5');
+
+let patternDB = _=>0;
 
 const expandMoves = {
 	'U': ['F1', 'F2', 'F3', 'R1', 'R2', 'R3'],
@@ -24,7 +25,7 @@ class SearchState {
 	}
 	
 	heuristics() {
-		if(this.h<0) this.h = table(this.state);
+		if(this.h<0) this.h = patternDB(this.state);
 		return this.h;
 	}
 	
@@ -43,5 +44,6 @@ class SearchState {
 	}
 }
 
+SearchState.setPatternDatabase = function(pdb) {patternDB = pdb};
 
 module.exports = SearchState;
