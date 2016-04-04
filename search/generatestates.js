@@ -1,9 +1,13 @@
 'use strict';
+const path = require('path');
 const State = require('./cubestate');
 const SearchState = require('./searchstate');
 const fileTable = require('./filetable');
 
+const tablesDir = path.join(__dirname, 'tables');
+
 let table = new Map();
+
 
 function generateStates(node, depth, maxDepth) {
 	var key = generateKey(node.state);
@@ -28,7 +32,7 @@ function main() {
 	
 	console.time('save to file');
 	let n = ('0' + maxDepth).slice(-2);
-	fileTable.toFile('tables/table' + n + '.gz', table);
+	fileTable.toFile(path.join(tablesDir, 'table' + n + '.gz'), table);
 	console.timeEnd('save to file');
 }
 //main();
@@ -38,7 +42,7 @@ function generateAllCubeStates() {
 	process.stdout.write('Generating ' + '\x1b[1m' + fileName + '\x1b[0m' + '...');
 	let d0 = Date.now();
 	generateStates(new SearchState(new State()), 0, 11);
-	fileTable.toFile('tables/' + fileName, table);
+	fileTable.toFile(path.join(tablesDir, fileName), table);
 	let d1 = Date.now();
 	console.log('...done! (' + (d1-d0) + 'ms)');
 }

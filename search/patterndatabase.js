@@ -1,5 +1,8 @@
 'use strict';
+const path = require('path');
 const fileTable = require('./fileTable');
+
+const tablesDir = path.join(__dirname, 'tables');
 
 const hashes = {
 	hash5: function(cubeState) { //avg 7.599925518689986    len 373248 373248
@@ -38,14 +41,15 @@ const hashes = {
 
 function generateTable(id) {
 	let cubeStatesFileName = 'cubestates-depth11.gz';
-	if(!fileTable.exists('tables/' + cubeStatesFileName)) {
+	let cubeStatesFilePath = path.join(tablesDir, cubeStatesFileName);
+	if(!fileTable.exists(cubeStatesFilePath)) {
 		console.log('Full cube states table ' + '\x1b[1m' + cubeStatesFileName + '\x1b[0m' + ' not found.');
 		require('./generatestates')();
 	}
 	
 	process.stdout.write('Loading ' + '\x1b[1m' + cubeStatesFileName + '\x1b[0m' + '...');
 	let d0 = Date.now();
-	let table = fileTable.fromFile('tables/' + cubeStatesFileName, 'Map');
+	let table = fileTable.fromFile(cubeStatesFilePath, 'Map');
 	let keys = table.keys();
 	let d1 = Date.now();
 	console.log('...done! (' + (d1-d0) + 'ms)');
@@ -113,7 +117,7 @@ function generateTable(id) {
 	d1 = Date.now();
 	console.log('...done! (' + (d1-d0) + 'ms)');
 	//average(patternDB);
-	fileTable.toFile('tables/' + fileName, patternDB);
+	fileTable.toFile(path.join(tablesDir, fileName), patternDB);
 }
 
 function addTopatternDB(patternDB, idx, val) {
@@ -138,11 +142,12 @@ function average(patternDB) {
 module.exports = {
 	getTable: function(id) {
 		let fileName = 'pdb-' + id + '.gz';
-		if(!fileTable.exists('tables/' + fileName)) {
+		let filePath = path.join(tablesDir, fileName);
+		if(!fileTable.exists(filePath)) {
 			console.log('Pattern database ' + '\x1b[1m' + fileName + '\x1b[0m' + ' not found.');
 			generateTable(id);
 		}
-		let patternDB = fileTable.fromFile('tables/' + fileName, 'Uint8Array');
+		let patternDB = fileTable.fromFile(filePath, 'Uint8Array');
 		let hash = hashes[id];
 		return cubeState => patternDB[hash(cubeState)];
 	}
