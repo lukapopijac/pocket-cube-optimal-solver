@@ -2,8 +2,9 @@
 /** For writing and reading tables from files
 */
 
-var zlib = require('zlib');
-var fs = require('fs');
+const zlib = require('zlib');
+const fs = require('fs');
+const path = require('path');
 
 function toFile(fileName, t) {
 	let buf;
@@ -14,6 +15,10 @@ function toFile(fileName, t) {
 	} else {
 		buf = new Buffer(t);
 	}
+	
+	try {
+		fs.mkdirSync(path.dirname(fileName));
+	} catch(e){};
 	
 	fs.writeFileSync(fileName, zlib.deflateSync(buf));
 }
