@@ -35,6 +35,9 @@ const hashes = {
 		let g = ((cubeState.o&0b010101010101)*0b100001 >> 5) & 0b111111;
 		
 		return (p2&0b111 | (p1&0b11100)<<2 | (p0&0b110001)<<3);
+	},
+	hash8: function(cubeState) {
+		return hashes.hash5(cubeState);
 	}
 }
 
@@ -94,7 +97,7 @@ function generateTable(id) {
 			
 			addTopatternDB(patternDB, hashes[id](state), val);
 		}
-	}	
+	}
 	if(id=='hash7') {
 		patternDB = new Uint8Array(512).fill(255);
 		
@@ -113,6 +116,29 @@ function generateTable(id) {
 			addTopatternDB(patternDB, hashes[id](state), val);
 		}
 	}
+	if(id=='hash8') {
+		patternDB = new Uint8Array(373248).fill(255);
+		
+		for(let key of keys) {  // key represents state
+			let val = table.get(key);
+			
+			// allowed values: 0,6,7,8
+			if(val<6) val = 0;
+			if(val>8) val = 8;
+			
+			let o = key>>18;
+			let p2 = key>>12 & 63;
+			let p1 = key>>6 & 63;
+			let p0 = key & 63;
+			
+			// These are not really p2, p1, p0, o, just their lower 6 bits.
+			// Higher 2 bits are not important as they are not used for this hash.
+			let state = {p2, p1, p0, o};
+			
+			addTopatternDB(patternDB, hashes[id](state), val);
+		}
+	}
+
 	
 	d1 = Date.now();
 	console.log('...done! (' + (d1-d0) + 'ms)');
