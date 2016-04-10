@@ -2,13 +2,13 @@
 */
 'use strict';
 
-function lehmerCode(p) {
+function lehmerCode(perm) { // n = 7
 	let ret = [0,0,0,0,0,0,0];
 	let s = 0;
-	for(let i=0; i<7; i++) {
-		let x = p[i];
-		ret[i] = x - ((s>>3*x) & 0b111);
-		s += 0b001001001001001001001 << (3*x) | 0;
+	for(let i=0; i<7-1; i++) {  // the last one must be 0, so it is not needed to calculate
+		let p = perm[i];
+		ret[i] = p - (s>>3*p & 0b111);
+		s += ( (1<<3*7)-(1<<3*p) ) /7;
 	}
 	return ret;
 }
