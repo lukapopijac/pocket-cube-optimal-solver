@@ -70,7 +70,7 @@ and the last one is dependent on others). The number of possible states is:
 
 	7! * 3^6 = 3674160
 
-This is fairly small about of states and it can be easily saved in computer
+This is fairly small amount of states and it can be easily saved in computer
 memory, in which case the search algorithm becomes trivial. As the purpose
 of this experiment was to try different search algorithms, the amount of
 memory was limited intentionally.
