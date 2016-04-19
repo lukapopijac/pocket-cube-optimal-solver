@@ -133,7 +133,7 @@ see that depth of the node plus its heuristic is acceptable:
 `depth + heuristics <= maxDepth` (`3+5<=8`). This leads to expansion of the 
 node `A` to its children. First child to handle is the node `B`. The similar 
 situation happens with this node, as `4+4<=8`, so the node `B` gets expanded. 
-Again, first children of it is the node `C`. Now, for the node `C` we can see 
+Again, first child of it is the node `C`. Now, for the node `C` we can see 
 that depth plus heuristic of it exceeds maximum depth (`5+8>8`), so this part 
 of the tree can be pruned. Furthermore, as the node `C` is just one step away
 from the node `B`, we know that minimum number of steps required to get to the
@@ -143,7 +143,7 @@ so the heuristic value for the node `B` can be updated to that value. At this
 point, IDA* would continue with exploring the next child of the node `B`.
 My algorithm doesn't continue exploring the next child as it concludes from 
 the updated heuristic value of the node `B` that the node does not satisfies
-requirement `depth + heuristic <= maxDepth` anymore: `7+4>8`. The whole branch
+requirement `depth + heuristic <= maxDepth` anymore: `4+7>8`. The whole branch
 of `A` with the child `B` gets pruned at this point. The same procedure
 continues. As the node `B` is just one step away from the node `A`, heuristic
 of the node `A` can be updated to the value 6. Now, even node `A` does not
@@ -162,8 +162,8 @@ information can be used in the next iteration of the iterative deepening
 to set the maxDepth for the next iteration to be for more than 1 step bigger
 than previous. However, this is just a theoretical advantage which is very 
 unlikely to be useful in case of Rubik's cube, as it almost always needs to 
-increment the maximum depth of the next iteration for just by one. As s
-results, my algorithm when applied on the Rubik's cube basically doesn't lose
+increment the maximum depth of the next iteration for just by one. As a
+result, my algorithm when applied on the Rubik's cube basically doesn't lose
 any advantage of IDA*, but it improves effectiveness of pruning mechanism.
 
 
