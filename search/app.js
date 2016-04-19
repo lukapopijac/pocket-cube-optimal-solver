@@ -16,7 +16,3 @@ router.route('/cube2')
 ;
 
 module.exports = router;
-
-/*
-http://localhost:3000/cube2?p2=0b01101100&p1=0b00011101&p0=0b10100101&o=0b0100010111010000
-*/
