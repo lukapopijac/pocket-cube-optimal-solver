@@ -47,7 +47,7 @@ Motivation
 
 This project is made as an exercise with few different goals in mind:
  
- - Playing with different search algorithms: DFS, BFS, A*, IDA*
+ - Playing with different search algorithms: DFS, BFS, A\*, IDA\*
  - Experimenting with heuristics calculations and pruning tables
  - Optimizing the search to have as better performance as possible with
    use of as little memory as possible. In general, those two requirements
