@@ -101,7 +101,7 @@ IDA* search uses heuristics to prune branches which are guaranteed to lack
 a solution withing allowed depth. As heuristic calculation made with 
 pattern databases is not [consistent][3], it is possible to have a situation 
 where IDA* will explore too much of a subtree of seemingly good node with
-small heuristic value __WHICH__ too much underestimate the real distance to the
+small heuristic value that too much underestimate the real distance to the
 solution.
 
 To improve the IDA* search in this regard, I adjusted the search algorithm
@@ -110,7 +110,7 @@ idea with the following example.
 
 Assume that we have a part of the search tree that looks like in the picture
 below, and assume that the maximum depth is 8. Nodes `A`, `B` and `C` are
-__PLACED__ at the depths `3`, `4` and `5`, respectively. Heuristic values of
+positioned at depths `3`, `4` and `5`, respectively. Heuristic values of
 these nodes obtained from the pattern databases are `h(A)=5`, `h(B)=4` and
 `h(C)=8`.
 
@@ -130,11 +130,11 @@ depth
 
 During the search of this tree, when it comes to explore the node `A`, we can 
 see that depth of the node plus its heuristic is acceptable:
-`depth + heuristics <= maxDepth` (3+5<=8). This leads to expansion of the 
+`depth + heuristics <= maxDepth` (`3+5<=8`). This leads to expansion of the 
 node `A` to its children. First child to handle is the node `B`. The similar 
-situation happens with this node, as 4+4<=8, so the node `B` gets expanded. 
+situation happens with this node, as `4+4<=8`, so the node `B` gets expanded. 
 Again, first children of it is the node `C`. Now, for the node `C` we can see 
-that depth plus heuristic of it exceeds maximum depth (5+8>8), so this part 
+that depth plus heuristic of it exceeds maximum depth (`5+8>8`), so this part 
 of the tree can be pruned. Furthermore, as the node `C` is just one step away
 from the node `B`, we know that minimum number of steps required to get to the
 goal node cannot differ for more that one step. This leads to conclusion that 
@@ -143,11 +143,11 @@ so the heuristic value for the node `B` can be updated to that value. At this
 point, IDA* would continue with exploring the next child of the node `B`.
 My algorithm doesn't continue exploring the next child as it concludes from 
 the updated heuristic value of the node `B` that the node does not satisfies
-requirement `depth + heuristic <= maxDepth` anymore: 7+4>8. The whole branch
+requirement `depth + heuristic <= maxDepth` anymore: `7+4>8`. The whole branch
 of `A` with the child `B` gets pruned at this point. The same procedure
 continues. As the node `B` is just one step away from the node `A`, heuristic
 of the node `A` can be updated to the value 6. Now, even node `A` does not
-satisfy the condition anymore, as 3+6>8. That means, at this time, we can 
+satisfy the condition anymore, as `3+6>8`. That means, at this time, we can 
 prune the whole subtree which includes the node `A`.
 
 It is straight forward to generalize this algorithm in case when step costs
