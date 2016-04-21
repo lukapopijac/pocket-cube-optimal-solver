@@ -2,16 +2,17 @@ Pocket Cube Optimal Solver
 ==========================
 
 This is an optimal solver for the [Pocket Cube][1] (2x2 Rubik's cube). It
-defines Web API written with Node.js and Express. For given state of a cube,
-the service returns list of moves which solves the cube optimally, which 
-means in the minimum amount of moves possible.
+defines Web API written with Node.js and Express. For a given state of the 
+cube, the service returns a list of moves which solves the cube optimally 
+(with the minimum number of moves possible).
+
 
 
 How to Set Up
 -------------
 
-You have to have `Node.js` and `npm` installed. Then, to install all the
-dependencies just run
+You need to have `Node.js` and `npm` installed. Then, to install all the 
+dependencies, just run
 ```
 npm install
 ```
@@ -42,19 +43,21 @@ are just a preparation for the search. After applying `normalize` moves, list
 of moves in `solution` will solve the cube optimally.
 
 
+
 Motivation
 ----------
 
-This project is made as an exercise with few different goals in mind:
+This project is made as an exercise with several different goals in mind:
  
- - Playing with different search algorithms: DFS, BFS, A\*, IDA\*
- - Experimenting with heuristics calculations and pruning tables
- - Optimizing the search to have as better performance as possible with
-   use of as little memory as possible. In general, those two requirements
-   contradict each other, so the satisfying middle was to be found.
+ - Experimenting with different search algorithms: DFS, BFS, A\*, IDA\*
+ - Experimenting with heuristics and pruning tables
+ - Tweaking the search to optimize the performance while minimizing the 
+   memory usage. In general, those two goals contradict each other, so the 
+   satisfying compromise was to be found.
  - Writing REST API with `Node.js` and `Express`
  - Preparing for the bigger challenge in the future project: Optimal
-   solver of the standard Rubik's Cube
+   solver for the standard Rubik's Cube
+
 
 
 Pocket Cube Technicalities
@@ -62,21 +65,22 @@ Pocket Cube Technicalities
 
 The cube consists of 8 smaller cubies, each one with 3 color stickers on it.
 Any permutation of the cubies is possible, and 7 of them can be independently
-oriented in three ways. If we fix one cubie to have correct position and
-correct orientation, we can calculate the number of possible states of the cube
-by allowing any permutation of remaining 7 cubies and any orientation of 6
-cubies (first cubie is correctly oriented, 6 cubies we can independently orient, 
-and the last one is dependent on others). The number of possible states is:
+oriented in three ways. If we fix one cubie to have a chosen position and 
+orientation, we can allow any permutation of the remaining 7 cubies and any
+orientation of 6 cubies (the orientation of the first cubie is fixed, 6 cubies 
+can be independently oriented, and the orientation of the last one is 
+determined by the other). The number of possible states is:
 
 	7! * 3^6 = 3674160
 
-This is fairly small amount of states and it can be easily saved in computer
-memory, in which case the search algorithm becomes trivial. As the purpose
-of this experiment was to try different search algorithms, the amount of
-memory was limited intentionally.
+This is a fairly small amount of states, and it can be easily saved in a 
+computer memory, in which case the search algorithm becomes trivial. As the 
+purpose of this experiment was to try different search algorithms, the amount 
+of memory was intentionally limited.
 
-In case of the standard Rubik's cube, the number of possible states greatly 
-exceeds this number, and numerating all of the states is infeasible.
+In case of the standard Rubik's cube, the number of possible states is 
+vastly larger, and enumerating all the states is infeasible.
+
 
 
 About the Search Algorithm
@@ -167,6 +171,7 @@ result, my algorithm when applied on the Rubik's cube basically doesn't lose
 any advantage of IDA*, but it improves effectiveness of pruning mechanism.
 
 
+
 Some Results
 ------------
 
@@ -178,6 +183,7 @@ faster, as expected. It uses pattern database which compressed has size 109KB.
 The implemented search algorithm is about 30% faster than standard IDA* search.
 Implementation of both algorithms can be found in files [search.js](/search/search.js)
 and [search_idastar.js](/search/search_idastar.js).
+
 
 
 License
