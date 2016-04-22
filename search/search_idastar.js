@@ -21,7 +21,7 @@ function search(node, depth, maxDepth) {
 	if(node.isGoal()) return node.getMoves();
 	let min = 100;
 	let successors = node.expand();
-    for(var i=0; i<successors.length; i++) {
+	for(var i=0; i<successors.length; i++) {
 		let t = search(successors[i], depth+1, maxDepth);
 		if(typeof t != 'number') return t;  // success!
 		if(t<min) min = t;
