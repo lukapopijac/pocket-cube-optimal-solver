@@ -90,33 +90,31 @@ The idea of the implemented search algorithm is based on [IDA*][2] search. In
 short, IDA* works similarly like a regular iterative deepening search, but
 instead of exploring every node, it utilizes heuristics to prune some branches
 in the search three. As such it is very memory efficient and it provides an
-optimal solution as long as the heuristics is admissible.
+optimal solution as long as the heuristics is [admissible][3].
 
-Heuristic calculation is done using pattern database. For each state of the
-cube, pattern can be extracted and value for it can be found in the pattern 
-database. That value represents minimum number of moves required to solve 
+Heuristic calculation is done using pattern database. For each state of the 
+cube, the pattern can be extracted and its value can be found in the pattern
+database. That value represents the minimum number of moves required to solve
 the cube starting from the corresponding state. It is always preferable to
-have bigger values as it would lead to better performance, but that also
-implies bigger database in general. The pattern database used in this
-project was selected to preserve good performances without using too much 
-of memory.
+have larger values as it would lead to better performance, but that also
+implies bigger database in general. The pattern database used in this project
+was selected to preserve good performance without using too much of memory.
 
 IDA* search uses heuristics to prune branches which are guaranteed to lack 
-a solution withing allowed depth. As heuristic calculation made with 
-pattern databases is not [consistent][3], it is possible to have a situation 
+a solution within the allowed depth. As heuristic calculation made with 
+pattern databases is not [consistent][4], it is possible to have a situation 
 where IDA* will explore too much of a subtree of seemingly good node with
 small heuristic value that too much underestimate the real distance to the
 solution.
 
 To improve the IDA* search in this regard, I adjusted the search algorithm
-with few changes that provide more efficient pruning. I will explain the main
-idea with the following example.
+to provide more efficient pruning. I will explain the main idea with the 
+following example.
 
-Assume that we have a part of the search tree that looks like in the picture
-below, and assume that the maximum depth is 8. Nodes `A`, `B` and `C` are
-positioned at depths `3`, `4` and `5`, respectively. Heuristic values of
-these nodes obtained from the pattern databases are `h(A)=5`, `h(B)=4` and
-`h(C)=8`.
+Assume that a part of the search tree looks like in the picture below, and 
+assume that the maximum depth is `8`. Nodes `A`, `B` and `C` are positioned 
+at depths `3`, `4` and `5`, respectively. Heuristic values of these nodes 
+obtained from the pattern databases are `h(A)=5`, `h(B)=4` and `h(C)=8`.
 
 ```
 depth
@@ -135,40 +133,40 @@ depth
 During the search of this tree, when it comes to explore the node `A`, we can 
 see that depth of the node plus its heuristic is acceptable:
 `depth + heuristics <= maxDepth` (`3+5<=8`). This leads to expansion of the 
-node `A` to its children. First child to handle is the node `B`. The similar 
-situation happens with this node, as `4+4<=8`, so the node `B` gets expanded. 
-Again, first child of it is the node `C`. Now, for the node `C` we can see 
-that depth plus heuristic of it exceeds maximum depth (`5+8>8`), so this part 
-of the tree can be pruned. Furthermore, as the node `C` is just one step away
-from the node `B`, we know that minimum number of steps required to get to the
-goal node cannot differ for more that one step. This leads to conclusion that 
-minimum number of steps to get to the goal from the node `B` is at least 7, 
-so the heuristic value for the node `B` can be updated to that value. At this
-point, IDA* would continue with exploring the next child of the node `B`.
-My algorithm doesn't continue exploring the next child as it concludes from 
-the updated heuristic value of the node `B` that the node does not satisfies
-requirement `depth + heuristic <= maxDepth` anymore: `4+7>8`. The whole branch
-of `A` with the child `B` gets pruned at this point. The same procedure
-continues. As the node `B` is just one step away from the node `A`, heuristic
-of the node `A` can be updated to the value 6. Now, even node `A` does not
-satisfy the condition anymore, as `3+6>8`. That means, at this time, we can 
-prune the whole subtree which includes the node `A`.
+node `A` into its children. The first child to handle is the node `B`. The 
+similar situation happens with this node, as `4+4<=8`, so the node `B` gets 
+expanded. Again, its first child is the node `C`. Now, for the node `C` we 
+can see that depth plus heuristic exceeds the maximum depth (`5+8>8`), so 
+this part of the tree can be pruned. Furthermore, as the node `C` is just 
+one step away from the node `B`, we know that the minimum number of steps 
+required to get to the goal node cannot differ by more than one step. This 
+leads to conclusion that the minimum number of steps to get to the goal from 
+the node `B` is at least `7`, so the heuristic value for the node `B` can be
+updated to that value. At this point, IDA* would continue with exploring the
+next child of the node `B`. My algorithm doesn't continue exploring the next
+child as it concludes from the updated heuristic value of the node `B` that 
+the node does not satisfy requirement `depth + heuristic <= maxDepth` anymore:
+`4+7>8`. The whole branch of `A` with the child `B` gets pruned at this point.
+The same procedure continues. As the node `B` is just one step away from the 
+node `A`, heuristic of the node `A` can be updated to the value `6`. Now even
+the node `A` does not satisfy the condition anymore, as `3+6>8`. That means 
+that at this point, we can prune the whole subtree which includes the node `A`.
 
-It is straight forward to generalize this algorithm in case when step costs
-are different that 1. I didn't bother with those details here as for the
-Rubik's cube, cost of one move is always 1.
+It is straightforward to generalize this algorithm in the case when step costs
+are different than `1`. I didn't bother with those details here as for the
+Rubik's cube, cost of one move is always `1`.
 
 There is one theoretical advantage of IDA* which is not present in my
 algorithm. As IDA* explores all the children of an expanded node, if the
 solution is not found in this subtree, it gains information about the
-minimum number of steps needed to find the solution in this subtree. That
-information can be used in the next iteration of the iterative deepening
-to set the maxDepth for the next iteration to be for more than 1 step bigger
-than previous. However, this is just a theoretical advantage which is very 
-unlikely to be useful in case of Rubik's cube, as it almost always needs to 
-increment the maximum depth of the next iteration for just by one. As a
-result, my algorithm when applied on the Rubik's cube basically doesn't lose
-any advantage of IDA*, but it improves effectiveness of pruning mechanism.
+minimum number of steps needed to find the solution in this subtree. That 
+information can be used in the iterative deepening to set the `maxDepth` for
+the next iteration to be more than `1` step bigger than previous. However, 
+this is just a theoretical advantage which is very unlikely to be useful in 
+the case of Rubik's cube, as it almost always needs to increment the maximum
+depth of the next iteration just by one. As a result, when applied on the 
+Rubik's cube, my algorithm basically doesn't lose any advantage of IDA*, but
+it improves the effectiveness of pruning mechanism.
 
 
 
@@ -176,8 +174,8 @@ Some Results
 ------------
 
 The number of moves needed to solve the Pocket Cube is 11 in the worst case.
-For such cases, this app, written in JavaScript, finds an optimal solution in 
-less than 10ms on my modest laptop from 2011. For other cases it works much 
+For such cases, this app written in JavaScript, finds an optimal solution in 
+less than 10ms on my modest laptop from 2011. In other cases it works much 
 faster, as expected. It uses pattern database which compressed has size 109KB.
 
 The implemented search algorithm is about 30% faster than standard IDA* search.
@@ -196,4 +194,5 @@ This software is released under the MIT license.
 
 [1]: https://en.wikipedia.org/wiki/Pocket_Cube/             "Pocket Cube"
 [2]: https://en.wikipedia.org/wiki/Iterative_deepening_A*   "Iterative deepening A*"
-[3]: https://en.wikipedia.org/wiki/Consistent_heuristic     "Consistent heuristic"
+[3]: https://en.wikipedia.org/wiki/Admissible_heuristic     "Admissible heuristic"
+[4]: https://en.wikipedia.org/wiki/Consistent_heuristic     "Consistent heuristic"
