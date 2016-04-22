@@ -192,7 +192,7 @@ This software is released under the MIT license.
 
 
 
-[1]: https://en.wikipedia.org/wiki/Pocket_Cube/             "Pocket Cube"
+[1]: https://en.wikipedia.org/wiki/Pocket_Cube              "Pocket Cube"
 [2]: https://en.wikipedia.org/wiki/Iterative_deepening_A*   "Iterative deepening A*"
 [3]: https://en.wikipedia.org/wiki/Admissible_heuristic     "Admissible heuristic"
 [4]: https://en.wikipedia.org/wiki/Consistent_heuristic     "Consistent heuristic"
