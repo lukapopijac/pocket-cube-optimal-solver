@@ -56,7 +56,7 @@ This project is made as an exercise with several different goals in mind:
    satisfying compromise was to be found.
  - Writing REST API with `Node.js` and `Express`
  - Preparing for the bigger challenge in the future project: Optimal
-   solver for the standard Rubik's Cube
+   solver for standard Rubik's Cube
 
 
 
@@ -78,7 +78,7 @@ computer memory, in which case the search algorithm becomes trivial. As the
 purpose of this experiment was to try different search algorithms, the amount 
 of memory was intentionally limited.
 
-In case of the standard Rubik's cube, the number of possible states is 
+In case of a standard Rubik's cube, the number of possible states is 
 vastly larger, and enumerating all the states is infeasible.
 
 
