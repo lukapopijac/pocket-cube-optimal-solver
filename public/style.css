@@ -1,0 +1,17 @@
+body {
+	background-color: #e9ddaf;
+}
+
+.cube {
+	background: url(cube.png);
+	width: 778px;
+	height: 506px;
+}
+
+[data-v="0"]  { fill: #393939; }
+[data-v="1"]  { fill: blue; }
+[data-v="2"]  { fill: darkorange; }
+[data-v="4"]  { fill: white; }
+[data-v="8"]  { fill: red; }
+[data-v="16"] { fill: green; }
+[data-v="32"] { fill: yellow; }
