@@ -1,27 +1,63 @@
-var stickers = Array.from(document.querySelectorAll('svg [data-p]'));
+var stickers = Array.from(document.querySelectorAll('.sticker'));
+var colorPicks = Array.from(document.querySelectorAll('.color-pick'));
 
-console.log(stickers);
+function setV(el, v) {
+	el.setAttribute('data-v', v);
+}
+function getP(el) {
+	return +el.getAttribute('data-p');
+}
+function getO(el) {
+	return +el.getAttribute('data-o');
+}
 
+stickers.forEach(function(el) {
+	el.addEventListener('click', function(evt) {
+		var v = document.querySelector('.color-pick.selected').getAttribute('data-v');
+		setV(evt.target, v);
+	});
+});
 
-var pa = stickers
-    .reduce((acc, curr) => {
-        acc[curr.getAttribute('data-p')] += +curr.getAttribute('data-v');
-        return acc;
-    }, [0,0,0,0,0,0,0,0])
-    .map(x => x&0b111);
+colorPicks.forEach(function(el) {
+	el.addEventListener('click', function(evt) {
+		document.querySelector('.color-pick.selected').classList.remove('selected');
+		evt.target.classList.add('selected');
+	});
+});
 
-
-var oa = stickers
-    .filter(x => x.getAttribute('data-v') & 0b100100)   // v==4 || v==32
-    .reduce((acc, curr) => {
-        acc[curr.getAttribute('data-p')] = +curr.getAttribute('data-o');
-        return acc;
-    }, [0,0,0,0,0,0,0,0]);
+document.querySelector('.button.reset').addEventListener('click', function(evt) {
+	stickers.filter(x => getP(x)<4 && getO(x)==0).forEach(el => setV(el, 32)); // yellow
+	stickers.filter(x => getP(x)>3 && getO(x)==0).forEach(el => setV(el, 4));  // white
+	stickers.filter(x => !(getP(x)&1) && getO(x)).forEach(el => setV(el, 16));  // green
+	stickers.filter(x => getP(x)&1 && getO(x)).forEach(el => setV(el, 1));  // blue
 	
+});
 
-console.log(pa);
-console.log(oa);
-	
+document.querySelector('.button.clear').addEventListener('click', function(evt) {
+	stickers.forEach(el => setV(el, 0));
+});
+
+
+function getPArray() {
+	return stickers
+		.reduce((acc, curr) => {
+			acc[curr.getAttribute('data-p')] += +curr.getAttribute('data-v');
+			return acc;
+		}, [0,0,0,0,0,0,0,0])
+		.map(x => x&0b111);
+}
+
+function getOArray() {
+	return stickers
+		.filter(x => x.getAttribute('data-v') & 0b100100)   // v==4 || v==32
+		.reduce((acc, curr) => {
+			acc[curr.getAttribute('data-p')] = +curr.getAttribute('data-o');
+			return acc;
+		}, [0,0,0,0,0,0,0,0]);
+}
+
+
+
 /*
 
 // generate p array

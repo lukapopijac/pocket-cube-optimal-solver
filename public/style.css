@@ -1,3 +1,10 @@
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
 body {
 	background-color: #e9ddaf;
 }
@@ -8,10 +15,73 @@ body {
 	height: 506px;
 }
 
-[data-v="0"]  { fill: #393939; }
-[data-v="1"]  { fill: blue; }
-[data-v="2"]  { fill: darkorange; }
-[data-v="4"]  { fill: white; }
-[data-v="8"]  { fill: red; }
-[data-v="16"] { fill: green; }
-[data-v="32"] { fill: yellow; }
+.color-pick {
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	margin-left: 10px;
+	margin-right: 10px;
+	border: 2px solid black;
+	border-radius: 10px;
+}
+.color-pick[data-v="0"]   { background: #393939; }
+.color-pick[data-v="1"]   { background: blue; }
+.color-pick[data-v="2"]   { background: darkorange; }
+.color-pick[data-v="4"]   { background: white; }
+.color-pick[data-v="8"]   { background: red; }
+.color-pick[data-v="16"] { background: green; }
+.color-pick[data-v="32"] { background: yellow; }
+
+.color-pick.selected {
+    border: 5px solid #dadada;
+    border-radius: 0px;
+    box-shadow: 0px 0px 0px 2px black;
+}
+
+.color-pick:hover {
+	cursor: pointer;
+	transform: scale(1.1);
+}
+
+.color-pick.selected:hover {
+	cursor: auto;
+	transform: scale(1);
+}
+
+.sticker:hover {
+	cursor: pointer;
+}
+
+.sticker[data-v="0"]   { fill: #393939; }
+.sticker[data-v="1"]   { fill: blue; }
+.sticker[data-v="2"]   { fill: darkorange; }
+.sticker[data-v="4"]   { fill: white; }
+.sticker[data-v="8"]   { fill: red; }
+.sticker[data-v="16"] { fill: green; }
+.sticker[data-v="32"] { fill: yellow; }
+
+.button-container {
+	margin-top: 20px;
+}
+.button {
+    background-image: linear-gradient(#ff1d1b, #cd0200 50%, #b90200);
+    border: 1px solid #9a0200;
+    background-color: #cd0200;
+    border-radius: 4px;
+    padding: 12px 18px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    font-family: verdana;
+}
+.button:hover {
+	background-image: linear-gradient(#ff0906, #b90200 50%, #a40200);
+	border: 1px solid #860100;
+	background-color: #9a0200;
+}
+.button:active {
+	background-image: none;
+	background-color: #9a0200;
+    border-color: #900100;
+}
