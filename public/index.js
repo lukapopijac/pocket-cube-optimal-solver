@@ -26,35 +26,61 @@ colorPicks.forEach(function(el) {
 });
 
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
-	stickers.filter(x => getP(x)<4 && getO(x)==0).forEach(el => setV(el, 32)); // yellow
-	stickers.filter(x => getP(x)>3 && getO(x)==0).forEach(el => setV(el, 4));  // white
-	stickers.filter(x => !(getP(x)&1) && getO(x)).forEach(el => setV(el, 16));  // green
-	stickers.filter(x => getP(x)&1 && getO(x)).forEach(el => setV(el, 1));  // blue
-	
+	stickers.forEach(function(el) {
+		var o = getO(el);
+		var p = getP(el);
+		var v;
+		if(o==0) v = p<4 ? 32 : 4;  // yellow=32, white=4
+		else if(o==1) {
+			if(p==3 || p==5) v = 1;  // blue
+			if(p==2 || p==7) v = 2;  // orange
+			if(p==1 || p==4) v = 8;  // red
+			if(p==0 || p==6) v = 16; // green
+		}
+		else { // o==2
+			if(p==1 || p==7) v = 1;
+			if(p==3 || p==6) v = 2;
+			if(p==0 || p==5) v = 8;
+			if(p==2 || p==4) v = 16;
+		}
+		setV(el, v);
+	});
 });
+
 
 document.querySelector('.button.clear').addEventListener('click', function(evt) {
 	stickers.forEach(el => setV(el, 0));
 });
 
 
-function getPArray() {
-	return stickers
+document.querySelector('.button.solve').addEventListener('click', function(evt) {
+	var p = stickers
 		.reduce((acc, curr) => {
 			acc[curr.getAttribute('data-p')] += +curr.getAttribute('data-v');
 			return acc;
 		}, [0,0,0,0,0,0,0,0])
-		.map(x => x&0b111);
-}
-
-function getOArray() {
-	return stickers
+		.map(x => x&0b111)
+		.join('');
+	
+	var o = stickers
 		.filter(x => x.getAttribute('data-v') & 0b100100)   // v==4 || v==32
 		.reduce((acc, curr) => {
 			acc[curr.getAttribute('data-p')] = +curr.getAttribute('data-o');
 			return acc;
-		}, [0,0,0,0,0,0,0,0]);
-}
+		}, [0,0,0,0,0,0,0,0])
+		.join('');
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', encodeURI('/solve?p=' + p + '&o=' + o));
+	xhr.onload = function() {
+		if(xhr.status == 200) {
+			console.log(xhr.responseText);
+		} else {
+			console.log('error');
+		}
+	};
+	xhr.send();
+});
 
 
 
