@@ -74,7 +74,7 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 	xhr.open('GET', encodeURI('/solve?p=' + p + '&o=' + o));
 	xhr.onload = function() {
 		if(xhr.status == 200) {
-			console.log(xhr.responseText);
+			document.querySelector('.solution').textContent = formulateSolution(JSON.parse(xhr.responseText))
 		} else {
 			console.log('error');
 		}
@@ -83,6 +83,12 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 });
 
 
+function formulateSolution(resData) {
+	return resData.normalize
+		.concat(resData.solution)
+		.map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x)
+		.join(' ');
+}
 
 /*
 
