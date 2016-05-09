@@ -12,9 +12,9 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
-   width="797"
-   height="491"
-   sodipodi:docname="cube-unfolded-02.svg">
+   width="757.03882"
+   height="478.75528"
+   sodipodi:docname="stickers2.svg">
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -31,15 +31,12 @@
      id="defs6">
     <filter
        inkscape:collect="always"
-       id="filter4756"
-       x="-0.07875477"
-       width="1.1575095"
-       y="-0.13110353"
-       height="1.2622071">
+       id="filter4086"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="24.644228"
-         id="feGaussianBlur4758" />
+         stdDeviation="16.035205"
+         id="feGaussianBlur4088" />
     </filter>
   </defs>
   <sodipodi:namedview
@@ -55,20 +52,28 @@
      inkscape:window-height="706"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="0.735625"
-     inkscape:cx="206.22869"
-     inkscape:cy="205.77156"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="388.2518"
+     inkscape:cy="225.33429"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer4"
      showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:guide-bbox="true"
+     borderlayer="false"
+     showborder="true"
+     inkscape:showpageshadow="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <g
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="background"
-     style="display:inline"
+     style="display:none"
+     transform="translate(-39.990182,4.76584)"
      sodipodi:insensitive="true">
     <rect
        style="fill:#e9ddaf;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -85,21 +90,23 @@
      id="layer3"
      inkscape:label="shadow"
      style="display:inline"
+     transform="translate(-39.990182,4.76584)"
      sodipodi:insensitive="true">
     <path
-       style="opacity:0.54807691;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4756)"
-       d="m 858.81619,624.03222 29.9152,189.38263 125.69221,59.10668 46.0791,86.12688 180.2151,9.40881 6.0313,-86.12687 212.0603,-24.60768 114.3533,-51.38663 36.6702,-184.07509 -119.9021,17.37013 -236.4267,8.68506 -3.86,-130.99969 -197.5852,0.24125 -59.10671,127.13967 z"
+       style="opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter4086)"
+       d="m 90.09205,128.97092 26.60197,168.40773 111.77129,52.56038 40.97565,76.58798 160.25555,8.36674 5.36331,-76.58797 188.57376,-21.88228 101.6882,-45.69535 32.60883,-163.68802 -106.62246,15.44631 -210.24148,7.72316 -3.43249,-116.490946 -175.70183,0.214531 -52.56041,113.058435 z"
        id="path3768-7-1-5"
        inkscape:connector-curvature="0"
-       transform="matrix(0.88924594,0,0,0.88924594,-666.16921,-427.9472)"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90"
+       inkscape:export-filename="C:\Workspace\pocket-cube-optimal-solver\ink\cube3.png" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer7"
      inkscape:label="plain cube"
      style="display:inline"
+     transform="translate(-39.990182,4.76584)"
      sodipodi:insensitive="true">
     <path
        transform="translate(-0.00458886,0.01754621)"
@@ -108,13 +115,17 @@
        inkscape:original="M 433.8125 19.84375 L 236.25 20.09375 L 177.125 147.25 L 43 126.96875 L 72.90625 316.34375 L 198.59375 375.46875 L 244.6875 461.59375 L 424.90625 471 L 430.9375 384.875 L 643 360.25 L 757.34375 308.875 L 794.03125 124.8125 L 674.125 142.1875 L 437.6875 150.84375 L 433.8125 19.84375 z "
        style="fill:#333333;stroke:#262626;stroke-width:3.4000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
        id="path4539"
-       d="m 433.8125,18.5625 -197.5625,0.25 a 1.2921349,1.2921349 0 0 0 -1.15625,0.75 L 176.375,145.84375 43.1875,125.6875 a 1.2921349,1.2921349 0 0 0 -1.46875,1.46875 L 71.625,316.53125 A 1.2921349,1.2921349 0 0 0 72.34375,317.5 l 125.3125,58.9375 45.90625,85.78125 a 1.2921349,1.2921349 0 0 0 1.0625,0.65625 l 180.21875,9.40625 a 1.2921349,1.2921349 0 0 0 1.34375,-1.1875 l 5.96875,-85.0625 211,-24.5 a 1.2921349,1.2921349 0 0 0 0.375,-0.0937 L 757.875,310.0625 a 1.2921349,1.2921349 0 0 0 0.75,-0.9375 l 36.6875,-184.0625 a 1.2921349,1.2921349 0 0 0 -1.46875,-1.53125 l -119.90625,17.375 -235,8.59375 -3.84375,-129.6875 a 1.2921349,1.2921349 0 0 0 -1.28125,-1.25 z" />
+       d="m 433.8125,18.5625 -197.5625,0.25 a 1.2921349,1.2921349 0 0 0 -1.15625,0.75 L 176.375,145.84375 43.1875,125.6875 a 1.2921349,1.2921349 0 0 0 -1.46875,1.46875 L 71.625,316.53125 A 1.2921349,1.2921349 0 0 0 72.34375,317.5 l 125.3125,58.9375 45.90625,85.78125 a 1.2921349,1.2921349 0 0 0 1.0625,0.65625 l 180.21875,9.40625 a 1.2921349,1.2921349 0 0 0 1.34375,-1.1875 l 5.96875,-85.0625 211,-24.5 a 1.2921349,1.2921349 0 0 0 0.375,-0.0937 L 757.875,310.0625 a 1.2921349,1.2921349 0 0 0 0.75,-0.9375 l 36.6875,-184.0625 a 1.2921349,1.2921349 0 0 0 -1.46875,-1.53125 l -119.90625,17.375 -235,8.59375 -3.84375,-129.6875 a 1.2921349,1.2921349 0 0 0 -1.28125,-1.25 z"
+       inkscape:export-filename="C:\Workspace\pocket-cube-optimal-solver\ink\cube3.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="stickers"
-     style="display:inline">
+     style="display:inline"
+     transform="translate(-39.990182,4.76584)">
     <path
        style="fill:#ffffff;stroke:none"
        d="m 444.41926,284.01807 c 2.8101,-2.93766 6.0098,-2.91754 10.1677,-3.24948 25.23006,-2.01412 50.18264,-4.00623 74.8428,-5.97484 4.1579,-0.33194 7.0275,-0.95197 9.8532,1.88679 2.8257,2.83876 1.9742,4.76939 1.651,8.59539 -1.96116,23.21585 -3.90074,46.17638 -5.8176,68.86792 -0.3232,3.826 -0.024,7.0375 -2.7516,9.8533 -2.728,2.8157 -6.167,2.5506 -10.1415,3.0136 -24.11695,2.80897 -47.96856,5.58787 -71.5409,8.3333 -3.9745,0.463 -6.2724,1.31 -9.1981,-1.3889 -2.9258,-2.6988 -2.4459,-5.1362 -2.3061,-9.0933 0.84783,-24.0109 1.68713,-47.75771 2.5157,-71.2264 0.1398,-3.957 -0.085,-6.67972 2.7254,-9.61738 z"

@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Pocket Cube Optimal Solver</title>
-        <meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<script src="index.js" defer></script>
 	</head>
 	
     <body>
 		<div class="cube">
-			<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-				<g transform="translate(-39.990182,20.876817)">
+			<svg viewBox="0 0 757.04 478.76" preserveAspectRatio="xMidYMid" xmlns="http://www.w3.org/2000/svg">
+				<g transform="translate(-39.990182,4.76584)">
 					<path data-p=0 data-o=0 data-v=2  class="sticker" d="m317.34,134.76c3.2608-15.854,6.4854-31.533,9.6727-47.029,0.5374-2.6127,0.4997-3.8799,3.1316-6.0223s6.7202-1.8036,10.84-1.7974c24.999,0.03744,49.723,0.07421,74.157,0.111,4.1199,0.006,8.37-0.15746,10.506,1.7604,2.1366,1.9178,1.8531,3.5825,1.8531,6.2446v47.919c0,2.6622,0.4538,3.9687-2.0384,6.0964-2.4921,2.1277-7.2761,1.7789-11.933,1.7233-28.26-0.33732-56.209-0.67093-83.83-1.0006-4.6572-0.0556-8.1536,0.16558-10.896-1.7973-2.742-1.9629-2.0013-3.5947-1.4639-6.2075z"/>
 					<path data-p=0 data-o=1 data-v=32 class="sticker" d="m449.03,161.53c3.1187-3.1354,6.3423-2.7526,10.726-2.9157,26.603-0.9901,52.914-1.9693,78.916-2.937,4.3842-0.16316,7.1248-0.7349,10.131,2.405,3.0058,3.1398,2.3269,5.6896,1.9793,9.9816-2.1097,26.044-4.1951,51.801-6.2572,77.256-0.3476,4.292-0.1625,7.7478-3.1711,10.748-3.0085,2.9999-6.2287,2.7809-10.407,3.1073-25.355,1.9802-50.431,3.9386-75.213,5.874-4.1785,0.32634-7.4927,0.90077-9.9816-1.3195-2.489-2.2203-2.2702-6.6118-2.1283-11.067,0.86101-27.034,1.7124-53.77,2.554-80.193,0.1418-4.4552-0.2668-7.8038,2.8518-10.939z"/>
 					<path data-p=0 data-o=2 data-v=1  class="sticker" d="m317.63,161.11c3.1907-3.2472,6.6691-2.7547,11.371-2.6917,28.53,0.38272,56.746,0.7612,84.631,1.1353,4.7018,0.0631,8.8353-0.20888,11.664,2.8748,2.8286,3.0836,2.2624,6.1523,2.1729,10.571-0.5438,26.814-1.0799,53.333-1.6114,79.541-0.09,4.419,0.3977,7.7799-2.8076,10.864-3.2052,3.0844-6.4127,2.2298-10.889,2.1484-27.16-0.49382-54.02-0.9822-80.566-1.4648-4.476-0.0814-8.0223,0.28718-10.986-2.5391-2.964-2.8262-2.714-6.5064-2.8503-10.907-0.8271-26.703-1.6452-53.112-2.4536-79.211-0.1363-4.4006-0.8653-7.0738,2.3254-10.321z"/>
@@ -38,22 +40,25 @@
 				</g>
 			</svg>
 		</div>
-		<div class="color-pick-container">
-			<div class="color-pick selected" data-v=0></div>
-			<div class="color-pick" data-v=1></div>
-			<div class="color-pick" data-v=2></div>
-			<div class="color-pick" data-v=4></div>
-			<div class="color-pick" data-v=8></div>
+		<div class="controls-row">
+			<div class="color-pick" data-v=1 ></div>
+			<div class="color-pick" data-v=2 ></div>
+			<div class="color-pick" data-v=4 ></div>
+			<div class="color-pick" data-v=8 ></div>
 			<div class="color-pick" data-v=16></div>
 			<div class="color-pick" data-v=32></div>
 		</div>
-		<div class="button-container">
-			<a href="#" class="button reset">Reset</a>
-			<a href="#" class="button clear">Clear</a>
-			<a href="#" class="button solve">Solve</a>
+		<div class="controls-row">
+			<div class="color-pick selected" data-v=0></div>
+			<div class="button-container">
+				<button type="button" class="button clear">Empty</button>
+				<button type="button" class="button reset">Clean</button>
+			</div>
 		</div>
-		<div class="solution">
+		<div class="controls-row">
+			<button type="button" class="button solve">Solve</button>
 		</div>
+		<div class="solution"></div>
 	</body>
 </html>
 
@@ -63,26 +68,26 @@ solved cube v values:
 
 32
 16
- 8
+8
 32
- 8
- 1
+8
+1
 32
- 2
+2
 16
 32
- 1
- 2
- 4
- 8
+1
+2
+4
+8
 16
- 4
- 1
- 8
- 4
+4
+1
+8
+4
 16
- 2
- 4
- 2
- 1
+2
+4
+2
+1
 -->

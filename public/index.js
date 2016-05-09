@@ -49,11 +49,14 @@ document.querySelector('.button.reset').addEventListener('click', function(evt) 
 
 
 document.querySelector('.button.clear').addEventListener('click', function(evt) {
+	document.querySelector('.solution').textContent = '';
 	stickers.forEach(el => setV(el, 0));
 });
 
 
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
+	document.querySelector('.solution').textContent = '';
+	
 	var p = stickers
 		.reduce((acc, curr) => {
 			acc[curr.getAttribute('data-p')] += +curr.getAttribute('data-v');
@@ -84,8 +87,9 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 
 
 function formulateSolution(resData) {
-	return resData.normalize
-		.concat(resData.solution)
+	var s = resData.normalize.concat(resData.solution);
+	if(s.length==0) return 'Solved!'
+	return s
 		.map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x)
 		.join(' ');
 }

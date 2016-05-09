@@ -11,6 +11,6 @@ app.use(express.static(publicDir));
 
 app.use(require('./search/app'));
 
-app.listen(port, function() {
+app.listen(port, '0.0.0.0', function() {
 	console.log('server started at port', port);
 });
