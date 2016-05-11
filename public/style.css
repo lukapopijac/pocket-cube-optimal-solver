@@ -9,43 +9,50 @@ html {
 body {
 	margin: 0;
 	background-color: #e9ddaf;
+	text-align: center;
 }
 
 .cube {
-	margin: 0 auto;
+	display: inline-block;
+	vertical-align: bottom;
 	width: calc(70% + 84px);
-	max-width: 600px;
+	max-width: 640px;
 	background: url(cube2.png);
 	background-size: 100%;
 }
 
-
-
 .cube svg {
 	width: 100%;
 	height: 100%;
+	display: block;
+}
+
+
+.controls {
+	display: inline-block;
+	vertical-align: bottom;
+	width: calc(70% + 84px);
+	max-width: 430px;
 }
 
 .controls-row {
-	width: calc(70% + 84px);
 	position: relative;
+	width: 100%;
 	padding: 2px 0px;
-	margin: 25px auto;
-	max-width: 430px;
-	font-size: 0;
+	margin: 25px auto 0;
+	text-align: left;
+	font-size: 0; /* to remove space between blocks */
 }
 
-@media (min-width: 980px) {
-	/*
+@media (min-width: 940px) {
 	.cube {
-		display: inline-block;
-		max-width: 560px;
+		width: calc(67% - 110px);
+		margin-right: calc(3% - 8px);
 	}
-	.controls-row {
-		display: inline-block;
+	.controls {
+		width: calc(15% + 195px);
 		max-width: 360px;
 	}
-	*/
 }
 
 .controls-row .color-pick {
