@@ -81,10 +81,27 @@ body {
 .color-pick[data-v="16"] { background: green; }
 .color-pick[data-v="32"] { background: yellow; }
 
+/*
 .color-pick.selected {
     border: 5px solid #dadada;
     border-radius: 0px;
     box-shadow: 0px 0px 0px 2px black;
+}
+*/
+.color-pick.selected::before {
+	content: "\2714";  /* check mark */
+	font-size: 33px;
+	font-weight: bold;
+	position: relative;
+	bottom: 3px;
+	left: 8px;
+}
+
+.color-pick[data-v="0"].selected::before, 
+.color-pick[data-v="1"].selected::before, 
+.color-pick[data-v="8"].selected::before, 
+.color-pick[data-v="16"].selected::before {
+	color: white;
 }
 
 .color-pick:hover {
