@@ -66,6 +66,7 @@ body {
 	vertical-align: middle;
 	border: 2px solid black;
 	border-radius: 10px;
+	position: relative;
 }
 
 
@@ -88,21 +89,25 @@ body {
     box-shadow: 0px 0px 0px 2px black;
 }
 */
+
 .color-pick.selected::before {
-	content: "\2714";  /* check mark */
-	font-size: 33px;
-	font-weight: bold;
-	position: relative;
-	bottom: 3px;
-	left: 8px;
+	position: absolute;
+	content: " ";
+	background: url(check.png);
+	width: 30px;
+	height: 26px;
+	top: 8px;
+	left: 6px;
 }
 
 .color-pick[data-v="0"].selected::before, 
 .color-pick[data-v="1"].selected::before, 
 .color-pick[data-v="8"].selected::before, 
 .color-pick[data-v="16"].selected::before {
-	color: white;
+	background-position: 30px 0;
 }
+
+
 
 .color-pick:hover {
 	cursor: pointer;
