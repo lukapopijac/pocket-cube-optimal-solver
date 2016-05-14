@@ -26,6 +26,7 @@ colorPicks.forEach(function(el) {
 });
 
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
+	document.querySelector('.solution').textContent = '';
 	stickers.forEach(function(el) {
 		var o = getO(el);
 		var p = getP(el);
