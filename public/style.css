@@ -17,7 +17,7 @@ body {
 	vertical-align: bottom;
 	width: calc(70% + 84px);
 	max-width: 640px;
-	background: url(cube2.png);
+	background: url(cube.png);
 	background-size: 100%;
 }
 
@@ -93,7 +93,7 @@ body {
 .color-pick.selected::before {
 	position: absolute;
 	content: " ";
-	background: url(check.png);
+	background: url(check.svg);
 	width: 30px;
 	height: 26px;
 	top: 8px;
@@ -111,7 +111,7 @@ body {
 
 .color-pick:hover {
 	cursor: pointer;
-	transform: scale(1.1);
+	transform: scale(1.133);
 }
 
 .color-pick.selected:hover {

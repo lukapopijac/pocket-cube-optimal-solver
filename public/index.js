@@ -48,7 +48,7 @@ document.querySelector('.button.reset').addEventListener('click', function(evt) 
 });
 
 
-document.querySelector('.button.clear').addEventListener('click', function(evt) {
+document.querySelector('.button.empty').addEventListener('click', function(evt) {
 	document.querySelector('.solution').textContent = '';
 	stickers.forEach(el => setV(el, 0));
 });
