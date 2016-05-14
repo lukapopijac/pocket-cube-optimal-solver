@@ -17,7 +17,7 @@ body {
 	vertical-align: bottom;
 	width: calc(70% + 84px);
 	max-width: 640px;
-	background: url(cube.png);
+	background: url(plaincube.svg), url(shadow.png);
 	background-size: 100%;
 }
 
