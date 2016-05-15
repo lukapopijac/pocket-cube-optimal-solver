@@ -26,7 +26,7 @@ colorPicks.forEach(function(el) {
 });
 
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
-	document.querySelector('.solution').textContent = '';
+	setSolution('');
 	stickers.forEach(function(el) {
 		var o = getO(el);
 		var p = getP(el);
@@ -50,13 +50,13 @@ document.querySelector('.button.reset').addEventListener('click', function(evt) 
 
 
 document.querySelector('.button.empty').addEventListener('click', function(evt) {
-	document.querySelector('.solution').textContent = '';
+	setSolution('');
 	stickers.forEach(el => setV(el, 0));
 });
 
 
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
-	document.querySelector('.solution').textContent = '';
+	setSolution('');
 	
 	var p = stickers
 		.reduce((acc, curr) => {
@@ -78,7 +78,7 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 	xhr.open('GET', encodeURI('/solve?p=' + p + '&o=' + o));
 	xhr.onload = function() {
 		if(xhr.status == 200) {
-			document.querySelector('.solution').textContent = formulateSolution(JSON.parse(xhr.responseText))
+			setSolution(formulateSolution(JSON.parse(xhr.responseText)));
 		} else {
 			console.log('error');
 		}
@@ -86,6 +86,14 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 	xhr.send();
 });
 
+function setSolution(text) {
+	var solRow = document.querySelector('.solution-row');
+	if(!text) solRow.classList.add('hidden');
+	else {
+		solRow.classList.remove('hidden');
+		document.querySelector('.solution').textContent = text;
+	}
+}
 
 function formulateSolution(resData) {
 	var s = resData.normalize.concat(resData.solution);

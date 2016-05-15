@@ -188,23 +188,46 @@ body {
 }
 
 
-.solution {
+.solution-row {
 	margin-top: 30px;
-}
-
-.solution > span {
-	padding: 5px 10px;
-	border: 5px solid grey;
-	background: white;
-	color: black;
 	font-family: sans-serif;
 	font-size: 18px;
 	font-weight: bold;
+	color: black;
 }
 
+.solution {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0 10px;
+	border: 5px solid grey;
+	background: white;
+	height: 40px;
+	line-height: 30px;
+}
+
+.solution-row > a {
+	display: inline-block;
+	vertical-align: middle;
+	border: 5px solid grey;
+	background: white;
+    border-radius: 20px;
+    margin-left: 4px;
+    height: 32px;
+    width: 32px;
+	text-decoration: none;
+}
+
+.solution-row > a:hover {
+	transform: scale(1.125);
+}
 
 @media (max-width: 350px) {
-	.solution > span {
+	.solution-row {
 		font-size: 15px;
 	}
+}
+
+.hidden {
+	display: none;
 }
