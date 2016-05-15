@@ -11,7 +11,7 @@
     "url": "git+ssh://git@bitbucket.org/contrabit/pocket-cube-optimal-solver.git"
   },
   "author": "Luka Popijac",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "homepage": "https://bitbucket.org/contrabit/pocket-cube-optimal-solver#readme",
   "devDependencies": {
     "express": "^4.13.4",
