@@ -5,11 +5,14 @@ html {
 	box-sizing: inherit;
 }
 
-
 body {
 	margin: 0;
 	background-color: #e9ddaf;
 	text-align: center;
+}
+
+.hidden {
+	display: none;
 }
 
 .cube {
@@ -43,17 +46,6 @@ body {
 	margin: 17px auto 0;
 	text-align: left;
 	font-size: 0; /* to remove space between blocks */
-}
-
-@media (min-width: 940px) {
-	.cube {
-		width: calc(67% - 110px);
-		margin-right: calc(3% - 8px);
-	}
-	.controls {
-		width: calc(15% + 195px);
-		max-width: 360px;
-	}
 }
 
 .controls-row .color-pick {
@@ -223,12 +215,23 @@ body {
 	transform: scale(1.125);
 }
 
+@media (min-width: 940px) {
+	.cube {
+		width: calc(67% - 110px);
+		margin-right: calc(3% - 8px);
+	}
+	.controls {
+		width: calc(15% + 195px);
+		max-width: 360px;
+		margin-bottom: 20px;
+	}
+	.solution-row {
+		margin-top: 30px;
+	}
+}
+
 @media (max-width: 350px) {
 	.solution-row {
 		font-size: 15px;
 	}
-}
-
-.hidden {
-	display: none;
 }
