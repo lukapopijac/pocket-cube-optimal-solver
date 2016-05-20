@@ -22,19 +22,23 @@ To start local server run
 npm start
 ```
 
-Now you can use the API to solve the cube. For example:
+To run the application, just navigate to `http://localhost:3000` in your browser.
+
+You can use API directly. For example, try this GET call:
 ```
-http://localhost:3000/cube2?p2=0b01101100&p1=0b00011101&p0=0b10100101&o=0b0100010111010000
+http://localhost:3000/solve?p=31605472&o=10022022
 ```
-will return JSON string:
+It will return JSON string:
 ```
 {
-	"normalize": ["x1","y3"],
-	"solution": ["U1","R1","F3","U1","F3","R2","U2","F3"]
+	"normalize": ["x1","y2"],
+	"solution": ["U1","F1","U1","R3","U1","F1","R1","U3"]
 }
 ```
 
-Parameters `p2`, `p1`, `p0` and `o` are defined in [cubestate.js](/search/cubestate.js).
+Parameters `p=31605472` and `o=10022022` represent cubie permutation 
+`[3,1,6,0,5,4,7,2]` and cubie orientation `[1,0,0,2,2,0,2,2]`. More details
+about this can be found in [cubestate.js](/search/cubestate.js).
 
 Returned JSON object contains `normalize` and `solution` properties.
 `normalize` is a list of moves required to rotate the whole cube in space to 
