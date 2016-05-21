@@ -211,7 +211,7 @@ body {
 	width: 26px;
 	font-size: 13px;
 	line-height: 23px;
-	box-shadow: 0px 0px 4px grey;
+	box-shadow: 0 0 3px grey;
 	text-decoration: none;
 }
 
