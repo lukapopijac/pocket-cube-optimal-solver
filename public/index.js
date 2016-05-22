@@ -26,7 +26,7 @@ colorPicks.forEach(function(el) {
 });
 
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
-	setSolution('');
+	setSolution(null);
 	stickers.forEach(function(el) {
 		var o = getO(el);
 		var p = getP(el);
@@ -50,13 +50,13 @@ document.querySelector('.button.reset').addEventListener('click', function(evt) 
 
 
 document.querySelector('.button.empty').addEventListener('click', function(evt) {
-	setSolution('');
+	setSolution(null);
 	stickers.forEach(el => setV(el, 0));
 });
 
 
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
-	setSolution('');
+	setSolution(null);
 	
 	var p = stickers
 		.reduce((acc, curr) => {
@@ -77,31 +77,47 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', encodeURI('/solve?p=' + p + '&o=' + o));
 	xhr.onload = function() {
-		if(xhr.status == 200) {
-			setSolution(formulateSolution(JSON.parse(xhr.responseText)));
-		} else {
-			console.log('error');
+		switch(xhr.status) {
+			case 200:
+			case 304:
+				var data = JSON.parse(xhr.responseText);
+				setSolution(formulateSolution(data), false, isSolved(data));
+				break;
+			case 400:
+				setSolution(xhr.responseText, true);
+				break;
+			default:
+				setSolution('Some error occured!', true);
 		}
+	};
+	xhr.onerror = function() {
+		setSolution('Error! Check your internet connection', true);
 	};
 	xhr.send();
 });
 
-function setSolution(text) {
-	var solRow = document.querySelector('.solution-row');
-	if(!text) solRow.classList.add('hidden');
-	else {
-		solRow.classList.remove('hidden');
-		document.querySelector('.solution').textContent = text;
-	}
+function isSolved(data) {
+	return data.solution.length==0;
 }
 
 function formulateSolution(resData) {
-	var s = resData.normalize.concat(resData.solution);
-	if(s.length==0) return 'Solved!'
-	return s
+	return resData.normalize
+		.concat(resData.solution)
 		.map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x)
 		.join(' ');
 }
+
+function setSolution(text, isError, isSolved) {
+	var solRow = document.querySelector('.solution-row');
+	
+	solRow.classList[text == null ? 'add' : 'remove']('hidden');
+	solRow.classList[isError      ? 'add' : 'remove']('error');
+	solRow.classList[isSolved     ? 'add' : 'remove']('solved');
+	
+	solRow.querySelector('.solution').textContent = isSolved ? 'Solved!' : text;
+}
+
+
 
 /*
 
