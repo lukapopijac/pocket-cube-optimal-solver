@@ -9,7 +9,7 @@ router.route('/solve')
 	.get(function(req, res, next) {
 		console.log('prvo ovo');
 		
-		if(true) res.status(400).send('Impossible state!');
+		if(false) res.status(400).send('Impossible state!');
 		else next();
 	})
 	.get(function(req, res) {

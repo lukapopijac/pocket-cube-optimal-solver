@@ -13,6 +13,7 @@ function getO(el) {
 
 stickers.forEach(function(el) {
 	el.addEventListener('click', function(evt) {
+		setSolution(null);
 		var v = document.querySelector('.color-pick.selected').getAttribute('data-v');
 		setV(evt.target, v);
 	});
