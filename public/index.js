@@ -85,10 +85,10 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 				setSolution(formulateSolution(data), false, isSolved(data));
 				break;
 			case 400:
-				setSolution(xhr.responseText, true);
+				setSolution('Impossible state!', true);
 				break;
 			default:
-				setSolution('Some error occured!', true);
+				setSolution('Some error occurred!', true);
 		}
 	};
 	xhr.onerror = function() {
