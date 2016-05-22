@@ -7,13 +7,10 @@ const search = require('./search');
 
 router.route('/solve')
 	.get(function(req, res, next) {
-		console.log('prvo ovo');
-		
 		if(false) res.status(400).send('Impossible state!');
 		else next();
 	})
 	.get(function(req, res) {
-		console.log('drugo ovo');
 		let pa = req.query.p.split('').map(x => +x);
 		let p2 = pa.reduce((a,x,i) => a+(x&0b100?1<<i:0), 0);
 		let p1 = pa.reduce((a,x,i) => a+(x&0b010?1<<i:0), 0);
