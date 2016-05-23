@@ -1,24 +1,17 @@
 var stickers = Array.from(document.querySelectorAll('.sticker'));
 var colorPicks = Array.from(document.querySelectorAll('.color-pick'));
 
-function setV(el, v) {
-	el.setAttribute('data-v', v);
-}
-function getP(el) {
-	return +el.getAttribute('data-p');
-}
-function getO(el) {
-	return +el.getAttribute('data-o');
-}
 
+// set click handler on each sticker
 stickers.forEach(function(el) {
 	el.addEventListener('click', function(evt) {
 		setSolution(null);
 		var v = document.querySelector('.color-pick.selected').getAttribute('data-v');
-		setV(evt.target, v);
+		evt.target.setAttribute('data-v', v);
 	});
 });
 
+// set click handler on each colorPick
 colorPicks.forEach(function(el) {
 	el.addEventListener('click', function(evt) {
 		document.querySelector('.color-pick.selected').classList.remove('selected');
@@ -26,11 +19,12 @@ colorPicks.forEach(function(el) {
 	});
 });
 
+// set click handler on button 'reset'
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
 	setSolution(null);
 	stickers.forEach(function(el) {
-		var o = getO(el);
-		var p = getP(el);
+		var o = +el.getAttribute('data-o');
+		var p = +el.getAttribute('data-p');
 		var v;
 		if(o==0) v = p<4 ? 32 : 4;  // yellow=32, white=4
 		else if(o==1) {
@@ -45,18 +39,23 @@ document.querySelector('.button.reset').addEventListener('click', function(evt) 
 			if(p==0 || p==5) v = 8;
 			if(p==2 || p==4) v = 16;
 		}
-		setV(el, v);
+		el.setAttribute('data-v', v);
 	});
 });
 
-
+// set click handler on button 'empty'
 document.querySelector('.button.empty').addEventListener('click', function(evt) {
 	setSolution(null);
-	stickers.forEach(el => setV(el, 0));
+	stickers.forEach(el => el.setAttribute('data-v', 0));
 });
 
-
+// set click handler on button 'solve'
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
+	if(validateState()) {
+		setSolution('Impossible state!', true);
+		return;
+	}
+	
 	setSolution(null);
 	
 	var p = stickers
@@ -97,6 +96,38 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 	xhr.send();
 });
 
+
+function validateState() {
+	var s = stickers.map(x => ({
+		p: +x.getAttribute('data-p'),
+		o: +x.getAttribute('data-o'),
+		v: +x.getAttribute('data-v')
+	}));
+	
+	// check if any color exists on two stickers on the same cubie
+	var t = s.reduce((a,x) => {
+		if(!a || x.v&a[x.p]) return null;
+		a[x.p] += x.v;
+		return a;
+	}, [0,0,0,0,0,0,0,0]);
+	if(t==null) return true;
+	
+	// check if two opposite colors exist on the same cubie (yellow-white=36, green-blue=17, red-orange=10)
+	if(t.some(x => (x&36)==36 || (x&17)==17 || (x&10)==10)) return true;
+	
+	// check if any color exists on more than 4 stickers
+	t = s.filter(x => x.v!=0)
+		.map(x => x.v<8 ? x.v>>1 : (x.v>>4)+3)   // map {1,2,4,8,16,32} to {0,1,2,3,4,5}
+		.reduce((a,x) => {
+			if(!a || a[x]==4) return null;
+			a[x]++;
+			return a;
+		}, [0,0,0,0,0,0]);
+	if(t==null) return true;
+	
+	// TODO: check if any cubie is illegal (e.g. swapping two colors on it makes cubie illegal)
+}
+
 function isSolved(data) {
 	return data.solution.length==0;
 }
@@ -117,73 +148,3 @@ function setSolution(text, isError, isSolved) {
 	
 	solRow.querySelector('.solution').textContent = isSolved ? 'Solved!' : text;
 }
-
-
-
-/*
-
-// generate p array
-
-stickers
-    .sort((a,b) => a.dataset.p-b.dataset.p)
-    .map(x => x.dataset.v)
-    .reduce((acc, curr, i, arr)=>{
-        if(i%3==0) acc.push((curr + arr[i+1] + arr[i+2]) & 0b111);
-        return acc;
-    }, [])
-
-
-stickers
-    .reduce((acc, curr) => {
-        acc[curr.dataset.p] += curr.dateset.v;
-        return acc;
-    }, [0,0,0,0,0,0,0,0])
-    .map(x => x&0b111);
-
-
-// generate o array
-
-document.querySelectorAll('[data-v=4],[data-v=8]')
-    .sort((a,b) => a.dataset.p-b.dataset.p)
-    .map(x => x.dataset.o)
-
-
-// or starting the same as for `p` array:
-
-stickers
-    .sort((a,b) => a.dataset.p-b.dataset.p)
-    .filter(x => x.dataset.v & 0b1100)   // v==4 || v==8
-    .map(x => x.dataset.o)
-
-
-// or
-
-stickers
-    .filter(x => x.dataset.v & 0b1100)   // v==4 || v==8
-    .reduce((acc, curr) => {
-        acc[curr.dataset.p] = curr.dataset.o;
-        return accl
-    }, [0,0,0,0,0,0,0,0]);
-
-
-
-var p2 = p.reduce((acc, curr, i) => curr&0b100 ? acc + (1<<i) : acc, 0);
-var p1 = p.reduce((acc, curr, i) => curr&0b010 ? acc + (1<<i) : acc, 0);
-var p0 = p.reduce((acc, curr, i) => curr&0b001 ? acc + (1<<i) : acc, 0);
-var p0 = p.reduce((acc, curr, i) => acc + (curr&0b001 ? 1<<i : 0), 0);
-
-p.reduce((acc, curr, i) => {
-    var b = 1<<i;
-    if(curr&0b100) acc[2] += b;
-    if(curr&0b010) acc[1] += b;
-    if(curr&0b001) acc[0] += b;
-    return acc;
-}, [0,0,0]);
-
-o.reduce((acc, curr, i) => acc + (curr==2 ? 0b11<<2*i : curr<<2*i), 0);
-o.reduce((acc, curr, i) => acc + (curr==2 ? 0b11 : curr)<<2*i, 0);
-
-o.map(x=>x<2?x:3).reduce((a,x,i) => a+(x<<2*i), 0);
-
-
-*/
