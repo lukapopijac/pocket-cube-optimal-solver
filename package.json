@@ -2,23 +2,22 @@
   "name": "pocket-cube-optimal-solver",
   "version": "1.0.0",
   "description": "Optimal solver for pocket cube.",
-  "private": true,
   "scripts": {
     "start": "node server.js",
     "test": "mocha test --colors"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/contrabit/pocket-cube-optimal-solver.git"
+    "url": "git+ssh://git@github.com:lukapopijac/pocket-cube-optimal-solver.git"
   },
   "author": "Luka Popijac",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/contrabit/pocket-cube-optimal-solver#readme",
+  "homepage": "https://github.com/lukapopijac/pocket-cube-optimal-solver",
   "devDependencies": {
-    "express": "^4.13.4",
     "mocha": "^2.4.5"
   },
   "dependencies": {
+    "express": "^4.13.4",
     "morgan": "^1.7.0"
   }
 }
