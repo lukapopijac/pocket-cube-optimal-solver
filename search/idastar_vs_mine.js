@@ -16,7 +16,7 @@ searchIDAstar(state);
 
 function getCubeStatesAsKeys() {
 	const path = require('path');
-	const fileTable = require('./fileTable');
+	const fileTable = require('./filetable');
 	let cubeStatesFileName = 'cubestates-depth11.gz';
 	let cubeStatesFilePath = path.join(path.join(__dirname, 'tables'), cubeStatesFileName);
 	if(!fileTable.exists(cubeStatesFilePath)) {

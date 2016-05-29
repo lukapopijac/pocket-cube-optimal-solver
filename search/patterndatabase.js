@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const fileTable = require('./fileTable');
+const fileTable = require('./filetable');
 
 const tablesDir = path.join(__dirname, 'tables');
 
