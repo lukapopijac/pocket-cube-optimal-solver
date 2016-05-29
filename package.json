@@ -2,8 +2,9 @@
   "name": "pocket-cube-optimal-solver",
   "version": "1.0.0",
   "description": "Optimal solver for pocket cube.",
-  "main": "server.js",
+  "private": true,
   "scripts": {
+    "start": "node server.js",
     "test": "mocha test --colors"
   },
   "repository": {
