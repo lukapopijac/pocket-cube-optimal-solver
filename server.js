@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000;
 let app = express();
 
 app.use(morgan('dev'));
-app.use(express.static(publicDir));
+//app.use(express.static(publicDir));
 
 app.use(require('./search/app'));
 
