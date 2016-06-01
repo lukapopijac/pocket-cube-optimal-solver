@@ -6,6 +6,9 @@ defines Web API written with Node.js and Express. For a given state of the
 cube, the service returns a list of moves which solves the cube optimally 
 (with the minimum number of moves possible).
 
+To make it easier to try the service for solving a real cube, a simple
+UI was created. One can try the application at 
+[pocketcubesolver.lukapopijac.com](http://pocketcubesolver.lukapopijac.com/).
 
 
 How to Set Up
