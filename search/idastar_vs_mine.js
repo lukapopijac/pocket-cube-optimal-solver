@@ -1,5 +1,5 @@
 /**
-This file is a little bit caotic. It is quickly written just to compare some
+This file is a little bit chaotic. It is quickly written just to compare some
 algorithms: IDA* and mine search algorithm for the all states of the cube.
 */
 'use strict';
