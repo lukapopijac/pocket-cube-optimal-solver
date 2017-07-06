@@ -108,11 +108,11 @@ implies bigger database in general. The pattern database used in this project
 was selected to preserve good performance without using too much of memory.
 
 IDA* search uses heuristics to prune branches which are guaranteed to lack 
-a solution within the allowed depth. As heuristic calculation made with 
+a solution within the allowed depth. As heuristics calculation made with 
 pattern databases is not [consistent][4], it is possible to have a situation 
-where IDA* will explore too much of a subtree of seemingly good node with
-small heuristic value that too much underestimate the real distance to the
-solution.
+where IDA* will explore the subtree of what will appear to be a good node, 
+too much. That will happen when the node has an excessively underestimated 
+heuristics value.
 
 To improve the IDA* search in this regard, I adjusted the search algorithm
 to provide more efficient pruning. I will explain the main idea with the 
