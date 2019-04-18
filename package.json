@@ -14,10 +14,11 @@
   "license": "MIT",
   "homepage": "https://github.com/lukapopijac/pocket-cube-optimal-solver",
   "devDependencies": {
-    "mocha": "^2.4.5"
+    "mocha": "^6.1.4",
+    "parcel-bundler": "^1.12.3"
   },
   "dependencies": {
-    "express": "^4.13.4",
-    "morgan": "^1.7.0"
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
   }
 }

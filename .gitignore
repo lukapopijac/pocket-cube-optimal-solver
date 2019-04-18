@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 search/tables/cubestates-depth11.gz
 .elasticbeanstalk/
+.cache/
+dist/
