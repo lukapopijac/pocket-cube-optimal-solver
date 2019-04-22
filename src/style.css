@@ -69,11 +69,11 @@ body {
 
 .color-pick[data-v="0"]   { background: #373737; }
 .color-pick[data-v="1"]   { background: blue; }
-.color-pick[data-v="2"]   { background: darkorange; }
+.color-pick[data-v="2"]   { background: orange; }
 .color-pick[data-v="4"]   { background: white; }
 .color-pick[data-v="8"]   { background: red; }
-.color-pick[data-v="16"] { background: green; }
-.color-pick[data-v="32"] { background: yellow; }
+.color-pick[data-v="16"]  { background: green; }
+.color-pick[data-v="32"]  { background: yellow; }
 
 /*
 .color-pick.selected {
@@ -118,11 +118,11 @@ body {
 
 .sticker[data-v="0"]   { fill: #373737; }
 .sticker[data-v="1"]   { fill: blue; }
-.sticker[data-v="2"]   { fill: darkorange; }
+.sticker[data-v="2"]   { fill: orange; }
 .sticker[data-v="4"]   { fill: white; }
 .sticker[data-v="8"]   { fill: red; }
-.sticker[data-v="16"] { fill: green; }
-.sticker[data-v="32"] { fill: yellow; }
+.sticker[data-v="16"]  { fill: green; }
+.sticker[data-v="32"]  { fill: yellow; }
 
 
 

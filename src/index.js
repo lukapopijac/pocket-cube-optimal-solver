@@ -1,6 +1,7 @@
 var stickers = Array.from(document.querySelectorAll('.sticker'));
 var colorPicks = Array.from(document.querySelectorAll('.color-pick'));
 
+import solve from './solve.js';
 
 // set click handler on each sticker
 stickers.forEach(function(el) {
@@ -64,36 +65,18 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 			return acc;
 		}, [0,0,0,0,0,0,0,0])
 		.map(x => x&0b111)
-		.join('');
-	
+	;
+
 	var o = stickers
-		.filter(x => x.getAttribute('data-v') & 0b100100)   // v==4 || v==32
-		.reduce((acc, curr) => {
-			acc[curr.getAttribute('data-p')] = +curr.getAttribute('data-o');
+	.filter(x => x.getAttribute('data-v') & 0b100100)   // v==4 || v==32
+	.reduce((acc, curr) => {
+		acc[curr.getAttribute('data-p')] = +curr.getAttribute('data-o');
 			return acc;
 		}, [0,0,0,0,0,0,0,0])
-		.join('');
+	;
 	
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', encodeURI('/solve?p=' + p + '&o=' + o));
-	xhr.onload = function() {
-		switch(xhr.status) {
-			case 200:
-			case 304:
-				var data = JSON.parse(xhr.responseText);
-				setSolution(formulateSolution(data), false, isSolved(data));
-				break;
-			case 400:
-				setSolution('Impossible state!', true);
-				break;
-			default:
-				setSolution('Some error occurred!', true);
-		}
-	};
-	xhr.onerror = function() {
-		setSolution('Error! Check your internet connection', true);
-	};
-	xhr.send();
+	let data = solve(p, o);
+	setSolution(formulateSolution(data), false, isSolved(data));
 });
 
 
@@ -132,9 +115,9 @@ function isSolved(data) {
 	return data.solution.length==0;
 }
 
-function formulateSolution(resData) {
-	return resData.normalize
-		.concat(resData.solution)
+function formulateSolution(data) {
+	return data.normalize
+		.concat(data.solution)
 		.map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x)
 		.join(' ');
 }
