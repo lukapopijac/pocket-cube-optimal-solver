@@ -56,9 +56,9 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 		setSolution('Impossible state!', true);
 		return;
 	}
-	
+
 	setSolution(null);
-	
+
 	var p = stickers
 		.reduce((acc, curr) => {
 			acc[curr.getAttribute('data-p')] += +curr.getAttribute('data-v');
