@@ -114,13 +114,9 @@ function generateOTransforms() {
 }
 
 
-
-console.time();
+// TODO: call this lazily after intial load
 generatePTransforms();
-console.timeEnd();
-console.time();
 generateOTransforms();
-console.timeEnd();
 
 
 module.exports = {p: transP, o: transO};

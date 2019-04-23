@@ -1,16 +1,22 @@
-var stickers = Array.from(document.querySelectorAll('.sticker'));
+import solve from './solve.js';
+import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
+
+
+let cubeUnfolded = new CubeUnfolded({
+	onStickerClick() {
+		setSolution(null);
+	},
+	getSelectedColor() {
+		return document.querySelector('.color-pick.selected').getAttribute('data-v');
+	}
+});
+
+
+document.body.insertBefore(cubeUnfolded.element, document.body.firstElementChild);
+
+
 var colorPicks = Array.from(document.querySelectorAll('.color-pick'));
 
-import solve from './solve.js';
-
-// set click handler on each sticker
-stickers.forEach(function(el) {
-	el.addEventListener('click', function(evt) {
-		setSolution(null);
-		var v = document.querySelector('.color-pick.selected').getAttribute('data-v');
-		evt.target.setAttribute('data-v', v);
-	});
-});
 
 // set click handler on each colorPick
 colorPicks.forEach(function(el) {
@@ -23,61 +29,84 @@ colorPicks.forEach(function(el) {
 // set click handler on button 'reset'
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
 	setSolution(null);
-	stickers.forEach(function(el) {
-		var o = +el.getAttribute('data-o');
-		var p = +el.getAttribute('data-p');
-		var v;
-		if(o==0) v = p<4 ? 32 : 4;  // yellow=32, white=4
-		else if(o==1) {
-			if(p==3 || p==5) v = 1;  // blue
-			if(p==2 || p==7) v = 2;  // orange
-			if(p==1 || p==4) v = 8;  // red
-			if(p==0 || p==6) v = 16; // green
-		}
-		else { // o==2
-			if(p==1 || p==7) v = 1;
-			if(p==3 || p==6) v = 2;
-			if(p==0 || p==5) v = 8;
-			if(p==2 || p==4) v = 16;
-		}
-		el.setAttribute('data-v', v);
-	});
+	cubeUnfolded.setToSolvedStickers();
 });
 
 // set click handler on button 'empty'
 document.querySelector('.button.empty').addEventListener('click', function(evt) {
 	setSolution(null);
-	stickers.forEach(el => el.setAttribute('data-v', 0));
+	cubeUnfolded.emptyStickers();
 });
 
 // set click handler on button 'solve'
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
-	if(validateState()) {
-		setSolution('Impossible state!', true);
-		return;
-	}
+	// if(validateState()) {
+	// 	setSolution('Impossible state!', true);
+	// 	return;
+	// }
 
 	setSolution(null);
 
-	var p = stickers
-		.reduce((acc, curr) => {
-			acc[curr.getAttribute('data-p')] += +curr.getAttribute('data-v');
-			return acc;
-		}, [0,0,0,0,0,0,0,0])
-		.map(x => x&0b111)
-	;
+	let {p, o} = cubeUnfolded.getStickers();
 
-	var o = stickers
-	.filter(x => x.getAttribute('data-v') & 0b100100)   // v==4 || v==32
-	.reduce((acc, curr) => {
-		acc[curr.getAttribute('data-p')] = +curr.getAttribute('data-o');
-			return acc;
-		}, [0,0,0,0,0,0,0,0])
-	;
-	
+	let stickers = cubeUnfolded.getStickers2();
+
+	console.log(stickers);
+
+	let {p: p2, o: o2} = getPandO(stickers);
+
+	console.log(p2, o2);
+
 	let data = solve(p, o);
 	setSolution(formulateSolution(data), false, isSolved(data));
 });
+
+
+function getPandO(stickers) {
+	let cubies = stickers.join('').match(/.{3}/g);
+
+	console.log('cuies', cubies);
+
+	let validCubies = [
+		['urf', 'fur', 'rfu'],
+		['ufl', 'luf', 'flu'],
+		['ubr', 'rub', 'bru'],
+		['ulb', 'bul', 'lbu'],
+		['dfr', 'rdf', 'frd'],
+		['dlf', 'fdl', 'lfd'],
+		['drb', 'bdr', 'rbd'],
+		['dbl', 'ldb', 'bld']
+	];
+
+	// let P = [[], [], [], [], [], [], [], []];
+	// let O = [[], [], [], [], [], [], [], []];
+	let PO = [[], [], [], [], [], [], [], []];
+	for(let k=0; k<8; k++) {
+		let re = RegExp(cubies[k]);
+		for(let i=0; i<8; i++) {
+			for(let j=0; j<3; j++) {
+				if(re.test(validCubies[i][j])) {
+					// P[k].push(i);
+					// O[k].push(j);
+					PO[k].push({p: i, o: j});
+				}
+			}
+		}
+	}
+
+	// validation
+	for(let i=0; i<8; i++) if(PO[i].length != 1) return null;
+
+	let p = [];
+	let o = [];
+	for(let i=0; i<8; i++) {
+		p[i] = PO[i][0].p;
+		o[i] = PO[i][0].o;
+	}
+
+	return {p, o};
+}
+
 
 
 function validateState() {
