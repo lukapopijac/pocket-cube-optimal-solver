@@ -2,12 +2,17 @@ import solve from './solve.js';
 import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
 
 
+let v2val = v => '.lb-d---f-------r---------------u'[v];
+let val2v = val => ({'.': 0, 'l': 1, 'b': 2, 'd': 4, 'f': 8, 'r': 16, 'u': 32}[val]);
+
+
 let cubeUnfolded = new CubeUnfolded({
 	onStickerClick() {
 		setSolution(null);
 	},
 	getSelectedColor() {
-		return document.querySelector('.color-pick.selected').getAttribute('data-v');
+		let v = document.querySelector('.color-pick.selected').getAttribute('data-v');
+		return v2val(v);
 	}
 });
 
@@ -63,44 +68,25 @@ function getRandomO() {
 }
 
 document.querySelector('.button.shuffle').addEventListener('click', function(evt) {
+	setSolution(null);
 	let p = getRadnomP();
-	console.log(p)
 	let o = getRandomO();
-	console.log(o);
 	let stickers = po2stickers(p, o);
 	cubeUnfolded.setStickers(stickers);
 });
 
+
 // set click handler on button 'solve'
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
-	// if(validateState()) {
-	// 	setSolution('Impossible state!', true);
-	// 	return;
-	// }
-
-	setSolution(null);
-
-	let {p, o} = cubeUnfolded.getStickers();
-
-	let stickers = cubeUnfolded.getStickers2();
-	console.log('stickers', stickers);
-
-	// console.log(stickers);
-
-	let {p: p2, o: o2} = stickers2po(stickers);
-
-	console.log(p, o);
-	console.log(p2, o2);
-
-	let stickers2 = po2stickers(p, o);
-	console.log('sticker2', stickers2);
-	
-	let data = solve(p, o);
+	let stickers = cubeUnfolded.getStickers();
+	let po = stickers2po(stickers);
+	if(!po) {
+		setSolution('Invalid or ambiguous state!');
+		return;
+	}
+	let data = solve(po.p, po.o);
 	setSolution(formulateSolution(data), false, isSolved(data));
 });
-
-
-
 
 
 const validCubies = [
@@ -126,19 +112,13 @@ function po2stickers(p, o) {
 
 function stickers2po(stickers) {
 	let cubies = stickers.join('').match(/.{3}/g);
-
-	// console.log('cuies', cubies);
-
-	// let P = [[], [], [], [], [], [], [], []];
-	// let O = [[], [], [], [], [], [], [], []];
+	
 	let PO = [[], [], [], [], [], [], [], []];
 	for(let k=0; k<8; k++) {
 		let re = RegExp(cubies[k]);
 		for(let i=0; i<8; i++) {
 			for(let j=0; j<3; j++) {
 				if(re.test(validCubies[i][j])) {
-					// P[k].push(i);
-					// O[k].push(j);
 					PO[k].push({p: i, o: j});
 				}
 			}
@@ -146,51 +126,13 @@ function stickers2po(stickers) {
 	}
 
 	// validation
-	// TODO
-	for(let i=0; i<8; i++) if(PO[i].length != 1) return null;
+	for(let po of PO) if(po.length != 1) return null;
 
-	let p = [];
-	let o = [];
-	for(let i=0; i<8; i++) {
-		p[i] = PO[i][0].p;
-		o[i] = PO[i][0].o;
-	}
-
+	let p = PO.map(x => x[0].p);
+	let o = PO.map(x => x[0].o);
 	return {p, o};
 }
 
-
-
-function validateState() {
-	var s = stickers.map(x => ({
-		p: +x.getAttribute('data-p'),
-		o: +x.getAttribute('data-o'),
-		v: +x.getAttribute('data-v')
-	}));
-	
-	// check if any color exists on two stickers on the same cubie
-	var t = s.reduce((a,x) => {
-		if(!a || x.v&a[x.p]) return null;
-		a[x.p] += x.v;
-		return a;
-	}, [0,0,0,0,0,0,0,0]);
-	if(t==null) return true;
-	
-	// check if two opposite colors exist on the same cubie (yellow-white=36, green-blue=17, red-orange=10)
-	if(t.some(x => (x&36)==36 || (x&17)==17 || (x&10)==10)) return true;
-	
-	// check if any color exists on more than 4 stickers
-	t = s.filter(x => x.v!=0)
-		.map(x => x.v<8 ? x.v>>1 : (x.v>>4)+3)   // map {1,2,4,8,16,32} to {0,1,2,3,4,5}
-		.reduce((a,x) => {
-			if(!a || a[x]==4) return null;
-			a[x]++;
-			return a;
-		}, [0,0,0,0,0,0]);
-	if(t==null) return true;
-	
-	// TODO: check if any cubie is illegal (e.g. swapping two colors on it makes cubie illegal)
-}
 
 function isSolved(data) {
 	return data.solution.length==0;

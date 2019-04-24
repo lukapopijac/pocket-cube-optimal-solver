@@ -1,0 +1,35 @@
+.cube-unfolded {
+	display: inline-block;
+	vertical-align: bottom;
+	width: calc(70% + 84px);
+	max-width: 640px;
+	background: url(plaincube.svg), url(shadow.png);
+	background-size: 100%;
+	margin-top: 25px;
+}
+
+.cube-unfolded svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.cube-unfolded .sticker:hover {
+	cursor: pointer;
+}
+
+.cube-unfolded .sticker[data-val="."]  { fill: #373737; }
+.cube-unfolded .sticker[data-val="l"]  { fill: blue;    }
+.cube-unfolded .sticker[data-val="b"]  { fill: orange;  }
+.cube-unfolded .sticker[data-val="d"]  { fill: white;   }
+.cube-unfolded .sticker[data-val="f"]  { fill: red;     }
+.cube-unfolded .sticker[data-val="r"]  { fill: green;   }
+.cube-unfolded .sticker[data-val="u"]  { fill: yellow;  }
+
+
+@media (min-width: 940px) {
+	.cube-unfolded {
+		width: calc(67% - 110px);
+		margin-right: calc(3% - 8px);
+    }
+}
