@@ -46,8 +46,6 @@ export default class {
 				onStickerClick();
 			});
 		});
-
-		console.log(this._stickers);
 	}
 
 	setToSolvedStickers() {
@@ -107,7 +105,17 @@ export default class {
 		}
 		return ret;
 	}
+
+	setStickers(stickerValues) {
+		for(let sticker of this._stickers) {
+			let i = sticker.dataset.idx;
+			sticker.dataset.val = stickerValues[sticker.dataset.idx];
+			sticker.dataset.v = val2v(sticker.dataset.val);
+		}
+	}
 };
 
 
 let v2val = v => '.lb-d---f-------r---------------u'[v];
+
+let val2v = val => ({'.': 0, 'l': 1, 'b': 2, 'd': 4, 'f': 8, 'r': 16, 'u': 32}[val]);

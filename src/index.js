@@ -38,6 +38,39 @@ document.querySelector('.button.empty').addEventListener('click', function(evt) 
 	cubeUnfolded.emptyStickers();
 });
 
+
+function getRadnomP() {
+	let p = [0, 1, 2, 3, 4, 5, 6, 7];
+	for(let i=p.length-1; i>0; i--) {
+		let j = Math.random()*(i+1) | 0;
+		let b = p[i];
+		p[i] = p[j];
+		p[j] = b;
+	}
+	return p;
+}
+
+function getRandomO() {
+	let o = [];
+	let s = 0;
+	for(let i=0; i<7; i++) {
+		let r = Math.random()*3 | 0;
+		o[i] = r;
+		s += r;
+	}
+	o[7] = (30 - s) % 3;
+	return o;
+}
+
+document.querySelector('.button.shuffle').addEventListener('click', function(evt) {
+	let p = getRadnomP();
+	console.log(p)
+	let o = getRandomO();
+	console.log(o);
+	let stickers = po2stickers(p, o);
+	cubeUnfolded.setStickers(stickers);
+});
+
 // set click handler on button 'solve'
 document.querySelector('.button.solve').addEventListener('click', function(evt) {
 	// if(validateState()) {
@@ -50,33 +83,51 @@ document.querySelector('.button.solve').addEventListener('click', function(evt) 
 	let {p, o} = cubeUnfolded.getStickers();
 
 	let stickers = cubeUnfolded.getStickers2();
+	console.log('stickers', stickers);
 
-	console.log(stickers);
+	// console.log(stickers);
 
-	let {p: p2, o: o2} = getPandO(stickers);
+	let {p: p2, o: o2} = stickers2po(stickers);
 
+	console.log(p, o);
 	console.log(p2, o2);
 
+	let stickers2 = po2stickers(p, o);
+	console.log('sticker2', stickers2);
+	
 	let data = solve(p, o);
 	setSolution(formulateSolution(data), false, isSolved(data));
 });
 
 
-function getPandO(stickers) {
+
+
+
+const validCubies = [
+	['urf', 'fur', 'rfu'],
+	['ufl', 'luf', 'flu'],
+	['ubr', 'rub', 'bru'],
+	['ulb', 'bul', 'lbu'],
+	['dfr', 'rdf', 'frd'],
+	['dlf', 'fdl', 'lfd'],
+	['drb', 'bdr', 'rbd'],
+	['dbl', 'ldb', 'bld']
+];
+
+
+
+function po2stickers(p, o) {
+	let cubies = [];
+	for(let i=0; i<8; i++) {
+		cubies[i] = validCubies[p[i]][o[i]];
+	}
+	return cubies.join('').split('');
+}
+
+function stickers2po(stickers) {
 	let cubies = stickers.join('').match(/.{3}/g);
 
-	console.log('cuies', cubies);
-
-	let validCubies = [
-		['urf', 'fur', 'rfu'],
-		['ufl', 'luf', 'flu'],
-		['ubr', 'rub', 'bru'],
-		['ulb', 'bul', 'lbu'],
-		['dfr', 'rdf', 'frd'],
-		['dlf', 'fdl', 'lfd'],
-		['drb', 'bdr', 'rbd'],
-		['dbl', 'ldb', 'bld']
-	];
+	// console.log('cuies', cubies);
 
 	// let P = [[], [], [], [], [], [], [], []];
 	// let O = [[], [], [], [], [], [], [], []];
@@ -95,6 +146,7 @@ function getPandO(stickers) {
 	}
 
 	// validation
+	// TODO
 	for(let i=0; i<8; i++) if(PO[i].length != 1) return null;
 
 	let p = [];
