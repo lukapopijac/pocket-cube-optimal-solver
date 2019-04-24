@@ -18,7 +18,7 @@
 	cursor: pointer;
 }
 
-.cube-unfolded .sticker[data-val="."]  { fill: #373737; }
+.cube-unfolded .sticker[data-val="."]  { fill: #292929; }
 .cube-unfolded .sticker[data-val="l"]  { fill: blue;    }
 .cube-unfolded .sticker[data-val="b"]  { fill: orange;  }
 .cube-unfolded .sticker[data-val="d"]  { fill: white;   }

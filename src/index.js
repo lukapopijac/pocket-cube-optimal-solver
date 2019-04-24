@@ -34,13 +34,13 @@ colorPicks.forEach(function(el) {
 // set click handler on button 'reset'
 document.querySelector('.button.reset').addEventListener('click', function(evt) {
 	setSolution(null);
-	cubeUnfolded.setToSolvedStickers();
+	cubeUnfolded.setStickersToSolved();
 });
 
 // set click handler on button 'empty'
 document.querySelector('.button.empty').addEventListener('click', function(evt) {
 	setSolution(null);
-	cubeUnfolded.emptyStickers();
+	cubeUnfolded.setStickersToEmpty();
 });
 
 

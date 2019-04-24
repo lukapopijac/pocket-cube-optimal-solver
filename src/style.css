@@ -52,7 +52,7 @@ body {
 .color-pick:last-child { margin-right: 0; }
 
 
-.color-pick[data-v="0"]   { background: #373737; }
+.color-pick[data-v="0"]   { background: #292929; }
 .color-pick[data-v="1"]   { background: blue; }
 .color-pick[data-v="2"]   { background: orange; }
 .color-pick[data-v="4"]   { background: white; }
