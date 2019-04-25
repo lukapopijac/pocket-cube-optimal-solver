@@ -5,7 +5,7 @@
 	max-width: 430px;
 }
 
-.controls-row {
+.controls .controls-row {
 	position: relative;
 	width: 100%;
 	padding: 2px 0px;
@@ -14,11 +14,11 @@
 	font-size: 0; /* to remove space between blocks */
 }
 
-.controls-row .color-pick {
+.controls .controls-row .color-pick {
 	margin: 0 calc(10% - 27px);  /*  (100% - 6*width) / 10   */
 }
 
-.color-pick {
+.controls .color-pick {
 	width: 45px;
 	height: 45px;
 	display: inline-block;
@@ -29,19 +29,20 @@
 }
 
 
-.color-pick:first-child { margin-left: 0; }
-.color-pick:last-child { margin-right: 0; }
+.controls .color-pick:first-child { margin-left: 0; }
+.controls .color-pick:last-child { margin-right: 0; }
 
 
-.color-pick[data-v="0"]   { background: #292929; }
-.color-pick[data-v="1"]   { background: blue; }
-.color-pick[data-v="2"]   { background: orange; }
-.color-pick[data-v="4"]   { background: white; }
-.color-pick[data-v="8"]   { background: red; }
-.color-pick[data-v="16"]  { background: green; }
-.color-pick[data-v="32"]  { background: yellow; }
+.controls .color-pick[data-val="."] { background: #333; }
+.controls .color-pick[data-val="l"] { background: blue; }
+.controls .color-pick[data-val="b"] { background: orange; }
+.controls .color-pick[data-val="d"] { background: white; }
+.controls .color-pick[data-val="f"] { background: red; }
+.controls .color-pick[data-val="r"] { background: green; }
+.controls .color-pick[data-val="u"] { background: yellow; }
 
-.color-pick.selected::before {
+
+.controls .color-pick.selected::before {
 	position: absolute;
 	content: " ";
 	background: url(check.svg);
@@ -51,21 +52,21 @@
 	left: 6px;
 }
 
-.color-pick[data-v="0"].selected::before, 
-.color-pick[data-v="1"].selected::before, 
-.color-pick[data-v="8"].selected::before, 
-.color-pick[data-v="16"].selected::before {
+.controls .color-pick[data-val="."].selected::before, 
+.controls .color-pick[data-val="l"].selected::before, 
+.controls .color-pick[data-val="f"].selected::before, 
+.controls .color-pick[data-val="r"].selected::before {
 	background-position: 30px 0;
 }
 
 
 
-.color-pick:hover {
+.controls .color-pick:hover {
 	cursor: pointer;
 	transform: scale(1.133);
 }
 
-.color-pick.selected:hover {
+.controls .color-pick.selected:hover {
 	cursor: auto;
 	transform: scale(1);
 }

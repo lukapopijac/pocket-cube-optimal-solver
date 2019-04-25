@@ -18,14 +18,13 @@
 	cursor: pointer;
 }
 
-.cube-unfolded .sticker[data-val="."]  { fill: #292929; }
+.cube-unfolded .sticker[data-val="."]  { fill: transparent; stroke: #191919;}
 .cube-unfolded .sticker[data-val="l"]  { fill: blue;    }
 .cube-unfolded .sticker[data-val="b"]  { fill: orange;  }
 .cube-unfolded .sticker[data-val="d"]  { fill: white;   }
 .cube-unfolded .sticker[data-val="f"]  { fill: red;     }
 .cube-unfolded .sticker[data-val="r"]  { fill: green;   }
 .cube-unfolded .sticker[data-val="u"]  { fill: yellow;  }
-
 
 @media (min-width: 940px) {
 	.cube-unfolded {

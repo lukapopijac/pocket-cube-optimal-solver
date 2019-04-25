@@ -9,20 +9,21 @@ export default class {
 		onSolveButtonClick
 	}) {
 		this._state = {
+			selectedColor: '.'
 		};
 
 		this.element = html2element(`
 			<div class="controls">
 				<div class="controls-row">
-					<div class="color-pick" data-v=1 ></div>
-					<div class="color-pick" data-v=2 ></div>
-					<div class="color-pick" data-v=4 ></div>
-					<div class="color-pick" data-v=8 ></div>
-					<div class="color-pick" data-v=16></div>
-					<div class="color-pick" data-v=32></div>
+					<div class="color-pick" data-val="l"></div>
+					<div class="color-pick" data-val="b"></div>
+					<div class="color-pick" data-val="d"></div>
+					<div class="color-pick" data-val="f"></div>
+					<div class="color-pick" data-val="r"></div>
+					<div class="color-pick" data-val="u"></div>
 				</div>
 				<div class="controls-row">
-					<div class="color-pick selected" data-v=0></div>
+					<div class="color-pick" data-val="."></div>
 					<div class="button-container">
 						<button type="button" class="button reset">Reset</button>
 						<button type="button" class="button empty">Empty</button>
@@ -35,15 +36,15 @@ export default class {
 			</div>
 		`);
 
-		let colorPicks = Array.from(this.element.querySelectorAll('.color-pick'));
-
+		this._colorPickElements = Array.from(this.element.querySelectorAll('.color-pick'))
+		
 		// set click handler on each colorPick
-		colorPicks.forEach(function(el) {
-			el.addEventListener('click', function(evt) {
-				document.querySelector('.color-pick.selected').classList.remove('selected');
-				evt.target.classList.add('selected');
+		for(let el of this._colorPickElements) {
+			el.addEventListener('click', evt => {
+				this._state.selectedColor = evt.target.dataset.val;
+				this._render();
 			});
-		});
+		}
 
 		// set click handler on button 'reset'
 		this.element.querySelector('.button.reset').addEventListener('click', function(evt) {
@@ -69,7 +70,14 @@ export default class {
 		this._render();
 	}
 
+	getSelectedColor() {
+		return this._state.selectedColor;
+	}
+
 	_render(state) {
 		if(!state) state = this._state;
+		for(let el of this._colorPickElements) {
+			el.classList.toggle('selected', el.dataset.val == state.selectedColor);
+		}
 	}
 };

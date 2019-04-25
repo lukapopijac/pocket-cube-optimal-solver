@@ -2,17 +2,13 @@ import solve from './solve.js';
 import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
 import Controls from './components/controls/controls.js';
 
-let v2val = v => '.lb-d---f-------r---------------u'[v];
-let val2v = val => ({'.': 0, 'l': 1, 'b': 2, 'd': 4, 'f': 8, 'r': 16, 'u': 32}[val]);
-
 
 let cubeUnfolded = new CubeUnfolded({
 	onStickerClick() {
 		setSolution(null);
 	},
 	getSelectedColor() {
-		let v = document.querySelector('.color-pick.selected').getAttribute('data-v');
-		return v2val(v);
+		return controls.getSelectedColor();
 	}
 });
 
