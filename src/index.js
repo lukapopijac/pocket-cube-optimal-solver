@@ -1,6 +1,6 @@
 import solve from './solve.js';
 import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
-
+import Controls from './components/controls/controls.js';
 
 let v2val = v => '.lb-d---f-------r---------------u'[v];
 let val2v = val => ({'.': 0, 'l': 1, 'b': 2, 'd': 4, 'f': 8, 'r': 16, 'u': 32}[val]);
@@ -17,31 +17,38 @@ let cubeUnfolded = new CubeUnfolded({
 });
 
 
+let controls = new Controls({
+	onSolvedStateButtonClick() {
+		setSolution(null);
+		cubeUnfolded.setStickersToSolved();
+	},
+	onEmptyStateButtonClick() {
+		setSolution(null);
+		cubeUnfolded.setStickersToEmpty();
+	},
+	onShuffledStateButtonClick() {
+		setSolution(null);
+		let p = getRadnomP();
+		let o = getRandomO();
+		let stickers = po2stickers(p, o);
+		cubeUnfolded.setStickers(stickers);
+	},
+	onSolveButtonClick() {
+		let stickers = cubeUnfolded.getStickers();
+		let po = stickers2po(stickers);
+		if(!po) {
+			setSolution('Invalid or ambiguous state!');
+			return;
+		}
+		let data = solve(po.p, po.o);
+		setSolution(formulateSolution(data), false, isSolved(data));
+	}
+});
+
+document.body.insertBefore(controls.element, document.body.firstElementChild);
 document.body.insertBefore(cubeUnfolded.element, document.body.firstElementChild);
 
 
-var colorPicks = Array.from(document.querySelectorAll('.color-pick'));
-
-
-// set click handler on each colorPick
-colorPicks.forEach(function(el) {
-	el.addEventListener('click', function(evt) {
-		document.querySelector('.color-pick.selected').classList.remove('selected');
-		evt.target.classList.add('selected');
-	});
-});
-
-// set click handler on button 'reset'
-document.querySelector('.button.reset').addEventListener('click', function(evt) {
-	setSolution(null);
-	cubeUnfolded.setStickersToSolved();
-});
-
-// set click handler on button 'empty'
-document.querySelector('.button.empty').addEventListener('click', function(evt) {
-	setSolution(null);
-	cubeUnfolded.setStickersToEmpty();
-});
 
 
 function getRadnomP() {
@@ -66,27 +73,6 @@ function getRandomO() {
 	o[7] = (30 - s) % 3;
 	return o;
 }
-
-document.querySelector('.button.shuffle').addEventListener('click', function(evt) {
-	setSolution(null);
-	let p = getRadnomP();
-	let o = getRandomO();
-	let stickers = po2stickers(p, o);
-	cubeUnfolded.setStickers(stickers);
-});
-
-
-// set click handler on button 'solve'
-document.querySelector('.button.solve').addEventListener('click', function(evt) {
-	let stickers = cubeUnfolded.getStickers();
-	let po = stickers2po(stickers);
-	if(!po) {
-		setSolution('Invalid or ambiguous state!');
-		return;
-	}
-	let data = solve(po.p, po.o);
-	setSolution(formulateSolution(data), false, isSolved(data));
-});
 
 
 const validCubies = [
@@ -125,17 +111,31 @@ function stickers2po(stickers) {
 		}
 	}
 
-	// validation
+	// validation: every position must contaion only one possible cubie
 	for(let po of PO) if(po.length != 1) return null;
 
+	// get return arrays
 	let p = PO.map(x => x[0].p);
 	let o = PO.map(x => x[0].o);
+
+	// validation: every cubie must be unique
+	let usedP = new Set();
+	for(let x of p) {
+		if(usedP.has(x)) return null;
+		usedP.add(x);
+	}
+
+	// validation: orientations must sum to 0 mod 3
+	let s = 0;
+	for(let x of o) s += x;
+	if(s%3 != 0) return null;
+
 	return {p, o};
 }
 
 
 function isSolved(data) {
-	return data.solution.length==0;
+	return data.solution.length == 0;
 }
 
 function formulateSolution(data) {
