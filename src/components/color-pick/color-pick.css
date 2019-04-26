@@ -1,0 +1,56 @@
+.controls-row .color-pick {
+	margin: 0 calc(10% - 27px);  /*  (100% - 6*width) / 10   */
+}
+
+.color-pick {
+	width: 45px;
+	height: 45px;
+	display: inline-block;
+	vertical-align: middle;
+	border: 2px solid black;
+	border-radius: 10px;
+	position: relative;
+}
+
+
+.color-pick:first-child { margin-left: 0; }
+.color-pick:last-child { margin-right: 0; }
+
+
+.color-pick[data-val="."] { background: #333; }
+.color-pick[data-val="l"] { background: blue; }
+.color-pick[data-val="b"] { background: orange; }
+.color-pick[data-val="d"] { background: white; }
+.color-pick[data-val="f"] { background: red; }
+.color-pick[data-val="r"] { background: green; }
+.color-pick[data-val="u"] { background: yellow; }
+
+
+.color-pick.selected::before {
+	position: absolute;
+	content: " ";
+	background: url(check.svg);
+	width: 30px;
+	height: 26px;
+	top: 8px;
+	left: 6px;
+}
+
+.color-pick[data-val="."].selected::before, 
+.color-pick[data-val="l"].selected::before, 
+.color-pick[data-val="f"].selected::before, 
+.color-pick[data-val="r"].selected::before {
+	background-position: 30px 0;
+}
+
+
+
+.color-pick:hover {
+	cursor: pointer;
+	transform: scale(1.133);
+}
+
+.color-pick.selected:hover {
+	cursor: auto;
+	transform: scale(1);
+}

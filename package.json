@@ -4,6 +4,7 @@
   "description": "Optimal solver for pocket cube.",
   "scripts": {
     "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --out-dir build",
     "start": "node server.js",
     "test": "mocha test --colors"
   },

@@ -1,5 +1,5 @@
 import './cube-unfolded.css';
-import html2element from '/html2element.js';
+import makeElement from '/html2element.js';
 
 export default class {
 	constructor({onStickerClick, getSelectedColor}) {
@@ -7,7 +7,7 @@ export default class {
 			stickerValues: 'urfuflubrulbdfrdlfdrbdbl'.split('')
 		};
 
-		this.element = html2element(`
+		this.element = makeElement`
 			<div class="cube-unfolded">
 				<svg viewBox="0 0 757.04 478.76" preserveAspectRatio="xMidYMid" xmlns="http://www.w3.org/2000/svg">
 					<g transform="translate(-39.990182,4.76584)">
@@ -38,7 +38,7 @@ export default class {
 					</g>
 				</svg>
 			</div>
-		`);
+		`;
 
 		this._stickerElementsSorted = Array.from(this.element.querySelectorAll('.sticker'))
 			.sort((a, b) => a.dataset.idx - b.dataset.idx)

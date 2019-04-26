@@ -4,3 +4,4 @@ search/tables/cubestates-depth11.gz
 .elasticbeanstalk/
 .cache/
 dist/
+build/

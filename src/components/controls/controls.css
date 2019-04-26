@@ -14,64 +14,6 @@
 	font-size: 0; /* to remove space between blocks */
 }
 
-.controls .controls-row .color-pick {
-	margin: 0 calc(10% - 27px);  /*  (100% - 6*width) / 10   */
-}
-
-.controls .color-pick {
-	width: 45px;
-	height: 45px;
-	display: inline-block;
-	vertical-align: middle;
-	border: 2px solid black;
-	border-radius: 10px;
-	position: relative;
-}
-
-
-.controls .color-pick:first-child { margin-left: 0; }
-.controls .color-pick:last-child { margin-right: 0; }
-
-
-.controls .color-pick[data-val="."] { background: #333; }
-.controls .color-pick[data-val="l"] { background: blue; }
-.controls .color-pick[data-val="b"] { background: orange; }
-.controls .color-pick[data-val="d"] { background: white; }
-.controls .color-pick[data-val="f"] { background: red; }
-.controls .color-pick[data-val="r"] { background: green; }
-.controls .color-pick[data-val="u"] { background: yellow; }
-
-
-.controls .color-pick.selected::before {
-	position: absolute;
-	content: " ";
-	background: url(check.svg);
-	width: 30px;
-	height: 26px;
-	top: 8px;
-	left: 6px;
-}
-
-.controls .color-pick[data-val="."].selected::before, 
-.controls .color-pick[data-val="l"].selected::before, 
-.controls .color-pick[data-val="f"].selected::before, 
-.controls .color-pick[data-val="r"].selected::before {
-	background-position: 30px 0;
-}
-
-
-
-.controls .color-pick:hover {
-	cursor: pointer;
-	transform: scale(1.133);
-}
-
-.controls .color-pick.selected:hover {
-	cursor: auto;
-	transform: scale(1);
-}
-
-
 
 
 
