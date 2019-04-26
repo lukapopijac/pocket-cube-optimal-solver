@@ -1,6 +1,8 @@
 import './controls.css';
 import html2element from '/html2element.js';
 
+import Button from '../button/button.js';
+
 export default class {
 	constructor({
 		onSolvedStateButtonClick,
@@ -33,8 +35,19 @@ export default class {
 				<div class="controls-row">
 					<button type="button" class="button solve">Solve</button>
 				</div>
+				${new Button({
+					caption: 'direktni',
+					onClick: _ => {console.log('klik direktni', Math.random()*100|0)}		
+				})}
 			</div>
 		`);
+
+		let button = new Button({
+			caption: 'novi',
+			onClick: _ => {console.log('klik', Math.random()*100|0)}
+		});
+
+		this.element.appendChild(button.element);
 
 		this._colorPickElements = Array.from(this.element.querySelectorAll('.color-pick'))
 		
@@ -81,3 +94,63 @@ export default class {
 		}
 	}
 };
+
+
+
+function rend(strings, ...parts) {
+	let map = {};
+	let htmlArray = [strings[0]];
+	for(let i=0; i<parts.length; i++) {
+		let part = parts[i];
+		let element = null;
+		if(part instanceof Element) element = part;
+		else if(part && part.element instanceof Element) element = part.element;
+		if(element) {
+			let slotId = 'slot-' + Math.trunc(Math.random()*1e15);
+			map[slotId] = element;
+			htmlArray.push(`<slot id="${slotId}"></slot>`)	
+		} else {
+			htmlArray.push(parts[i]);
+		}
+		htmlArray.push(strings[i+1]);
+	}
+
+	let el = html2element(htmlArray.join(''));
+
+	for(let id in map) {
+		let slot = el.querySelector('#' + id);
+		slot.parentNode.replaceChild(map[id], slot);
+	}
+
+	return el;
+}
+
+
+let el1 = {
+	element: html2element('<div>jedan div</div>')
+};
+
+let el2 = {
+	element: html2element('<a>neki link</a>')
+};
+
+let el3 = html2element('<div>divina</div>');
+
+
+let ee = rend`
+	<div id="vanjski">
+		${el1}
+		<span>neki span</span>
+		<div>
+			${'nekav direktan string'}
+		</div>
+		<div>
+			${el2}
+		</div>
+		<article>
+			${el3}
+		</article>
+	</div>
+`;
+
+console.log(ee);
