@@ -1,4 +1,4 @@
-.cube-unfolded {
+:host > div {
 	display: inline-block;
 	vertical-align: bottom;
 	width: calc(70% + 84px);
@@ -8,27 +8,27 @@
 	margin-top: 25px;
 }
 
-.cube-unfolded svg {
+:host > div svg {
 	width: 100%;
 	height: 100%;
 	display: block;
 }
 
-.cube-unfolded .sticker:hover {
+:host > div .sticker:hover {
 	cursor: pointer;
 }
 
-.cube-unfolded .sticker[data-val="."]  { fill: transparent; stroke: #191919;}
-.cube-unfolded .sticker[data-val="l"]  { fill: blue;    }
-.cube-unfolded .sticker[data-val="b"]  { fill: orange;  }
-.cube-unfolded .sticker[data-val="d"]  { fill: white;   }
-.cube-unfolded .sticker[data-val="f"]  { fill: red;     }
-.cube-unfolded .sticker[data-val="r"]  { fill: green;   }
-.cube-unfolded .sticker[data-val="u"]  { fill: yellow;  }
+:host > div .sticker[data-val="."]  { fill: transparent; stroke: #191919;}
+:host > div .sticker[data-val="l"]  { fill: blue;    }
+:host > div .sticker[data-val="b"]  { fill: orange;  }
+:host > div .sticker[data-val="d"]  { fill: white;   }
+:host > div .sticker[data-val="f"]  { fill: red;     }
+:host > div .sticker[data-val="r"]  { fill: green;   }
+:host > div .sticker[data-val="u"]  { fill: yellow;  }
 
 @media (min-width: 940px) {
 	.cube-unfolded {
 		width: calc(67% - 110px);
 		margin-right: calc(3% - 8px);
-    }
+	}
 }

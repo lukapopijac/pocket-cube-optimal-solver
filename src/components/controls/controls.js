@@ -18,6 +18,7 @@ export class Controls extends HTMLElement {
 				this._el.querySelectorAll('m-colorpick').forEach(x => x.removeAttribute('selected'));
 				let val = evt.target.getAttribute('val');
 				this._el.querySelector(`m-colorpick[val="${val}"]`).setAttribute('selected', true);
+				this.dispatchEvent(new CustomEvent('pick-color', {detail: val}));
 			});
 		}
 
@@ -35,7 +36,12 @@ export class Controls extends HTMLElement {
 		});
 	}
 
+	// TODO: remove this
 	getSelectedColor() {
+		return this._el.querySelector('m-colorpick[selected]').getAttribute('val');
+	}
+
+	get selectedColor() {
 		return this._el.querySelector('m-colorpick[selected]').getAttribute('val');
 	}
 }

@@ -1,19 +1,19 @@
 import solve from './solve.js';
-import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
+import {CubeUnfolded} from './components/cube-unfolded/cube-unfolded.js';
 import {Controls} from './components/controls/controls.js';
 
+
 let cubeUnfolded = new CubeUnfolded({
-	onStickerClick() {
-		setSolution(null);
-	},
-	getSelectedColor() {
-		return controls.getSelectedColor();
-	}
+	getSelectedColor: _ => controls.selectedColor
+});
+cubeUnfolded.addEventListener('click-sticker', _ => {
+	setSolution(null);
 });
 
 
-let controls = new Controls();
 
+
+let controls = new Controls();
 controls.addEventListener('click-reset', _ => {
 	setSolution(null);
 	cubeUnfolded.setStickersToSolved();
@@ -27,10 +27,10 @@ controls.addEventListener('click-shuffle', _ => {
 	let p = getRadnomP();
 	let o = getRandomO();
 	let stickers = po2stickers(p, o);
-	cubeUnfolded.setStickers(stickers);
+	cubeUnfolded.stickerValues = stickers;
 });
 controls.addEventListener('click-solve', _ => {
-	let stickers = cubeUnfolded.getStickers();
+	let stickers = cubeUnfolded.stickerValues;
 	let po = stickers2po(stickers);
 	if(!po) {
 		setSolution('Invalid or ambiguous state!');
@@ -39,12 +39,16 @@ controls.addEventListener('click-solve', _ => {
 	let data = solve(po.p, po.o);
 	setSolution(formulateSolution(data), false, isSolved(data));
 });
+controls.addEventListener('pick-color', evt => {
+	cubeUnfolded.selectedColor = evt.detail;
+});
+
 
 
 
 
 document.body.insertBefore(controls, document.body.firstElementChild);
-document.body.insertBefore(cubeUnfolded.element, document.body.firstElementChild);
+document.body.insertBefore(cubeUnfolded, document.body.firstElementChild);
 
 
 
