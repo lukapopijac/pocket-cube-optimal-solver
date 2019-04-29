@@ -11,33 +11,36 @@ let cubeUnfolded = new CubeUnfolded({
 	}
 });
 
-let controls = new Controls({
-	onSolvedStateButtonClick() {
-		setSolution(null);
-		cubeUnfolded.setStickersToSolved();
-	},
-	onEmptyStateButtonClick() {
-		setSolution(null);
-		cubeUnfolded.setStickersToEmpty();
-	},
-	onShuffledStateButtonClick() {
-		setSolution(null);
-		let p = getRadnomP();
-		let o = getRandomO();
-		let stickers = po2stickers(p, o);
-		cubeUnfolded.setStickers(stickers);
-	},
-	onSolveButtonClick() {
-		let stickers = cubeUnfolded.getStickers();
-		let po = stickers2po(stickers);
-		if(!po) {
-			setSolution('Invalid or ambiguous state!');
-			return;
-		}
-		let data = solve(po.p, po.o);
-		setSolution(formulateSolution(data), false, isSolved(data));
-	}
+
+let controls = new Controls();
+
+controls.addEventListener('click-reset', _ => {
+	setSolution(null);
+	cubeUnfolded.setStickersToSolved();
 });
+controls.addEventListener('click-empty', _ => {
+	setSolution(null);
+	cubeUnfolded.setStickersToEmpty();
+});
+controls.addEventListener('click-shuffle', _ => {
+	setSolution(null);
+	let p = getRadnomP();
+	let o = getRandomO();
+	let stickers = po2stickers(p, o);
+	cubeUnfolded.setStickers(stickers);
+});
+controls.addEventListener('click-solve', _ => {
+	let stickers = cubeUnfolded.getStickers();
+	let po = stickers2po(stickers);
+	if(!po) {
+		setSolution('Invalid or ambiguous state!');
+		return;
+	}
+	let data = solve(po.p, po.o);
+	setSolution(formulateSolution(data), false, isSolved(data));
+});
+
+
 
 
 document.body.insertBefore(controls, document.body.firstElementChild);

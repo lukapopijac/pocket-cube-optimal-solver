@@ -7,12 +7,7 @@ const template = document.createElement('template');
 template.innerHTML = t;
 
 export class Controls extends HTMLElement {
-	constructor({
-		onSolvedStateButtonClick,
-		onEmptyStateButtonClick,
-		onShuffledStateButtonClick,
-		onSolveButtonClick
-	}) {
+	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
@@ -26,10 +21,18 @@ export class Controls extends HTMLElement {
 			});
 		}
 
-		this._el.querySelector('#button-reset').addEventListener('click', onSolvedStateButtonClick);
-		this._el.querySelector('#button-empty').addEventListener('click', onEmptyStateButtonClick);
-		this._el.querySelector('#button-shuffle').addEventListener('click', onShuffledStateButtonClick);
-		this._el.querySelector('#button-solve').addEventListener('click', onSolveButtonClick);
+		this._el.querySelector('#button-reset').addEventListener('click', _ => {
+			this.dispatchEvent(new CustomEvent('click-reset'));
+		});
+		this._el.querySelector('#button-empty').addEventListener('click', _ => {
+			this.dispatchEvent(new CustomEvent('click-empty'));
+		});
+		this._el.querySelector('#button-shuffle').addEventListener('click', _ => {
+			this.dispatchEvent(new CustomEvent('click-shuffle'));
+		});
+		this._el.querySelector('#button-solve').addEventListener('click', _ => {
+			this.dispatchEvent(new CustomEvent('click-solve'));
+		});
 	}
 
 	getSelectedColor() {
