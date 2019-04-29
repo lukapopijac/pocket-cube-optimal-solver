@@ -6,7 +6,7 @@
 	margin-left: 10px;
 }
 
-.button {
+button {
 	background-image: linear-gradient(#1b1dff, #0002cd 50%, #0002b9);
 	border: 1px solid #00029a;
 	background-color: #0002cd;
@@ -18,29 +18,29 @@
 	color: #eee;
 	font-family: sans-serif;
 }
-.button:hover {
+button:hover {
 	background-image: linear-gradient(#0609ff, #0002b9 50%, #0002a4);
 	border: 1px solid #000186;
 	background-color: #00029a;
 	cursor: pointer;
 }
-.button:active {
+button:active {
 	background-image: none;
 	background-color: #00029a;
 	border-color: #000190;
 }
-.button.button-primary {
+button[primary] {
 	color: white;
 	background-image: linear-gradient(#ff1d1b, #cd0200 50%, #b90200);
 	border: 1px solid #9a0200;
 	background-color: #cd0200;
 }
-.button.button-primary:hover {
+button[primary]:hover {
 	background-image: linear-gradient(#ff0906, #b90200 50%, #a40200);
 	border: 1px solid #860100;
 	background-color: #9a0200;
 }
-.button.button-primary:active {
+button[primary]:active {
 	background-image: none;
 	background-color: #9a0200;
 	border-color: #900100;

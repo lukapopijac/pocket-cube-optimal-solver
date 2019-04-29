@@ -1,31 +1,33 @@
-import './color-pick.css';
-import makeElement from '/html2element.js';
+import t from './color-pick.html';
 
-export default class {
-	constructor({onClick, val}) {
-		this._state = {
-			selected: false
-		};
+const template = document.createElement('template');
+template.innerHTML = t;
 
-		this.element = makeElement`
-			<div class="color-pick" data-val="${val}"></div>
-		`;
-
-		this._render();
-		
-		this.element.addEventListener('click', evt => {
-			this._state.selected = true;
-			this._render();
-			onClick();
-		});
+export class ColorPick extends HTMLElement {
+	constructor() {
+		super();
+		this.attachShadow({mode: 'open'});
+		this.shadowRoot.appendChild(template.content.cloneNode(true));
+		this._el = this.shadowRoot.querySelector('div');
 	}
 
-	_render() {
-		this.element.classList.toggle('selected', this._state.selected);
+	static get observedAttributes() {
+		return ['val', 'selected'];
 	}
 
-	select(v) {
-		this._state.selected = v;
-		this._render();
+	get val() {
+		return this._el.getAttribute('val');
 	}
-};
+
+	attributeChangedCallback(attrName, oldVal, newVal) {
+		if(attrName == 'val') {
+			this._el.setAttribute('val', newVal);
+		}
+		if(attrName == 'selected') {
+			if(newVal) this._el.setAttribute('selected', true);
+			else this._el.removeAttribute('selected');
+		}
+	}
+}
+
+customElements.define('m-colorpick', ColorPick);

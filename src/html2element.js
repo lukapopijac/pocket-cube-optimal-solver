@@ -34,33 +34,3 @@ export default function makeElement(strings, ...parts) {
 
 	return el;
 }
-
-
-// let el1 = {
-// 	element: html2element('<div>jedan div</div>')
-// };
-
-// let el2 = {
-// 	element: html2element('<a>neki link</a>')
-// };
-
-// let el3 = html2element('<div>divina</div>');
-
-
-// let ee = makeElement`
-// 	<div id="vanjski">
-// 		${el1}
-// 		<span>neki span</span>
-// 		<div>
-// 			${'nekav direktan string'}
-// 		</div>
-// 		<div>
-// 			${el2}
-// 		</div>
-// 		<article>
-// 			${el3}
-// 		</article>
-// 	</div>
-// `;
-
-// console.log(ee);

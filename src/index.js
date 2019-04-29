@@ -2,7 +2,6 @@ import solve from './solve.js';
 import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
 import Controls from './components/controls/controls.js';
 
-
 let cubeUnfolded = new CubeUnfolded({
 	onStickerClick() {
 		setSolution(null);

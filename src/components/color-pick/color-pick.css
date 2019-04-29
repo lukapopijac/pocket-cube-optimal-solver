@@ -1,3 +1,4 @@
+/* TODO */
 .controls-row .color-pick {
 	margin: 0 calc(10% - 27px);  /*  (100% - 6*width) / 10   */
 }
@@ -12,23 +13,18 @@
 	position: relative;
 }
 
-
-.color-pick:first-child { margin-left: 0; }
-.color-pick:last-child { margin-right: 0; }
-
-
-.color-pick[data-val="."] { background: #333; }
-.color-pick[data-val="l"] { background: blue; }
-.color-pick[data-val="b"] { background: orange; }
-.color-pick[data-val="d"] { background: white; }
-.color-pick[data-val="f"] { background: red; }
-.color-pick[data-val="r"] { background: green; }
-.color-pick[data-val="u"] { background: yellow; }
+.color-pick[val="."] { background: #333; }
+.color-pick[val="l"] { background: blue; }
+.color-pick[val="b"] { background: orange; }
+.color-pick[val="d"] { background: white; }
+.color-pick[val="f"] { background: red; }
+.color-pick[val="r"] { background: green; }
+.color-pick[val="u"] { background: yellow; }
 
 
-.color-pick.selected::before {
+.color-pick[selected]::before {
 	position: absolute;
-	content: " ";
+	content: "";
 	background: url(check.svg);
 	width: 30px;
 	height: 26px;
@@ -36,13 +32,13 @@
 	left: 6px;
 }
 
-.color-pick[data-val="."].selected::before, 
-.color-pick[data-val="l"].selected::before, 
-.color-pick[data-val="f"].selected::before, 
-.color-pick[data-val="r"].selected::before {
+
+.color-pick[val="."][selected]::before, 
+.color-pick[val="l"][selected]::before, 
+.color-pick[val="f"][selected]::before, 
+.color-pick[val="r"][selected]::before {
 	background-position: 30px 0;
 }
-
 
 
 .color-pick:hover {
@@ -50,7 +46,7 @@
 	transform: scale(1.133);
 }
 
-.color-pick.selected:hover {
+.color-pick[selected]:hover {
 	cursor: auto;
 	transform: scale(1);
 }

@@ -1,8 +1,8 @@
 import './controls.css';
 import makeElement from '/html2element.js';
 
-import Button from '../button/button.js';
-import ColorPick from '../color-pick/color-pick.js';
+import '../button/button.js';
+import '../color-pick/color-pick.js';
 
 export default class {
 	constructor({
@@ -11,50 +11,47 @@ export default class {
 		onShuffledStateButtonClick,
 		onSolveButtonClick
 	}) {
-		this._state = {
-			selectedColor: '.'
-		};
-
-		let setSelectedColor = val => {
-			this._state.selectedColor = val;
-			this._render();
-		}
-
 		this._colorPicks = {};
 		let cps = this._colorPicks;
 
 		this.element = makeElement`
 			<div class="controls">
 				<div class="controls-row">
-					${cps['l'] = new ColorPick({onClick: _ => setSelectedColor('l'), val: 'l'})}
-					${cps['b'] = new ColorPick({onClick: _ => setSelectedColor('b'), val: 'b'})}
-					${cps['d'] = new ColorPick({onClick: _ => setSelectedColor('d'), val: 'd'})}
-					${cps['f'] = new ColorPick({onClick: _ => setSelectedColor('f'), val: 'f'})}
-					${cps['r'] = new ColorPick({onClick: _ => setSelectedColor('r'), val: 'r'})}
-					${cps['u'] = new ColorPick({onClick: _ => setSelectedColor('u'), val: 'u'})}
+					<m-colorpick val="l"></m-colorpick>
+					<m-colorpick val="b"></m-colorpick>
+					<m-colorpick val="d"></m-colorpick>
+					<m-colorpick val="f"></m-colorpick>
+					<m-colorpick val="r"></m-colorpick>
+					<m-colorpick val="u"></m-colorpick>
 				</div>
 				<div class="controls-row">
-					${cps['.'] = new ColorPick({onClick: _ => setSelectedColor('.'), val: '.'})}
+					<m-colorpick val="."></m-colorpick>
 					<div class="button-container">
-						${new Button({caption: 'Reset', onClick: onSolvedStateButtonClick})}
-						${new Button({caption: 'Empty', onClick: onEmptyStateButtonClick})}
-						${new Button({caption: 'Shuffle', onClick: onShuffledStateButtonClick})}
+						<m-button id="button-reset">Reset</m-button>
+						<m-button id="button-empty">Empty</m-button>
+						<m-button id="button-shuffle">Shuffle</m-button>
 					</div>
 				</div>
 				<div class="controls-row">
-					${new Button({caption: 'Solve', onClick: onSolveButtonClick, primary: true})}
+					<m-button id="button-solve" primary>Solve</m-button>
 				</div>
 			</div>
 		`;
+
+		for(let el of this.element.querySelectorAll('m-colorpick')) {
+			el.addEventListener('click', evt => {
+				this.element.querySelectorAll('m-colorpick').forEach(x => x.removeAttribute('selected'));
+				this.element.querySelector(`m-colorpick[val="${evt.target.val}"]`).setAttribute('selected', true);
+			});
+		}
+
+		this.element.querySelector('#button-reset').addEventListener('click', onSolvedStateButtonClick);
+		this.element.querySelector('#button-empty').addEventListener('click', onEmptyStateButtonClick);
+		this.element.querySelector('#button-shuffle').addEventListener('click', onShuffledStateButtonClick);
+		this.element.querySelector('#button-solve').addEventListener('click', onSolveButtonClick);
 	}
 
 	getSelectedColor() {
-		return this._state.selectedColor;
-	}
-
-	_render() {
-		for(let val in this._colorPicks) {
-			this._colorPicks[val].select(val == this._state.selectedColor);
-		}
+		return this.element.querySelector('m-colorpick[selected]').getAttribute('val');
 	}
 };

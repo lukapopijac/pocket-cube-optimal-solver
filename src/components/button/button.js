@@ -1,12 +1,25 @@
-import './button.css';
-import makeElement from '/html2element.js';
+import t from './button.html';
 
-export default class {
-	constructor({caption, onClick, primary}) {
-		this.element = makeElement`
-			<button type="button" class="button ${primary && 'button-primary'}">${caption}</button>
-		`;
-		
-		this.element.addEventListener('click', onClick);
+const template = document.createElement('template');
+template.innerHTML = t;
+
+export class Button extends HTMLElement {
+	constructor() {
+		super();
+		this.attachShadow({mode: 'open'});
+		this.shadowRoot.appendChild(template.content.cloneNode(true));
+		this._button = this.shadowRoot.querySelector('button');
 	}
-};
+
+	static get observedAttributes() {
+		return ['primary'];
+	}
+
+	attributeChangedCallback(attrName, oldVal, newVal) {
+		if(attrName == 'primary') {
+			this._button.setAttribute('primary', newVal);
+		}
+	}
+}
+
+customElements.define('m-button', Button);
