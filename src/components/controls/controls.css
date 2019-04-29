@@ -1,11 +1,11 @@
-.controls {
+:host > div {
 	display: inline-block;
 	vertical-align: bottom;
 	width: calc(70% + 84px);
 	max-width: 430px;
 }
 
-.controls .controls-row {
+:host > div .controls-row {
 	position: relative;
 	width: 100%;
 	padding: 2px 0px;
@@ -13,8 +13,6 @@
 	text-align: left;
 	font-size: 0; /* to remove space between blocks */
 }
-
-
 
 
 .button-container {
@@ -29,46 +27,6 @@
 	top: 50%;
 	transform: translateY(-50%);
 	margin-left: 10px;
-}
-
-.button {
-	background-image: linear-gradient(#1b1dff, #0002cd 50%, #0002b9);
-	border: 1px solid #00029a;
-	background-color: #0002cd;
-	border-radius: 4px;
-	padding: 12px 18px;
-	text-decoration: none;
-	font-size: 15px;
-	font-weight: bold;
-	color: #eee;
-	font-family: sans-serif;
-}
-.button:hover {
-	background-image: linear-gradient(#0609ff, #0002b9 50%, #0002a4);
-	border: 1px solid #000186;
-	background-color: #00029a;
-	cursor: pointer;
-}
-.button:active {
-	background-image: none;
-	background-color: #00029a;
-	border-color: #000190;
-}
-.button.solve {
-	color: white;
-	background-image: linear-gradient(#ff1d1b, #cd0200 50%, #b90200);
-	border: 1px solid #9a0200;
-	background-color: #cd0200;
-}
-.button.solve:hover {
-	background-image: linear-gradient(#ff0906, #b90200 50%, #a40200);
-	border: 1px solid #860100;
-	background-color: #9a0200;
-}
-.button.solve:active {
-	background-image: none;
-	background-color: #9a0200;
-	border-color: #900100;
 }
 
 

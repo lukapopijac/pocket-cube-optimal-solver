@@ -1,28 +1,28 @@
 /* TODO */
-.controls-row .color-pick {
+.controls-row :host > div {
 	margin: 0 calc(10% - 27px);  /*  (100% - 6*width) / 10   */
 }
 
-.color-pick {
+:host > div {
 	width: 45px;
 	height: 45px;
 	display: inline-block;
 	vertical-align: middle;
-	border: 2px solid black;
+	border: 2px solid #333;
 	border-radius: 10px;
 	position: relative;
 }
 
-.color-pick[val="."] { background: #333; }
-.color-pick[val="l"] { background: blue; }
-.color-pick[val="b"] { background: orange; }
-.color-pick[val="d"] { background: white; }
-.color-pick[val="f"] { background: red; }
-.color-pick[val="r"] { background: green; }
-.color-pick[val="u"] { background: yellow; }
+:host > div[val="."] { background: #333; }
+:host > div[val="l"] { background: blue; }
+:host > div[val="b"] { background: orange; }
+:host > div[val="d"] { background: white; }
+:host > div[val="f"] { background: red; }
+:host > div[val="r"] { background: green; }
+:host > div[val="u"] { background: yellow; }
 
 
-.color-pick[selected]::before {
+:host > div[selected]::before {
 	position: absolute;
 	content: "";
 	background: url(check.svg);
@@ -33,20 +33,20 @@
 }
 
 
-.color-pick[val="."][selected]::before, 
-.color-pick[val="l"][selected]::before, 
-.color-pick[val="f"][selected]::before, 
-.color-pick[val="r"][selected]::before {
+:host > div[val="."][selected]::before, 
+:host > div[val="l"][selected]::before, 
+:host > div[val="f"][selected]::before, 
+:host > div[val="r"][selected]::before {
 	background-position: 30px 0;
 }
 
 
-.color-pick:hover {
+:host > div:hover {
 	cursor: pointer;
 	transform: scale(1.133);
 }
 
-.color-pick[selected]:hover {
+:host > div[selected]:hover {
 	cursor: auto;
 	transform: scale(1);
 }

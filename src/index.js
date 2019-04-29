@@ -1,6 +1,6 @@
 import solve from './solve.js';
 import CubeUnfolded from './components/cube-unfolded/cube-unfolded.js';
-import Controls from './components/controls/controls.js';
+import {Controls} from './components/controls/controls.js';
 
 let cubeUnfolded = new CubeUnfolded({
 	onStickerClick() {
@@ -10,7 +10,6 @@ let cubeUnfolded = new CubeUnfolded({
 		return controls.getSelectedColor();
 	}
 });
-
 
 let controls = new Controls({
 	onSolvedStateButtonClick() {
@@ -40,7 +39,8 @@ let controls = new Controls({
 	}
 });
 
-document.body.insertBefore(controls.element, document.body.firstElementChild);
+
+document.body.insertBefore(controls, document.body.firstElementChild);
 document.body.insertBefore(cubeUnfolded.element, document.body.firstElementChild);
 
 

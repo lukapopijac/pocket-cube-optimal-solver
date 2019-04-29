@@ -15,16 +15,12 @@ export class ColorPick extends HTMLElement {
 		return ['val', 'selected'];
 	}
 
-	get val() {
-		return this._el.getAttribute('val');
-	}
-
 	attributeChangedCallback(attrName, oldVal, newVal) {
 		if(attrName == 'val') {
 			this._el.setAttribute('val', newVal);
 		}
 		if(attrName == 'selected') {
-			if(newVal) this._el.setAttribute('selected', true);
+			if(newVal != null) this._el.setAttribute('selected', true);
 			else this._el.removeAttribute('selected');
 		}
 	}
