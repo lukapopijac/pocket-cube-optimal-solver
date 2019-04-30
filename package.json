@@ -18,9 +18,5 @@
   "devDependencies": {
     "mocha": "^6.1.4",
     "parcel-bundler": "^1.12.3"
-  },
-  "dependencies": {
-    "express": "^4.16.4",
-    "morgan": "^1.9.1"
   }
 }
