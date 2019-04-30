@@ -4,23 +4,26 @@ const template = document.createElement('template');
 template.innerHTML = t;
 
 export class CubeUnfolded extends HTMLElement {
-	constructor({getSelectedColor}) {
+	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
 		this._stickerValues = 'urfuflubrulbdfrdlfdrbdbl'.split('');
+
+		// sort just to be sure that this is independent from order in html,
+		// that's why every sticker has data-idx
 		this._stickerElementsSorted = Array.from(this.shadowRoot.querySelectorAll('.sticker'))
 			.sort((a, b) => a.dataset.idx - b.dataset.idx)
 		;
 
 		this._refresh();
-		
+
 		// set click handler on each sticker
 		for(let el of this._stickerElementsSorted) {
 			el.addEventListener('click', evt => {
 				let idx = evt.target.dataset.idx;
-				this._stickerValues[idx] = getSelectedColor();
+				this._stickerValues[idx] = this._getSelectedColor();
 				this._refresh();
 				this.dispatchEvent(new CustomEvent('click-sticker'));
 			});
@@ -36,6 +39,9 @@ export class CubeUnfolded extends HTMLElement {
 		}
 	}
 
+	set getSelectedColor(callback) {
+		this._getSelectedColor = callback;
+	}
 	get stickerValues() {
 		return this._stickerValues;
 	}
