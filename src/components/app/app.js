@@ -1,5 +1,7 @@
 import '../cube-unfolded/cube-unfolded.js';
 import '../controls/controls.js';
+import '../cube3d/cube3d.js';
+
 import solve from '/solve.js';
 
 
@@ -57,12 +59,6 @@ export class App extends HTMLElement {
 		});
 	}
 
-	static get observedAttributes() {
-	}
-
-	attributeChangedCallback(attrName, oldVal, newVal) {
-	}
-
 	_setSolution(text, isError, isSolved) {
 		let solRow = this.shadowRoot.querySelector('.solution-row');
 		
@@ -71,8 +67,7 @@ export class App extends HTMLElement {
 		solRow.classList[isSolved     ? 'add' : 'remove']('solved');
 		
 		solRow.querySelector('.solution').textContent = isSolved ? 'Solved!' : text;
-	}
-	
+	}	
 }
 
 customElements.define('m-app', App);

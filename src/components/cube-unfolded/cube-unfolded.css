@@ -18,7 +18,7 @@
 	cursor: pointer;
 }
 
-:host > div .sticker[data-val="."]  { fill: transparent; stroke: #191919;}
+:host > div .sticker[data-val="."]  { fill: transparent; stroke: #111;}
 :host > div .sticker[data-val="l"]  { fill: blue;    }
 :host > div .sticker[data-val="b"]  { fill: orange;  }
 :host > div .sticker[data-val="d"]  { fill: white;   }

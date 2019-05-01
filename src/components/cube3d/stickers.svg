@@ -1,0 +1,8 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg">
+	<svg x="0">  <rect x="7" y="7" rx="10" ry="10" width="86" height="86" fill="yellow"/></svg>
+	<svg x="100"><rect x="7" y="7" rx="10" ry="10" width="86" height="86" fill="red"/></svg>
+	<svg x="200"><rect x="7" y="7" rx="10" ry="10" width="86" height="86" fill="green"/></svg>
+	<svg x="300"><rect x="7" y="7" rx="10" ry="10" width="86" height="86" fill="blue"/></svg>
+	<svg x="400"><rect x="7" y="7" rx="10" ry="10" width="86" height="86" fill="darkorange"/></svg>
+	<svg x="500"><rect x="7" y="7" rx="10" ry="10" width="86" height="86" fill="white"/></svg>
+</svg>

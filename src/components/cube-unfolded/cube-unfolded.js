@@ -18,16 +18,15 @@ export class CubeUnfolded extends HTMLElement {
 		;
 
 		this._refresh();
-
-		// set click handler on each sticker
-		for(let el of this._stickerElementsSorted) {
-			el.addEventListener('click', evt => {
-				let idx = evt.target.dataset.idx;
-				this._stickerValues[idx] = this._getSelectedColor();
-				this._refresh();
-				this.dispatchEvent(new CustomEvent('click-sticker'));
-			});
-		}
+		
+		// set click handler to react on click on sticker
+		this.shadowRoot.addEventListener('click', evt => {
+			let idx = evt.target.dataset.idx;
+			if(isNaN(idx)) return;  // not clicked on sticker
+			this._stickerValues[idx] = this._getSelectedColor();
+			this._refresh();
+			this.dispatchEvent(new CustomEvent('click-sticker'));
+		});
 	}
 
 	_refresh() {
