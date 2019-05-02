@@ -25,7 +25,8 @@ export class Cube3d extends HTMLElement {
 	_resize() {
 		let el = this.shadowRoot.querySelector('div');
 		let w = el.offsetWidth;
-		this.scale = w/540;
+		console.log(w, el.offsetHeight);
+		this.scale = w/354;
 	}
 
 	set scale(s) {

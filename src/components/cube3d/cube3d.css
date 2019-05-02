@@ -1,3 +1,7 @@
+.scene { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+
+
 .scene {
 	display: flex;
     align-items: center;
@@ -10,11 +14,11 @@
 }
 
 @keyframes rotate {
-	from { transform: rotateX(-30deg) rotateY(0deg); }
-	to { transform: rotateX(330deg) rotateY(1800deg); }
+	from { transform: rotateX(-.15turn) rotateY(0); }
+	to { transform: rotateX(.85turn) rotateY(5turn); }
 }
 .cube {
-	animation: rotate 50s infinite linear;
+	animation: rotate 35s infinite linear;
 }
   
 
@@ -40,45 +44,61 @@
 	transform-origin: 50px 50px;
 }
 
-.cubie-corner-position-0 { transform: translate3d(100px, -100px, 100px); }
-.cubie-corner-position-1 { transform: translate3d(-100px, -100px, 100px) rotateY(-90deg); }
-.cubie-corner-position-2 { transform: translate3d(100px, -100px, -100px) rotateY(90deg); }
-.cubie-corner-position-3 { transform: translate3d(-100px, -100px, -100px) rotateY(180deg); }
-.cubie-corner-position-4 { transform: translate3d(100px, 100px, 100px) rotateX(180deg) rotateY(90deg); }
-.cubie-corner-position-5 { transform: translate3d(-100px, 100px, 100px) rotateX(180deg) rotateY(180deg); }
-.cubie-corner-position-6 { transform: translate3d(100px, 100px, -100px) rotateX(180deg); }
-.cubie-corner-position-7 { transform: translate3d(-100px, 100px, -100px) rotateX(180deg) rotateY(-90deg); }
+.cubie-corner-position-0 { transform: translate3d(50px, -50px, 50px); }
+.cubie-corner-position-1 { transform: translate3d(-50px, -50px, 50px) rotateY(-90deg); }
+.cubie-corner-position-2 { transform: translate3d(50px, -50px, -50px) rotateY(90deg); }
+.cubie-corner-position-3 { transform: translate3d(-50px, -50px, -50px) rotateY(180deg); }
+.cubie-corner-position-4 { transform: translate3d(50px, 50px, 50px) rotateX(180deg) rotateY(90deg); }
+.cubie-corner-position-5 { transform: translate3d(-50px, 50px, 50px) rotateX(180deg) rotateY(180deg); }
+.cubie-corner-position-6 { transform: translate3d(50px, 50px, -50px) rotateX(180deg); }
+.cubie-corner-position-7 { transform: translate3d(-50px, 50px, -50px) rotateX(180deg) rotateY(-90deg); }
 
 .cubie-corner-orientation-0 {}
 .cubie-corner-orientation-1 { transform: rotateY(-90deg) rotateX(90deg); }
 .cubie-corner-orientation-2 { transform: rotateY(90deg) rotateZ(-90deg); }
 
 
-.cubie-face {
+[data-face] {
 	position: absolute;
 	width: 100px;
 	height: 100px;
-	background-color: rgba(0,30,60,0.2);
-	/*border-radius: 16px;*/
+	/* background-color: rgba(0,30,60,0.2); */
+	background-color: black;
+	border-radius: 16px;
 	transform-style: preserve-3d;
-}
-.face-u { transform: rotateX(90deg)  translateZ(50px); }
-.face-f { transform:                 translateZ(50px); }
-.face-r { transform: rotateY(90deg)  translateZ(50px); }
-.face-l { transform: rotateY(-90deg) translateZ(50px); }
-.face-b { transform: rotateY(180deg) translateZ(50px); }
-.face-d { transform: rotateX(-90deg) translateZ(50px); }
+	backface-visibility: hidden;
 
-.cubie-sticker {
-	background-image: url(stickers.svg);
-	background-size: 600px 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
-.sticker-u { background-position-x: 0; }
-.sticker-f { background-position-x: -100px; }
-.sticker-r { background-position-x: -200px; }
-.sticker-l { background-position-x: -300px; }
-.sticker-b { background-position-x: -400px; }
-.sticker-d { background-position-x: -500px; }
+
+[data-face="u"] { transform: rotateX(90deg)  translateZ(50px); }
+[data-face="f"] { transform:                 translateZ(50px); }
+[data-face="r"] { transform: rotateY(90deg)  translateZ(50px); }
+[data-face="l"] { transform: rotateY(-90deg) translateZ(50px); }
+[data-face="b"] { transform: rotateY(180deg) translateZ(50px); }
+[data-face="d"] { transform: rotateX(-90deg) translateZ(50px); }
+
+[data-face="u"].inside { transform: rotateX(-90deg) translateZ(-50px); }
+[data-face="f"].inside { transform: rotateY(180deg) translateZ(-50px); }
+[data-face="r"].inside { transform: rotateY(-90deg) translateZ(-50px); }
+[data-face="l"].inside { transform: rotateY(90deg)  translateZ(-50px); }
+[data-face="b"].inside { transform:                 translateZ(-50px); }
+[data-face="d"].inside { transform: rotateX(90deg)  translateZ(-50px); }
+
+[data-sticker] {
+	width: 86px;
+	height: 86px;
+	border-radius: 10px;
+}
+[data-sticker="u"] { background-color: yellow; }
+[data-sticker="f"] { background-color: red; }
+[data-sticker="r"] { background-color: green; }
+[data-sticker="l"] { background-color: blue; }
+[data-sticker="b"] { background-color: orange; }
+[data-sticker="d"] { background-color: white; }
+
 
 .turn-u1, .turn-d3 { transform: rotateY(-90deg); }
 .turn-f1, .turn-b3 { transform: rotateZ(90deg); }
