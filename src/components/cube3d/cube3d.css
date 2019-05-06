@@ -1,4 +1,14 @@
-.scene {
+:host {
+	--a: 7ch;  /* half cubie edge length */
+	--b: -7ch;
+}
+
+:host * {
+	transform-style: preserve-3d;
+	transform-origin: var(--a) var(--a);
+}
+
+:host > div {
 	display: flex;
     align-items: center;
     justify-content: center;
@@ -12,17 +22,15 @@
 
 /* 
 [data-plane] {
-	transform-style: preserve-3d;
-	transform-origin: 50px 50px;
-	width: 200px;
-	height: 200px;
+	width: calc(4 * var(--a));
+	height: calc(4 * var(--a));
 	background: rgba(250, 0, 250, .4);
 	position: absolute;
 }
 
-[data-plane="x"] { transform: rotateY(90deg) translate3d(-50px, -50px, 0); }
-[data-plane="y"] { transform: rotateX(90deg) translate3d(-50px, -50px, 0); }
-[data-plane="z"] { transform: translate3d(-50px, -50px, 0); }
+[data-plane="x"] { transform: rotateY(90deg) translate3d(var(--b), var(--b), 0); }
+[data-plane="y"] { transform: rotateX(90deg) translate3d(var(--b), var(--b), 0); }
+[data-plane="z"] { transform: translate3d(var(--b), var(--b), 0); }
  */
 
 
@@ -30,24 +38,14 @@
 	from { transform: rotateX(-.15turn) rotateY(0); }
 	to { transform: rotateX(.85turn) rotateY(5turn); }
 }
-.cube {
-	/* animation: rotate 50s infinite linear; */
-}
 
 
 .cube {
 	position: relative;
-	top: -50px;  /* move cube to the middle (as size of one cubie face is 100px*100px */
-	left: -50px;
-	transform-style: preserve-3d;
-	transform-origin: 50px 50px;  /* so the cube rotates around middle of itself */
+	top: var(--b);  /* move cube to the middle */
+	left: var(--b);
 	transform: rotateY(-30deg) rotateX(-20deg) rotateZ(9deg);
-}
-
-
-[data-turn], [data-p], [data-p] > div {
-	transform-style: preserve-3d;
-	transform-origin: 50px 50px;
+	/* animation: rotate 50s infinite linear; */
 }
 
 
@@ -66,7 +64,7 @@
 [data-p="7"] { --transform-p: rotateX(180deg) rotateY(-90deg); }
 
 [data-p][data-o] > div {
-	transform: var(--transform-p) var(--transform-o) translate3d(50px, -50px, 50px);
+	transform: var(--transform-p) var(--transform-o) translate3d(var(--a), var(--b), var(--a));
 }
 
 
@@ -77,37 +75,39 @@
 [data-turn$="2"] { --turn-angle: 180deg; }
 [data-turn$="3"] { --turn-angle: -90deg; }
 
-[data-turn^="u"] [data-p="0"],
-[data-turn^="u"] [data-p="1"],
-[data-turn^="u"] [data-p="2"],
-[data-turn^="u"] [data-p="3"] { transform: rotate3d( 0, -1,  0, var(--turn-angle)); }
+[data-turn^="U"] [data-p="0"],
+[data-turn^="U"] [data-p="1"],
+[data-turn^="U"] [data-p="2"],
+[data-turn^="U"] [data-p="3"] { transform: rotate3d( 0, -1,  0, var(--turn-angle)); }
 
-[data-turn^="r"] [data-p="0"],
-[data-turn^="r"] [data-p="2"],
-[data-turn^="r"] [data-p="4"],
-[data-turn^="r"] [data-p="6"] { transform: rotate3d( 1,  0,  0, var(--turn-angle)); }
+[data-turn^="R"] [data-p="0"],
+[data-turn^="R"] [data-p="2"],
+[data-turn^="R"] [data-p="4"],
+[data-turn^="R"] [data-p="6"] { transform: rotate3d( 1,  0,  0, var(--turn-angle)); }
 
-[data-turn^="f"] [data-p="0"],
-[data-turn^="f"] [data-p="1"],
-[data-turn^="f"] [data-p="4"],
-[data-turn^="f"] [data-p="5"] { transform: rotate3d( 0,  0,  1, var(--turn-angle)); }
+[data-turn^="F"] [data-p="0"],
+[data-turn^="F"] [data-p="1"],
+[data-turn^="F"] [data-p="4"],
+[data-turn^="F"] [data-p="5"] { transform: rotate3d( 0,  0,  1, var(--turn-angle)); }
 
-[data-turn^="l"] [data-p="1"],
-[data-turn^="l"] [data-p="3"],
-[data-turn^="l"] [data-p="5"],
-[data-turn^="l"] [data-p="7"] { transform: rotate3d(-1,  0,  0, var(--turn-angle)); }
+[data-turn^="L"] [data-p="1"],
+[data-turn^="L"] [data-p="3"],
+[data-turn^="L"] [data-p="5"],
+[data-turn^="L"] [data-p="7"] { transform: rotate3d(-1,  0,  0, var(--turn-angle)); }
 
-[data-turn^="b"] [data-p="2"],
-[data-turn^="b"] [data-p="3"],
-[data-turn^="b"] [data-p="6"],
-[data-turn^="b"] [data-p="7"] { transform: rotate3d( 0,  0, -1, var(--turn-angle)); }
+[data-turn^="B"] [data-p="2"],
+[data-turn^="B"] [data-p="3"],
+[data-turn^="B"] [data-p="6"],
+[data-turn^="B"] [data-p="7"] { transform: rotate3d( 0,  0, -1, var(--turn-angle)); }
 
-[data-turn^="d"] [data-p="4"],
-[data-turn^="d"] [data-p="5"],
-[data-turn^="d"] [data-p="6"],
-[data-turn^="d"] [data-p="7"] { transform: rotate3d( 0,  1,  0, var(--turn-angle)); }
+[data-turn^="D"] [data-p="4"],
+[data-turn^="D"] [data-p="5"],
+[data-turn^="D"] [data-p="6"],
+[data-turn^="D"] [data-p="7"] { transform: rotate3d( 0,  1,  0, var(--turn-angle)); }
 
-
+[data-turn^="x"] [data-p] { transform: rotate3d( 1,  0,  0, var(--turn-angle)); }
+[data-turn^="y"] [data-p] { transform: rotate3d( 0, -1,  0, var(--turn-angle)); }
+[data-turn^="z"] [data-p] { transform: rotate3d( 0,  0,  1, var(--turn-angle)); }
 
 
 
@@ -117,13 +117,12 @@
 	align-items: center;
 	justify-content: center;
 	position: absolute;
-	width: 100px;
-	height: 100px;
+	width: calc(2 * var(--a));
+	height: calc(2 * var(--a));
 	background-color: rgba(0,30,60,0.2);
 	/* background-color: black; */
 	/* backface-visibility: hidden; */
-	border-radius: 16px;
-	transform-style: preserve-3d;
+	border-radius: calc(.3 * var(--a));
 }
 
 /* inner side of each face */
@@ -138,37 +137,37 @@
 	backface-visibility: inherit;
 }
 
-.face:nth-child(1) { transform: rotateX(90deg)  translateZ(50px); }
-.face:nth-child(2) { transform: rotateY(90deg)  translateZ(50px); }
-.face:nth-child(3) { transform:                 translateZ(50px); }
-.face:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
-.face:nth-child(5) { transform: rotateY(180deg) translateZ(50px); }
-.face:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+.face:nth-child(1) { transform: rotateX(90deg)  translateZ(var(--a)); }
+.face:nth-child(2) { transform: rotateY(90deg)  translateZ(var(--a)); }
+.face:nth-child(3) { transform:                 translateZ(var(--a)); }
+.face:nth-child(4) { transform: rotateY(-90deg) translateZ(var(--a)); }
+.face:nth-child(5) { transform: rotateY(180deg) translateZ(var(--a)); }
+.face:nth-child(6) { transform: rotateX(-90deg) translateZ(var(--a)); }
 
 
 [data-sticker]::after {
 	content: "";
-	width: 86px;
-	height: 86px;
-	border-radius: 10px;
+	width: calc(1.7 * var(--a));
+	height: calc(1.7 * var(--a));
+	border-radius: calc(.2 * var(--a));
 	opacity: 0.9;
 }
-[data-sticker="u"]::after { background-color: yellow; }
-[data-sticker="r"]::after { background-color: green; }
-[data-sticker="f"]::after { background-color: red; }
-[data-sticker="l"]::after { background-color: blue; }
-[data-sticker="b"]::after { background-color: orange; }
-[data-sticker="d"]::after { background-color: white; }
+[data-sticker="U"]::after { background-color: yellow; }
+[data-sticker="R"]::after { background-color: green; }
+[data-sticker="F"]::after { background-color: red; }
+[data-sticker="L"]::after { background-color: blue; }
+[data-sticker="B"]::after { background-color: orange; }
+[data-sticker="D"]::after { background-color: white; }
 
 
-[cubie-inner-plane] {
+
+
+/* [cubie-inner-plane] {
 	position: absolute;
-	transform-style: preserve-3d;
-	transform-origin: 50px 50px;
-	width: 100px;
-	height: 100px;
+	width: calc(2 * var(--a));
+	height: calc(2 * var(--a));
 	background: black;
 }
 [cubie-inner-plane="x"] { transform: rotateY(90deg); }
 [cubie-inner-plane="y"] { transform: rotateX(90deg); }
-[cubie-inner-plane="z"] {}
+[cubie-inner-plane="z"] {} */
