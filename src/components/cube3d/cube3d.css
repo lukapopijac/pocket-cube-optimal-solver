@@ -20,20 +20,6 @@
 }
 
 
-/* 
-[data-plane] {
-	width: calc(4 * var(--a));
-	height: calc(4 * var(--a));
-	background: rgba(250, 0, 250, .4);
-	position: absolute;
-}
-
-[data-plane="x"] { transform: rotateY(90deg) translate3d(var(--b), var(--b), 0); }
-[data-plane="y"] { transform: rotateX(90deg) translate3d(var(--b), var(--b), 0); }
-[data-plane="z"] { transform: translate3d(var(--b), var(--b), 0); }
- */
-
-
 @keyframes rotate {
 	from { transform: rotateX(-.15turn) rotateY(0); }
 	to { transform: rotateX(.85turn) rotateY(5turn); }
@@ -120,9 +106,9 @@
 	width: calc(2 * var(--a));
 	height: calc(2 * var(--a));
 	background-color: rgba(0,30,60,0.2);
-	/* background-color: black; */
-	/* backface-visibility: hidden; */
-	border-radius: calc(.3 * var(--a));
+	background-color: black;
+	backface-visibility: hidden;
+	border-radius: calc(.25 * var(--a));
 }
 
 /* inner side of each face */
@@ -151,6 +137,7 @@
 	height: calc(1.7 * var(--a));
 	border-radius: calc(.2 * var(--a));
 	opacity: 0.9;
+	backface-visibility: inherit;
 }
 [data-sticker="U"]::after { background-color: yellow; }
 [data-sticker="R"]::after { background-color: green; }
@@ -162,12 +149,11 @@
 
 
 
-/* [cubie-inner-plane] {
+.cross-plane {
 	position: absolute;
 	width: calc(2 * var(--a));
 	height: calc(2 * var(--a));
 	background: black;
 }
-[cubie-inner-plane="x"] { transform: rotateY(90deg); }
-[cubie-inner-plane="y"] { transform: rotateX(90deg); }
-[cubie-inner-plane="z"] {} */
+.cross-plane ~ .cross-plane { transform: rotateY(90deg); }
+.cross-plane ~ .cross-plane ~ .cross-plane { transform: rotateX(90deg); }
