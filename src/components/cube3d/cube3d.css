@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;
 	width: 100%;
-	height: 100%;
+	height: 300px;
 	perspective: 1000px;
 	/* perspective-origin: 50% 50%; */
 	/* background: #aaaa; */
@@ -55,7 +55,7 @@
 
 
 [data-turn] [data-p] {
-	transition: transform .8s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	transition: transform .6s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 [data-turn$="1"] { --turn-angle:  90deg; }
 [data-turn$="2"] { --turn-angle: 180deg; }

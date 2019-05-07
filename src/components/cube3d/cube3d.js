@@ -6,6 +6,7 @@ template.innerHTML = t;
 export class Cube3d extends HTMLElement {
 	constructor() {
 		super();
+
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
@@ -24,6 +25,19 @@ export class Cube3d extends HTMLElement {
 				this._lastTurn = turn;
 			}))
 		;
+	}
+
+	set po({p, o}) {
+		let el_cubies = this.shadowRoot.querySelectorAll('[data-p]');
+		for(let i=0; i<el_cubies.length; i++) {
+			el_cubies[p[i]].dataset.p = i;
+			el_cubies[p[i]].dataset.o = o[i];
+		}
+		console.log('set', p, o);
+	}
+
+	get po() {
+
 	}
 
 	connectedCallback() {

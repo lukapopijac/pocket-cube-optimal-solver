@@ -1,20 +1,12 @@
-
-.hidden {
+[data-view].hidden {
 	display: none;
 }
 
-
-
-.solution-row {
-	margin-top: 20px;
+.message {
 	font-family: sans-serif;
 	font-size: 18px;
 	font-weight: bold;
 	color: black;
-}
-
-.solution {
-	display: inline-block;
 	vertical-align: middle;
 	padding: 0 10px;
 	border: 5px solid #333;
@@ -23,47 +15,11 @@
 	line-height: 30px;
 }
 
-.solution-row > a {
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 4px;
-	border-radius: 20px;
-	border: 2px solid white;
-	background: #0948ff;
-	color: white;
-	height: 26px;
-	width: 26px;
-	font-size: 13px;
-	line-height: 23px;
-	box-shadow: 0 0 3px grey;
-	text-decoration: none;
-}
-
-.solution-row > a:hover {
-	transform: scale(1.125);
-}
-
-.solution-row.error .solution {
-	background: red;
-	color: white;
-	border: 5px solid white;
-	box-shadow: 0 0 0 1px black;
-}
-
-.solution-row.error > a,
-.solution-row.solved > a {
+.message.hidden {
 	display: none;
 }
 
-
-@media (min-width: 940px) {
-	.solution-row {
-		margin-top: 30px;
-	}
-}
-
-@media (max-width: 359px) {
-	.solution-row {
-		font-size: 15px;
-	}
+.message.error {
+	background: red;
+	color: white;
 }

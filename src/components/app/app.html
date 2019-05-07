@@ -3,13 +3,14 @@
 </style>
 
 <div>
-	<div style="width: 80%; height: 540px; background: oldlace; margin-top: 50px; margin-left: 50px; overflow: hidden;">
-		<m-cube3d></m-cube3d>
+	<div data-view="setup">
+		<m-cube-unfolded></m-cube-unfolded>
+		<m-controls></m-controls>
+		<div class="message hidden"></div>
 	</div>
-	<m-cube-unfolded></m-cube-unfolded>
-	<m-controls></m-controls>
-	<div class="solution-row hidden">
-		<span class="solution">R2 F2 U2 R2 F2 U2 R2 F2 U2 R2 F2</span>
-		<a href="https://solvethecube.com/notation" target="_blank">?</a>
+	<div data-view="solution" class="hidden">
+		<m-button class="button-back">&#8678;</m-button><br>
+		<m-cube3d></m-cube3d>
+		<br><br><br><hr><div class="solution"></div>
 	</div>
 </div>

@@ -27,46 +27,71 @@ export class App extends HTMLElement {
 			cubeUnfolded.getSelectedColor = _ => controls.selectedColor;
 		}, 0);
 		cubeUnfolded.addEventListener('click-sticker', _ => {
-			this._setSolution(null);
+			this._setMessage(null);
 		});
 
 
 		// prepare controls
 		controls.addEventListener('click-reset', _ => {
-			this._setSolution(null);
+			this._setMessage(null);
 			cubeUnfolded.setStickersToSolved();
 		});
 		controls.addEventListener('click-empty', _ => {
-			this._setSolution(null);
+			this._setMessage(null);
 			cubeUnfolded.setStickersToEmpty();
 		});
 		controls.addEventListener('click-shuffle', _ => {
-			this._setSolution(null);
+			this._setMessage(null);
 			let {p, o} = generateRandomPO();
 			cubeUnfolded.stickerValues = po2stickers(p, o);
 		});
 		controls.addEventListener('click-solve', _ => {
 			let po = stickers2po(cubeUnfolded.stickerValues);
 			if(!po) {
-				this._setSolution('Invalid or ambiguous state!', true);
+				this._setMessage('Invalid or ambiguous state!', true);
 				return;
 			}
 			let data = solve(po.p, po.o);
-			this._setSolution(formulateSolution(data), false, data.solution.length == 0);
+			if(data.solution.length == 0) this._setMessage('Solved!');
+			else {
+				let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
+				el_cube3d.po = po;
+				this._setView('solution');
+				this.shadowRoot.querySelector('.solution').textContent = formulateSolution(data);
+			}
 		});
 		controls.addEventListener('pick-color', evt => {
 			cubeUnfolded.selectedColor = evt.detail;
 		});
+
+
+		this.shadowRoot.querySelector('.button-back').addEventListener('click', _ => {
+			this._setView('setup');
+		});
 	}
 
-	_setSolution(text, isError, isSolved) {
-		let solRow = this.shadowRoot.querySelector('.solution-row');
-		
-		solRow.classList[text == null ? 'add' : 'remove']('hidden');
-		solRow.classList[isError      ? 'add' : 'remove']('error');
-		solRow.classList[isSolved     ? 'add' : 'remove']('solved');
-		
-		solRow.querySelector('.solution').textContent = isSolved ? 'Solved!' : text;
+	_setView(view) {
+		if(view == 'setup') {
+			this.shadowRoot.querySelector('[data-view="setup"]').classList.remove('hidden');
+			this.shadowRoot.querySelector('[data-view="solution"]').classList.add('hidden');
+		}
+		if(view == 'solution') {
+			this.shadowRoot.querySelector('[data-view="setup"]').classList.add('hidden');
+			this.shadowRoot.querySelector('[data-view="solution"]').classList.remove('hidden');
+		}
+	}
+
+	_setMessage(text, isError) {
+		let msgElement = this.shadowRoot.querySelector('.message');
+
+		if(text == null) {
+			msgElement.classList.add('hidden');
+		} else {
+			msgElement.textContent = text;
+			msgElement.classList.remove('hidden');
+			if(isError) msgElement.classList.add('error');
+			else msgElement.classList.remove('error');
+		}
 	}	
 }
 
@@ -165,7 +190,7 @@ function stickers2po(stickers) {
 function formulateSolution(data) {
 	return data.normalize
 		.concat(data.solution)
-		.map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x)
+		// .map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x)
 		.join(' ')
 	;
 }
