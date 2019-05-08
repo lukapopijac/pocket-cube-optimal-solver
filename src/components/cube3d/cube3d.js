@@ -6,23 +6,21 @@ template.innerHTML = t;
 export class Cube3d extends HTMLElement {
 	constructor() {
 		super();
-
+		
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
-
+		
 		this._styleForResize = document.createElement('style');
 		this.shadowRoot.appendChild(this._styleForResize);
-
+		
 		this._resize = this._resize.bind(this);
-
+		
 		this._cubeEl = this.shadowRoot.querySelector('.cube');
-		this._lastTurn = null;
 
 		this.shadowRoot.querySelectorAll('button')
 			.forEach(el => el.addEventListener('click', evt => {
 				let turn = evt.target.textContent;
-				this._cubeEl.dataset.turn = turn;
-				this._lastTurn = turn;
+				this.move(turn);
 			}))
 		;
 	}
@@ -40,21 +38,32 @@ export class Cube3d extends HTMLElement {
 
 	}
 
+	move(turn) {
+		this._updateCubies();
+		runSoon(_ => this._cubeEl.dataset.turn = turn);
+	}
+
+	_updateCubies() {
+		let turn = this._cubeEl.dataset.turn;
+		if(!turn) return; // already done
+		console.log(turn);
+		this._cubeEl.removeAttribute('data-turn');
+
+		for(let el of this.shadowRoot.querySelectorAll('[data-p]')) {
+			// read previous p and o
+			let {p, o} = el.dataset;
+
+			// set new p and o
+			el.dataset.p = turn2p[turn][p];
+			el.dataset.o = (o + turn2oAdd[turn][p]) % 3;
+		}
+	}
+	
 	connectedCallback() {
 		this._resize();
 		window.addEventListener('resize', this._resize);
 
-		this.shadowRoot.querySelector('.cube').addEventListener('transitionend', evt => {
-			this._cubeEl.removeAttribute('data-turn');
-			let turn = this._lastTurn;
-
-			// read previous p and o
-			let {p, o} = evt.target.dataset;
-			
-			// set new p and o
-			evt.target.dataset.p = turn2p[turn][p];
-			evt.target.dataset.o = (o + turn2oAdd[turn][p]) % 3;
-		});
+		this.shadowRoot.querySelector('.cube').addEventListener('transitionend', _ => this._updateCubies());
 	}
 	disconnectedCallback() {
 		window.removeEventListener('resize', this._resize);
@@ -110,7 +119,13 @@ const turn2oAdd = {
 
 
 
-
+function runSoon(cb) {
+	requestAnimationFrame(_ =>
+		requestAnimationFrame(_ =>
+			cb()
+		)
+	);
+}
 
 // function inversePermutation(arr) { 
 // 	let b = [];

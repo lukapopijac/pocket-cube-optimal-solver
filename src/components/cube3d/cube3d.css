@@ -1,6 +1,6 @@
 :host {
-	--a: 7ch;  /* half cubie edge length */
-	--b: -7ch;
+	--a: 3em;  /* half cubie edge length */
+	--b: -3em;
 }
 
 :host * {
@@ -30,7 +30,7 @@
 	position: relative;
 	top: var(--b);  /* move cube to the middle */
 	left: var(--b);
-	transform: rotateY(-30deg) rotateX(-20deg) rotateZ(9deg);
+	transform: rotateY(-30deg) rotateX(-25deg) rotateZ(10deg);
 	/* animation: rotate 50s infinite linear; */
 }
 
@@ -53,10 +53,9 @@
 	transform: var(--transform-p) var(--transform-o) translate3d(var(--a), var(--b), var(--a));
 }
 
+[data-turn] [data-p] { transition: transform .6s ease-out; }
+[data-turn$="2"] [data-p] { transition-duration: .8s; }
 
-[data-turn] [data-p] {
-	transition: transform .6s cubic-bezier(0.445, 0.05, 0.55, 0.95);
-}
 [data-turn$="1"] { --turn-angle:  90deg; }
 [data-turn$="2"] { --turn-angle: 180deg; }
 [data-turn$="3"] { --turn-angle: -90deg; }

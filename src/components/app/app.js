@@ -1,6 +1,7 @@
 import '../cube-unfolded/cube-unfolded.js';
 import '../controls/controls.js';
 import '../cube3d/cube3d.js';
+import '../solution-controls/solution-controls.js';
 
 import solve from '/solve.js';
 
@@ -57,7 +58,10 @@ export class App extends HTMLElement {
 				let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
 				el_cube3d.po = po;
 				this._setView('solution');
-				this.shadowRoot.querySelector('.solution').textContent = formulateSolution(data);
+				// this.shadowRoot.querySelector('.solution').textContent = formulateSolution(data);
+				
+				this.shadowRoot.querySelector('.solution').innerHTML = '';
+				this.shadowRoot.querySelector('.solution').appendChild(this._formulateSolution2(data));
 			}
 		});
 		controls.addEventListener('pick-color', evt => {
@@ -92,7 +96,23 @@ export class App extends HTMLElement {
 			if(isError) msgElement.classList.add('error');
 			else msgElement.classList.remove('error');
 		}
-	}	
+	}
+	
+	// TODO: this is temporary
+	_formulateSolution2(data) {
+		let el = document.createElement('div');
+		for(let t of data.normalize.concat(data.solution)) {
+			let b = document.createElement('button');
+			b.textContent = t;
+			b.onclick = evt => {
+				let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
+				el_cube3d.move(evt.target.textContent);
+			};
+			el.appendChild(b);
+		};
+		return el;
+	}
+	
 }
 
 customElements.define('m-app', App);
@@ -194,3 +214,4 @@ function formulateSolution(data) {
 		.join(' ')
 	;
 }
+
