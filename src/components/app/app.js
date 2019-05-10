@@ -53,8 +53,9 @@ export class App extends HTMLElement {
 				return;
 			}
 			let data = solve(po.p, po.o);
-			if(data.solution.length == 0) this._setMessage('Solved!');
-			else {
+			// if(data.solution.length == 0) this._setMessage('Solved!');
+			// else 
+			{
 				let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
 				el_cube3d.po = po;
 				this._setView('solution');
@@ -101,12 +102,12 @@ export class App extends HTMLElement {
 	// TODO: this is temporary
 	_formulateSolution2(data) {
 		let el = document.createElement('div');
-		for(let t of data.normalize.concat(data.solution)) {
+		for(let turn of data.normalize.concat(data.solution)) {
 			let b = document.createElement('button');
-			b.textContent = t;
+			b.textContent = turn;
 			b.onclick = evt => {
 				let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
-				el_cube3d.move(evt.target.textContent);
+				el_cube3d.move(turn);
 			};
 			el.appendChild(b);
 		};

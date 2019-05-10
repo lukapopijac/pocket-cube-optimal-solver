@@ -10,19 +10,20 @@ export class Cube3d extends HTMLElement {
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 		
-		this._styleForResize = document.createElement('style');
-		this.shadowRoot.appendChild(this._styleForResize);
+		this._el_cube = this.shadowRoot.querySelector('.cube');
 		
-		this._resize = this._resize.bind(this);
-		
-		this._cubeEl = this.shadowRoot.querySelector('.cube');
-
-		this.shadowRoot.querySelectorAll('button')
+		// for debugging: start
+		this.shadowRoot.querySelectorAll('button:not(.special-button)')
 			.forEach(el => el.addEventListener('click', evt => {
 				let turn = evt.target.textContent;
 				this.move(turn);
 			}))
 		;
+		this.shadowRoot.querySelector('.special-button').onclick = _ => {
+			this.move('U1', 3000);
+			// this.move('R1', 3000);
+		};
+		// for debugging: end
 	}
 
 	set po({p, o}) {
@@ -38,17 +39,44 @@ export class Cube3d extends HTMLElement {
 
 	}
 
-	move(turn) {
-		this._updateCubies();
-		runSoon(_ => this._cubeEl.dataset.turn = turn);
+	// make the turn. if other turn is in progress, first complete that turn instantly.
+	move(turn, duration) {  // duration is number of ms
+		// wind-up any current turn animation
+		this._turnAnimationWindUp();
+
+		if(this._nextMove) {
+			// no turn animation in progress, but the next turn is already setup. complete it immediately
+			this._updateCubies(this._nextMove.turn);
+		} else {
+			runSoon(_ => {
+				let {duration, turn} = this._nextMove;
+				if(duration == 0) {
+					this._updateCubies(turn);
+				} else {
+					for(let el of this._el_cube.querySelectorAll('[data-p]')) {
+						el.style.transitionDuration = duration ? duration + 'ms' : null;
+					}
+					this._el_cube.dataset.turn = turn;
+				}
+				this._nextMove = null;
+			});
+		}
+
+		this._nextMove = {turn, duration};
 	}
 
-	_updateCubies() {
-		let turn = this._cubeEl.dataset.turn;
-		if(!turn) return; // already done
-		console.log(turn);
-		this._cubeEl.removeAttribute('data-turn');
+	_turnAnimationWindUp() {
+		let turn = this._el_cube.dataset.turn;
+		if(turn) {
+			this._el_cube.removeAttribute('data-turn');			
+			for(let el of this._el_cube.querySelectorAll('[data-p]')) {
+				el.style.transitionDuration = null;
+			}
+			this._updateCubies(turn);
+		}
+	}
 
+	_updateCubies(turn) {
 		for(let el of this.shadowRoot.querySelectorAll('[data-p]')) {
 			// read previous p and o
 			let {p, o} = el.dataset;
@@ -60,26 +88,10 @@ export class Cube3d extends HTMLElement {
 	}
 	
 	connectedCallback() {
-		this._resize();
-		window.addEventListener('resize', this._resize);
-
-		this.shadowRoot.querySelector('.cube').addEventListener('transitionend', _ => this._updateCubies());
+		this.shadowRoot.querySelector('.cube').addEventListener('transitionend', _ => this._turnAnimationWindUp());
 	}
 	disconnectedCallback() {
-		window.removeEventListener('resize', this._resize);
 	}
-	_resize() {
-		// let el = this.shadowRoot.querySelector('div');
-		// let w = el.offsetWidth;
-		// console.log(w, el.offsetHeight);
-		// this.scale = w/354;
-	}
-
-	set scale(s) {
-		// for some reason directly atlering style on some element inside shadow dom doesn't work
-		this._styleForResize.innerHTML = `:host > div { transform: scale(${s}); }`;
-	}
-
 }
 
 customElements.define('m-cube3d', Cube3d);
