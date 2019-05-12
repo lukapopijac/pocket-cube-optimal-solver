@@ -1,5 +1,17 @@
 :host > div {
-    width: 100px;
-    height: 50px;
-    background: red;
+}
+
+.turns {
+	display: inline-block;
+	font: 16px sans-serif;
+}
+
+.turns button {
+	margin: 0 4px;
+	height: 15px;
+}
+
+progress {
+	position: relative;
+	left: -2px;
 }

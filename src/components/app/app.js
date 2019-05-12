@@ -52,18 +52,22 @@ export class App extends HTMLElement {
 				this._setMessage('Invalid or ambiguous state!', true);
 				return;
 			}
+
+			
 			let data = solve(po.p, po.o);
+			let solution = data.normalize.concat(data.solution);
+
 			// if(data.solution.length == 0) this._setMessage('Solved!');
 			// else 
-			{
-				let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
-				el_cube3d.po = po;
-				this._setView('solution');
-				// this.shadowRoot.querySelector('.solution').textContent = formulateSolution(data);
-				
-				this.shadowRoot.querySelector('.solution').innerHTML = '';
-				this.shadowRoot.querySelector('.solution').appendChild(this._formulateSolution2(data));
-			}
+
+			let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
+			el_cube3d.po = po;
+			this._setView('solution');
+
+			this.shadowRoot.querySelector('m-solution-controls').solution = solution;
+
+			// TODO: this is temporary
+			this._setSolutionButtons(solution);
 		});
 		controls.addEventListener('pick-color', evt => {
 			cubeUnfolded.selectedColor = evt.detail;
@@ -72,6 +76,13 @@ export class App extends HTMLElement {
 
 		this.shadowRoot.querySelector('.button-back').addEventListener('click', _ => {
 			this._setView('setup');
+		});
+
+
+		this.shadowRoot.querySelector('m-solution-controls').addEventListener('change', evt => {
+			let {turns, duration} = evt.detail;
+			let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
+			el_cube3d.applyMoves(turns, duration);
 		});
 	}
 
@@ -98,11 +109,10 @@ export class App extends HTMLElement {
 			else msgElement.classList.remove('error');
 		}
 	}
-	
-	// TODO: this is temporary
-	_formulateSolution2(data) {
+
+	_setSolutionButtons(turns) {
 		let el = document.createElement('div');
-		for(let turn of data.normalize.concat(data.solution)) {
+		for(let turn of turns) {
 			let b = document.createElement('button');
 			b.textContent = turn;
 			b.onclick = evt => {
@@ -111,7 +121,9 @@ export class App extends HTMLElement {
 			};
 			el.appendChild(b);
 		};
-		return el;
+
+		this.shadowRoot.querySelector('.solution').innerHTML = '';
+		this.shadowRoot.querySelector('.solution').appendChild(el);
 	}
 	
 }

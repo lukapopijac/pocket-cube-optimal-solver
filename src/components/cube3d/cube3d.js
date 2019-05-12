@@ -11,6 +11,8 @@ export class Cube3d extends HTMLElement {
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 		
 		this._el_cube = this.shadowRoot.querySelector('.cube');
+
+		this._nextMoves = [];
 		
 		// for debugging: start
 		this.shadowRoot.querySelectorAll('button:not(.special-button)')
@@ -44,12 +46,12 @@ export class Cube3d extends HTMLElement {
 		// wind-up any current turn animation
 		this._turnAnimationWindUp();
 
-		if(this._nextMove) {
+		if(this._nextMoves.length > 0) {
 			// no turn animation in progress, but the next turn is already setup. complete it immediately
-			this._updateCubies(this._nextMove.turn);
+			while(this._nextMoves.length > 0) this._updateCubies(this._nextMoves.shift().turn);
 		} else {
 			runSoon(_ => {
-				let {duration, turn} = this._nextMove;
+				let {duration, turn} = this._nextMoves.shift();
 				if(duration == 0) {
 					this._updateCubies(turn);
 				} else {
@@ -58,12 +60,21 @@ export class Cube3d extends HTMLElement {
 					}
 					this._el_cube.dataset.turn = turn;
 				}
-				this._nextMove = null;
 			});
 		}
 
-		this._nextMove = {turn, duration};
+		this._nextMoves.push({turn, duration});
 	}
+
+	applyMoves(turns, duration) {
+		for(let turn of turns) {
+			console.log(turn);
+			this.move(turn, duration/turns.length);
+		}
+
+	}
+
+
 
 	_turnAnimationWindUp() {
 		let turn = this._el_cube.dataset.turn;
