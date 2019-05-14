@@ -49,12 +49,13 @@
 [data-p="6"] { --transform-p: rotateX(180deg); }
 [data-p="7"] { --transform-p: rotateX(180deg) rotateY(-90deg); }
 
-[data-p][data-o] > div {
+
+[data-p] > [data-o] {
 	transform: var(--transform-p) var(--transform-o) translate3d(var(--a), var(--b), var(--a));
 }
 
-[data-turn] [data-p] { transition: transform .6s ease-out; }
-[data-turn$="2"] [data-p] { transition-duration: .8s; }
+/* [data-turn] [data-p] { transition: transform .6s ease-out; }
+[data-turn$="2"] [data-p] { transition-duration: .8s; } */
 
 [data-turn$="1"] { --turn-angle:  90deg; }
 [data-turn$="2"] { --turn-angle: 180deg; }

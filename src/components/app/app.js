@@ -5,7 +5,6 @@ import '../solution-controls/solution-controls.js';
 
 import solve from '/solve.js';
 
-
 import t from './app.html';
 
 const template = document.createElement('template');

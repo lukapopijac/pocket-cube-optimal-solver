@@ -26,6 +26,32 @@ export class Cube3d extends HTMLElement {
 			// this.move('R1', 3000);
 		};
 		// for debugging: end
+
+
+
+		// debugging2: start
+
+		// let bobo = this.shadowRoot.querySelector('.bobo');
+		// console.log(bobo);
+
+		// setTimeout(_ => {
+		// 	let a = new animate(6000, t => {
+		// 		bobo.style.width = t + 'px';
+		// 	}, 400, 700);
+
+		// 	a.run();
+
+		// 	setTimeout(_ => {
+		// 		a.stop();
+		// 	}, 2000);
+
+		// 	setTimeout(_ => {
+		// 		a.run();
+		// 	}, 4000);
+
+		// }, 2000);
+
+		// debugging2: end
 	}
 
 	set po({p, o}) {
@@ -42,49 +68,20 @@ export class Cube3d extends HTMLElement {
 	}
 
 	// make the turn. if other turn is in progress, first complete that turn instantly.
-	move(turn, duration) {  // duration is number of ms
+	move(turn, duration = 2000) {  // duration is number of ms
 		// wind-up any current turn animation
-		this._turnAnimationWindUp();
-
-		if(this._nextMoves.length > 0) {
-			// no turn animation in progress, but the next turn is already setup. complete it immediately
-			while(this._nextMoves.length > 0) this._updateCubies(this._nextMoves.shift().turn);
-		} else {
-			runSoon(_ => {
-				let {duration, turn} = this._nextMoves.shift();
-				if(duration == 0) {
-					this._updateCubies(turn);
-				} else {
-					for(let el of this._el_cube.querySelectorAll('[data-p]')) {
-						el.style.transitionDuration = duration ? duration + 'ms' : null;
-					}
-					this._el_cube.dataset.turn = turn;
-				}
-			});
-		}
-
-		this._nextMoves.push({turn, duration});
+		// this._turnAnimationWindUp();
 	}
 
 	applyMoves(turns, duration) {
-		for(let turn of turns) {
-			console.log(turn);
-			this.move(turn, duration/turns.length);
-		}
+		if(turns.length == 0) return;
+		let turn = turns[0];
+		let anim = new animate(duration, angl => {
+			let el = this.shadowRoot.querySelector('[data-p="1"]');
+			el.style.transform = `rotateX(${angl}deg)`;
+		}, 0, 90);
 
-	}
-
-
-
-	_turnAnimationWindUp() {
-		let turn = this._el_cube.dataset.turn;
-		if(turn) {
-			this._el_cube.removeAttribute('data-turn');			
-			for(let el of this._el_cube.querySelectorAll('[data-p]')) {
-				el.style.transitionDuration = null;
-			}
-			this._updateCubies(turn);
-		}
+		anim.run();
 	}
 
 	_updateCubies(turn) {
@@ -99,13 +96,62 @@ export class Cube3d extends HTMLElement {
 	}
 	
 	connectedCallback() {
-		this.shadowRoot.querySelector('.cube').addEventListener('transitionend', _ => this._turnAnimationWindUp());
 	}
 	disconnectedCallback() {
 	}
 }
 
 customElements.define('m-cube3d', Cube3d);
+
+
+
+
+class animate {
+	constructor(duration, updateFn, y0 = 0, y1 = 1) {
+		this._t_elapsed = 0;
+		this._t0 = null;
+		this._y = null;
+		this._y0 = y0;
+		this._y1 = y1;
+		this._updateFn = updateFn;
+		this._duration = duration;
+		
+		this._step = this._step.bind(this);
+	}
+	
+	_step() {
+		let t = performance.now() - this._t0;
+
+		if(t < this._duration) {
+			this._y = this._y0 + (this._y1 - this._y0) * t / this._duration;
+			this._updateFn(this._y);
+		} else {
+			this._y = this._y1;
+			this._updateFn(this._y);
+		}		
+
+		if(t < this._duration) this._requestId = requestAnimationFrame(this._step);
+		else console.log('done');
+	}
+
+	set updateFn(fn) { this._updateFn = fn; }
+	set duration(d) { this._duration = d; }
+
+	stop() {
+		this._t_elapsed = performance.now() - this._t0;
+		console.log('stop');
+		cancelAnimationFrame(this._requestId);
+	}
+	
+	run() {
+		this._t0 = performance.now() - this._t_elapsed;
+		console.log('run');
+		this._requestId = requestAnimationFrame(this._step);
+	}
+}
+
+
+
 
 
 function getNewPO(prevP, prevO, turn) {
@@ -149,25 +195,3 @@ function runSoon(cb) {
 		)
 	);
 }
-
-// function inversePermutation(arr) { 
-// 	let b = [];
-// 	// Loop to select Elements one by one 
-// 	for (let i = 0; i < arr.length; i++) { 
-	
-// 	  // Loop to print position of element 
-// 	  // where we find an element 
-// 	  for (let j = 0; j < arr.length; j++) { 
-	
-// 		// checking the element in increasing order 
-// 		if (arr[j] == i) { 
-	
-// 		  // print position of element where 
-// 		  // element is in inverse permutation 
-// 		  b.push(j);
-// 		  break; 
-// 		} 
-// 	  } 
-// 	} 
-// 	return b;
-//   } 
