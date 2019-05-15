@@ -22,36 +22,11 @@ export class Cube3d extends HTMLElement {
 			}))
 		;
 		this.shadowRoot.querySelector('.special-button').onclick = _ => {
-			this.move('U1', 3000);
+			this._anim.finishIn(2000);
+			// this.move('U1', 3000);
 			// this.move('R1', 3000);
 		};
 		// for debugging: end
-
-
-
-		// debugging2: start
-
-		// let bobo = this.shadowRoot.querySelector('.bobo');
-		// console.log(bobo);
-
-		// setTimeout(_ => {
-		// 	let a = new animate(6000, t => {
-		// 		bobo.style.width = t + 'px';
-		// 	}, 400, 700);
-
-		// 	a.run();
-
-		// 	setTimeout(_ => {
-		// 		a.stop();
-		// 	}, 2000);
-
-		// 	setTimeout(_ => {
-		// 		a.run();
-		// 	}, 4000);
-
-		// }, 2000);
-
-		// debugging2: end
 	}
 
 	set po({p, o}) {
@@ -67,34 +42,45 @@ export class Cube3d extends HTMLElement {
 
 	}
 
+
+
 	// make the turn. if other turn is in progress, first complete that turn instantly.
-	move(turn, duration = 2000) {  // duration is number of ms
+	async move(turn, duration = 8000) {  // duration is number of ms
 		// wind-up any current turn animation
 		// this._turnAnimationWindUp();
+		if(this._anim) this._anim.stop(true);
+		let rotationVector = side2rotationVector[turn[0]];
+		let finalAngle = step2angle[turn[1]];
+		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
+
+		this._anim = new Animate(duration, angle => {
+			for(let el of el_slots) el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
+		}, 0, finalAngle);
+
+		await this._anim.run();
+		this._updateCubies(turn);
 	}
 
-	applyMoves(turns, duration) {
+	async applyMoves(turns, duration) {
 		if(turns.length == 0) return;
-		let turn = turns[0];
-		let anim = new animate(duration, angl => {
-			let el = this.shadowRoot.querySelector('[data-p="1"]');
-			el.style.transform = `rotateX(${angl}deg)`;
-		}, 0, 90);
-
-		anim.run();
+		for(let turn of turns) {
+			await this.move(turn);
+		}
 	}
 
 	_updateCubies(turn) {
-		for(let el of this.shadowRoot.querySelectorAll('[data-p]')) {
-			// read previous p and o
-			let {p, o} = el.dataset;
+		let slots = this.shadowRoot.querySelectorAll('[data-slot]');
+		let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
 
-			// set new p and o
-			el.dataset.p = turn2p[turn][p];
-			el.dataset.o = (o + turn2oAdd[turn][p]) % 3;
+		for(let i=0; i<8; i++) {
+			let slot = slots[turn2p[turn][i]];
+			slot.style.transform = null;
+			let cubie = cubies[i];
+			cubie.dataset.o = (cubie.dataset.o + turn2oAdd[turn][i]) % 3;
+			slot.appendChild(cubie);
 		}
 	}
-	
+
 	connectedCallback() {
 	}
 	disconnectedCallback() {
@@ -106,50 +92,74 @@ customElements.define('m-cube3d', Cube3d);
 
 
 
-class animate {
-	constructor(duration, updateFn, y0 = 0, y1 = 1) {
+class Animate {
+	constructor(duration, updateFn, y0 = 0, y1 = 1, v0 = 0) {
 		this._t_elapsed = 0;
 		this._t0 = null;
 		this._y = null;
 		this._y0 = y0;
 		this._y1 = y1;
+		this._v0 = v0;
 		this._updateFn = updateFn;
 		this._duration = duration;
 		
 		this._step = this._step.bind(this);
+		this._requestId = null;
+		this._onComplete = x => x;
 	}
 	
+	_easing(x) {
+		let v = this._v0;
+		return (v-2)*x**3 + (3-2*v)*x**2 + v*x;
+	}
+
+	_getCurrentDerivative() {
+		let x = (performance.now() - this._t0) / this._duration;
+		let v = this._v0;
+		return 3*(v-2)*x*x + 2*(3-2*v)*x + v;
+	}
+
 	_step() {
 		let t = performance.now() - this._t0;
 
 		if(t < this._duration) {
-			this._y = this._y0 + (this._y1 - this._y0) * t / this._duration;
-			this._updateFn(this._y);
+			this._y = this._y0 + (this._y1 - this._y0) * this._easing(t / this._duration);
+			this._requestId = requestAnimationFrame(this._step);
 		} else {
 			this._y = this._y1;
-			this._updateFn(this._y);
+			this._requestId = requestAnimationFrame(this._onComplete);
 		}		
-
-		if(t < this._duration) this._requestId = requestAnimationFrame(this._step);
-		else console.log('done');
+		
+		this._updateFn(this._y);
 	}
 
-	set updateFn(fn) { this._updateFn = fn; }
-	set duration(d) { this._duration = d; }
+	/** Restart animation starting from current point with new duration. Preserve current speed.
+	 *  This is used for slowing down or speeding up current animation.
+	 */
+	finishIn(duration) {
+		let scaleFactor = (this._y1 - this._y0) / (this._y1 - this._y) * duration / this._duration;
+		this._v0 = this._getCurrentDerivative() * scaleFactor;
+		this._y0 = this._y;
+		this._duration = duration;
+		this._t_elapsed = 0;
+		this._t0 = performance.now();
+	}
 
-	stop() {
+	stop(shouldResolve) {
 		this._t_elapsed = performance.now() - this._t0;
-		console.log('stop');
 		cancelAnimationFrame(this._requestId);
+		this._requestId = null;
+		if(shouldResolve) this._onComplete();
 	}
 	
 	run() {
 		this._t0 = performance.now() - this._t_elapsed;
-		console.log('run');
 		this._requestId = requestAnimationFrame(this._step);
+		return new Promise((resolve, reject) => {
+			this._onComplete = resolve;
+		});
 	}
 }
-
 
 
 
@@ -160,6 +170,50 @@ function getNewPO(prevP, prevO, turn) {
 	return {p, o};
 }
 
+
+const step2angle = [, 90, 180, -90];
+const side2rotationVector = {
+	U: [ 0, -1,  0],
+	R: [ 1,  0,  0],
+	F: [ 0,  0,  1],
+	L: [-1,  0,  0],
+	B: [ 0,  0, -1],
+	D: [ 0,  1,  0],
+	x: [ 1,  0,  0],
+	y: [ 0, -1,  0],
+	z: [ 0,  0,  1],
+};
+
+
+// console.time();
+// for(let i=-10; i<10; i++) {
+// 	for(let j=-10; j<10; j++) {
+// 		for(let k=-10; k<10; k++) {
+// 			for(let m=-10; m<10; m++) {
+// 				if(
+// 					m + i*1 + (j + 1*k)%4 == 1 &&
+// 					m + i*2 + (j + 2*k)%4 == 2 &&
+// 					m + i*3 + (j + 3*k)%4 == -1
+// 				) {
+// 					console.log(m, i, j, k)
+// 				}
+// 				// 0 0 8 -3    (8 - 3*x)%4 * 90
+// 				// -1 0 1 1
+
+
+
+
+// 			}
+// 		}
+// 	}
+// }
+// console.timeEnd();
+
+
+
+function getTurnParams(turn) {
+
+}
 
 
 const turn2p = {
