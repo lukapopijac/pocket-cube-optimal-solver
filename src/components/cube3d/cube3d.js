@@ -12,7 +12,7 @@ export class Cube3d extends HTMLElement {
 		
 		this._el_cube = this.shadowRoot.querySelector('.cube');
 
-		this._nextMoves = [];
+		this._moveBuffer = [];
 		
 		// for debugging: start
 		this.shadowRoot.querySelectorAll('button:not(.special-button)')
@@ -21,19 +21,22 @@ export class Cube3d extends HTMLElement {
 				this.move(turn);
 			}))
 		;
-		this.shadowRoot.querySelector('.special-button').onclick = _ => {
-			this._anim.finishIn(2000);
+		this.shadowRoot.querySelector('.special-button').onclick = async _ => {
+			await this._anim.finishIn(2000);
+			console.log('fin');
 			// this.move('U1', 3000);
 			// this.move('R1', 3000);
 		};
 		// for debugging: end
 	}
 
+
 	set po({p, o}) {
-		let el_cubies = this.shadowRoot.querySelectorAll('[data-p]');
-		for(let i=0; i<el_cubies.length; i++) {
-			el_cubies[p[i]].dataset.p = i;
-			el_cubies[p[i]].dataset.o = o[i];
+		for(let i=0; i<8; i++) {
+			let slot = this.shadowRoot.querySelector(`[data-slot|="${i}"]`);
+			let cubie = this.shadowRoot.querySelector(`[data-p="${p[i]}"]`);
+			cubie.dataset.o = o[i];
+			slot.appendChild(cubie);
 		}
 		console.log('set', p, o);
 	}
@@ -45,26 +48,56 @@ export class Cube3d extends HTMLElement {
 
 
 	// make the turn. if other turn is in progress, first complete that turn instantly.
-	async move(turn, duration = 8000) {  // duration is number of ms
+	async move(turn, duration = 2000) {  // duration is number of ms
 		// wind-up any current turn animation
 		// this._turnAnimationWindUp();
-		if(this._anim) this._anim.stop(true);
+		if(this._anim) this._anim.stop(true, false);
 		let rotationVector = side2rotationVector[turn[0]];
 		let finalAngle = step2angle[turn[1]];
+
 		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
 
-		this._anim = new Animate(duration, angle => {
-			for(let el of el_slots) el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
-		}, 0, finalAngle);
+		this._anim = new Animate({
+			duration,
+			updateFn: angle => {
+				for(let el of el_slots) {
+					el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
+				}
+			},
+			startVal: 0,
+			endVal: finalAngle,
+			onComplete: _ => {
+				this._anim = null;
+				this._updateCubies(turn);
+			}
+		});
 
 		await this._anim.run();
-		this._updateCubies(turn);
+		console.log('move done');
 	}
 
 	async applyMoves(turns, duration) {
-		if(turns.length == 0) return;
-		for(let turn of turns) {
-			await this.move(turn);
+		// update durations of remaining animations - speed them up
+		for(let move of this._moveBuffer) {
+			move.duration = 300;
+		}
+
+		// add new moves at the end of the buffer
+		this._moveBuffer.push(
+			...turns.map(turn => ({
+				turn,
+				duration: 800
+			}))
+		);
+
+		// Complete current turn animation. This will cause previous promise of the same animation
+		// to never fulfill, and consequently animations of the following moves with never run.
+		// That is what we want, because, below, we will run animations for the same uncompleted turns.
+		if(this._anim) await this._anim.finishIn(1000);
+
+		while(this._moveBuffer.length > 0) {
+			let move = this._moveBuffer.shift();
+			await this.move(move.turn, move.duration);
 		}
 	}
 
@@ -73,10 +106,10 @@ export class Cube3d extends HTMLElement {
 		let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
 
 		for(let i=0; i<8; i++) {
-			let slot = slots[turn2p[turn][i]];
-			slot.style.transform = null;
 			let cubie = cubies[i];
 			cubie.dataset.o = (cubie.dataset.o + turn2oAdd[turn][i]) % 3;
+			let slot = slots[turn2p[turn][i]];
+			slot.style.transform = null;
 			slot.appendChild(cubie);
 		}
 	}
@@ -93,19 +126,20 @@ customElements.define('m-cube3d', Cube3d);
 
 
 class Animate {
-	constructor(duration, updateFn, y0 = 0, y1 = 1, v0 = 0) {
+	constructor({duration, updateFn, startVal = 0, endVal = 1, v0 = 0, onComplete}) {
 		this._t_elapsed = 0;
 		this._t0 = null;
 		this._y = null;
-		this._y0 = y0;
-		this._y1 = y1;
+		this._y0 = startVal;
+		this._y1 = endVal;
 		this._v0 = v0;
 		this._updateFn = updateFn;
 		this._duration = duration;
 		
 		this._step = this._step.bind(this);
 		this._requestId = null;
-		this._onComplete = x => x;
+		this._resolve = null;
+		this._onComplete = onComplete || (_ => _);
 	}
 	
 	_easing(x) {
@@ -127,7 +161,10 @@ class Animate {
 			this._requestId = requestAnimationFrame(this._step);
 		} else {
 			this._y = this._y1;
-			this._requestId = requestAnimationFrame(this._onComplete);
+			this._requestId = requestAnimationFrame(_ => {
+				this._onComplete();
+				this._resolve();
+			});
 		}		
 		
 		this._updateFn(this._y);
@@ -136,28 +173,28 @@ class Animate {
 	/** Restart animation starting from current point with new duration. Preserve current speed.
 	 *  This is used for slowing down or speeding up current animation.
 	 */
-	finishIn(duration) {
+	async finishIn(duration) {
 		let scaleFactor = (this._y1 - this._y0) / (this._y1 - this._y) * duration / this._duration;
 		this._v0 = this._getCurrentDerivative() * scaleFactor;
 		this._y0 = this._y;
 		this._duration = duration;
 		this._t_elapsed = 0;
 		this._t0 = performance.now();
+		return new Promise(resolve => { this._resolve = resolve; });
 	}
 
-	stop(shouldResolve) {
+	stop(shouldComplete, shouldResolve) {
 		this._t_elapsed = performance.now() - this._t0;
 		cancelAnimationFrame(this._requestId);
 		this._requestId = null;
-		if(shouldResolve) this._onComplete();
+		if(shouldComplete) this._onComplete();
+		if(shouldResolve) this._resolve();
 	}
 	
 	run() {
 		this._t0 = performance.now() - this._t_elapsed;
 		this._requestId = requestAnimationFrame(this._step);
-		return new Promise((resolve, reject) => {
-			this._onComplete = resolve;
-		});
+		return new Promise(resolve => { this._resolve = resolve; });
 	}
 }
 

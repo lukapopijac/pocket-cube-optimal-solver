@@ -40,23 +40,24 @@
 [data-o="1"] { --transform-o: rotate3d(1, -1, 1, 120deg); }
 [data-o="2"] { --transform-o: rotate3d(1, -1, 1, 240deg); }
 
-[data-p="0"] { --transform-p: rotateY(0); }
-[data-p="1"] { --transform-p: rotateY(-90deg); }
-[data-p="2"] { --transform-p: rotateY(90deg); }
-[data-p="3"] { --transform-p: rotateY(180deg); }
-[data-p="4"] { --transform-p: rotateX(180deg) rotateY(90deg); }
-[data-p="5"] { --transform-p: rotateZ(180deg); }
-[data-p="6"] { --transform-p: rotateX(180deg); }
-[data-p="7"] { --transform-p: rotateX(180deg) rotateY(-90deg); }
+[data-slot|="0"] { --transform-p: rotateY(0); }
+[data-slot|="1"] { --transform-p: rotateY(-90deg); }
+[data-slot|="2"] { --transform-p: rotateY(90deg); }
+[data-slot|="3"] { --transform-p: rotateY(180deg); }
+[data-slot|="4"] { --transform-p: rotateX(180deg) rotateY(90deg); }
+[data-slot|="5"] { --transform-p: rotateZ(180deg); }
+[data-slot|="6"] { --transform-p: rotateX(180deg); }
+[data-slot|="7"] { --transform-p: rotateX(180deg) rotateY(-90deg); }
 
 
-[data-p] > [data-o] {
+[data-slot] > [data-o] {
 	transform: var(--transform-p) var(--transform-o) translate3d(var(--a), var(--b), var(--a));
 }
 
 /* [data-turn] [data-p] { transition: transform .6s ease-out; }
 [data-turn$="2"] [data-p] { transition-duration: .8s; } */
 
+/* 
 [data-turn$="1"] { --turn-angle:  90deg; }
 [data-turn$="2"] { --turn-angle: 180deg; }
 [data-turn$="3"] { --turn-angle: -90deg; }
@@ -94,7 +95,7 @@
 [data-turn^="x"] [data-p] { transform: rotate3d( 1,  0,  0, var(--turn-angle)); }
 [data-turn^="y"] [data-p] { transform: rotate3d( 0, -1,  0, var(--turn-angle)); }
 [data-turn^="z"] [data-p] { transform: rotate3d( 0,  0,  1, var(--turn-angle)); }
-
+ */
 
 
 /* outer (main) side of each face */

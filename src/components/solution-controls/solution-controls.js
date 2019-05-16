@@ -44,7 +44,7 @@ class SolutionControls extends HTMLElement {
 				this._stepIndex = i;
 				this.shadowRoot.querySelector('progress').value = i;
 
-				this.dispatchEvent(new CustomEvent('change', {detail: {turns, duration: 800}}));
+				this.dispatchEvent(new CustomEvent('change', {detail: {turns, duration: 3000}}));
 			};
 			el.appendChild(b);
 			el.appendChild(document.createTextNode(this._formatTurn(turn)));
