@@ -20,6 +20,7 @@ class SolutionControls extends HTMLElement {
 	}
 
 	_setProgressControl() {
+		this._stepIndex = 0;
 		let el = this.shadowRoot.querySelector('.turns');
 		
 		// remove all children
@@ -40,7 +41,6 @@ class SolutionControls extends HTMLElement {
 						.map(t => t[0] + (4-t[1]))
 					;
 				}
-				console.log(turns);
 				this._stepIndex = i;
 				this.shadowRoot.querySelector('progress').value = i;
 
@@ -52,12 +52,12 @@ class SolutionControls extends HTMLElement {
 
 		let el_progress = this.shadowRoot.querySelector('progress')
 		el_progress.max = this._solution.length;
+		el_progress.value = 0;
 		el_progress.style.width = (el.getBoundingClientRect().width - 20) + 'px';
 	}
 
 	_reverseTurns(turns) {
 		return turns.slice().reverse().map(t => (t[0] + (4-t[1])));
-
 	}
 	_formatTurn(turn) {
 		return turn && turn[0] + [, '', '2', "'"][turn[1]];

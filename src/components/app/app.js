@@ -81,7 +81,7 @@ export class App extends HTMLElement {
 		this.shadowRoot.querySelector('m-solution-controls').addEventListener('change', evt => {
 			let {turns, duration} = evt.detail;
 			let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
-			el_cube3d.applyMoves(turns, duration);
+			el_cube3d.applyMoves(turns, duration, true);
 		});
 	}
 

@@ -38,7 +38,6 @@ export class Cube3d extends HTMLElement {
 			cubie.dataset.o = o[i];
 			slot.appendChild(cubie);
 		}
-		console.log('set', p, o);
 	}
 
 	get po() {
@@ -73,10 +72,20 @@ export class Cube3d extends HTMLElement {
 		});
 
 		await this._anim.run();
-		console.log('move done');
 	}
 
-	async applyMoves(turns, duration) {
+	async applyMoves(turns, duration, smartReduce) {
+		// if buffer ends with moves that are reverse of new moves to add, remove those moves
+		if(smartReduce) {
+			while(turns.length > 0 && this._moveBuffer.length > 0) {
+				let a = turns[0];
+				let b = this._moveBuffer[this._moveBuffer.length - 1].turn;
+				if(a[0] != b[0] || +a[1] + (+b[1]) != 4 ) break;
+				this._moveBuffer.pop();
+				turns.shift();
+			}
+		}
+
 		// update durations of remaining animations - speed them up
 		for(let move of this._moveBuffer) {
 			move.duration = 300;
@@ -90,10 +99,12 @@ export class Cube3d extends HTMLElement {
 			}))
 		);
 
+		console.log('buffer combined', this._moveBuffer.map(x => x.turn));
+
 		// Complete current turn animation. This will cause previous promise of the same animation
-		// to never fulfill, and consequently animations of the following moves with never run.
+		// to never settle, and consequently animations of the following moves will never run.
 		// That is what we want, because, below, we will run animations for the same uncompleted turns.
-		if(this._anim) await this._anim.finishIn(1000);
+		if(this._anim) await this._anim.finishIn();
 
 		while(this._moveBuffer.length > 0) {
 			let move = this._moveBuffer.shift();
@@ -174,12 +185,14 @@ class Animate {
 	 *  This is used for slowing down or speeding up current animation.
 	 */
 	async finishIn(duration) {
-		let scaleFactor = (this._y1 - this._y0) / (this._y1 - this._y) * duration / this._duration;
-		this._v0 = this._getCurrentDerivative() * scaleFactor;
-		this._y0 = this._y;
-		this._duration = duration;
-		this._t_elapsed = 0;
-		this._t0 = performance.now();
+		if(duration > 0) {
+			let scaleFactor = (this._y1 - this._y0) / (this._y1 - this._y) * duration / this._duration;
+			this._v0 = this._getCurrentDerivative() * scaleFactor;
+			this._y0 = this._y;
+			this._duration = duration;
+			this._t_elapsed = 0;
+			this._t0 = performance.now();
+		}
 		return new Promise(resolve => { this._resolve = resolve; });
 	}
 
