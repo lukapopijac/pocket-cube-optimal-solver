@@ -1,0 +1,21 @@
+.message {
+	font-family: sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: black;
+	vertical-align: middle;
+	padding: 0 10px;
+	border: 5px solid #333;
+	background: white;
+	height: 32px;
+	line-height: 30px;
+}
+
+.message.hidden {
+	display: none;
+}
+
+.message.error {
+	background: red;
+	color: white;
+}

@@ -24,8 +24,6 @@ export class Cube3d extends HTMLElement {
 		this.shadowRoot.querySelector('.special-button').onclick = async _ => {
 			await this._anim.finishIn(2000);
 			console.log('fin');
-			// this.move('U1', 3000);
-			// this.move('R1', 3000);
 		};
 		// for debugging: end
 	}
@@ -74,7 +72,7 @@ export class Cube3d extends HTMLElement {
 		await this._anim.run();
 	}
 
-	async applyMoves(turns, duration, smartReduce) {
+	async applyMoves(turns, turnDurations, smartReduce) {
 		// if buffer ends with moves that are reverse of new moves to add, remove those moves
 		if(smartReduce) {
 			while(turns.length > 0 && this._moveBuffer.length > 0) {
@@ -87,19 +85,17 @@ export class Cube3d extends HTMLElement {
 		}
 
 		// update durations of remaining animations - speed them up
-		for(let move of this._moveBuffer) {
-			move.duration = 300;
-		}
+		// for(let move of this._moveBuffer) {
+		// 	move.duration = 300;
+		// }
 
 		// add new moves at the end of the buffer
 		this._moveBuffer.push(
 			...turns.map(turn => ({
 				turn,
-				duration: 800
+				duration: turn[1] == 2 ? turnDurations.half : turnDurations.quarter
 			}))
 		);
-
-		console.log('buffer combined', this._moveBuffer.map(x => x.turn));
 
 		// Complete current turn animation. This will cause previous promise of the same animation
 		// to never settle, and consequently animations of the following moves will never run.
@@ -126,8 +122,10 @@ export class Cube3d extends HTMLElement {
 	}
 
 	connectedCallback() {
+		console.log('conne')
 	}
 	disconnectedCallback() {
+		console.log('disconn')
 	}
 }
 
@@ -174,6 +172,7 @@ class Animate {
 			this._y = this._y1;
 			this._requestId = requestAnimationFrame(_ => {
 				this._onComplete();
+				console.log('move completed', performance.now())
 				this._resolve();
 			});
 		}		

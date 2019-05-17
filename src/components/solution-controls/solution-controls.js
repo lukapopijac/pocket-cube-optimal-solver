@@ -31,10 +31,12 @@ class SolutionControls extends HTMLElement {
 			
 			let b = document.createElement('button');
 			b.onclick = evt => {
-				let turns;
+				let turns, direction;
 				if(i >= this._stepIndex) {
+					direction = 'forward';
 					turns = this._solution.slice(this._stepIndex, i);
 				} else {
+					direction = 'backward';
 					turns = this._solution
 						.slice(i, this._stepIndex)
 						.reverse()
@@ -44,7 +46,10 @@ class SolutionControls extends HTMLElement {
 				this._stepIndex = i;
 				this.shadowRoot.querySelector('progress').value = i;
 
-				this.dispatchEvent(new CustomEvent('change', {detail: {turns, duration: 3000}}));
+				this.dispatchEvent(new CustomEvent('change', {detail: {
+					turns,
+					direction
+				}}));
 			};
 			el.appendChild(b);
 			el.appendChild(document.createTextNode(this._formatTurn(turn)));
