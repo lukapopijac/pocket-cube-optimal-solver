@@ -2,7 +2,6 @@ import '../cube-unfolded/cube-unfolded.js';
 import '../controls/controls.js';
 
 import t from './page-setup.html';
-
 const template = document.createElement('template');
 template.innerHTML = t;
 
@@ -11,44 +10,41 @@ export class PageSetup extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
-		
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
-	}
 
-	connectedCallback() {
-		let cubeUnfolded = this.shadowRoot.querySelector('m-cube-unfolded');
-		let controls = this.shadowRoot.querySelector('m-controls');
+		let el_cubeUnfolded = this.shadowRoot.querySelector('m-cube-unfolded');
+		let el_controls = this.shadowRoot.querySelector('m-controls');
 
 		// prepare cubeUnfolded
 		setTimeout(_ => {
 			// for some reason a component doesn't have their methods ready right away
-			cubeUnfolded.getSelectedColor = _ => controls.selectedColor;
+			el_cubeUnfolded.getSelectedColor = _ => el_controls.selectedColor;
 		}, 0);
-		cubeUnfolded.addEventListener('click-sticker', _ => {
+		el_cubeUnfolded.addEventListener('click-sticker', _ => {
 			this._setMessage(null);
 		});
 
 		// prepare controls
-		controls.addEventListener('click-reset', _ => {
+		el_controls.addEventListener('click-reset', _ => {
 			this._setMessage(null);
-			cubeUnfolded.setStickersToSolved();
+			el_cubeUnfolded.setStickersToSolved();
 		});
-		controls.addEventListener('click-empty', _ => {
+		el_controls.addEventListener('click-empty', _ => {
 			this._setMessage(null);
-			cubeUnfolded.setStickersToEmpty();
+			el_cubeUnfolded.setStickersToEmpty();
 		});
-		controls.addEventListener('click-shuffle', _ => {
+		el_controls.addEventListener('click-shuffle', _ => {
 			this._setMessage(null);
 			let {p, o} = generateRandomPO();
-			cubeUnfolded.stickerValues = po2stickers(p, o);
+			el_cubeUnfolded.stickerValues = po2stickers(p, o);
 		});
-		controls.addEventListener('click-solve', _ => {
-			let po = stickers2po(cubeUnfolded.stickerValues);
+		el_controls.addEventListener('click-solve', _ => {
+			let po = stickers2po(el_cubeUnfolded.stickerValues);
 			if(!po) this._setMessage('Invalid or ambiguous state!', true);
 			else this.dispatchEvent(new CustomEvent('solve', {detail: po}));
 		});
-		controls.addEventListener('pick-color', evt => {
-			cubeUnfolded.selectedColor = evt.detail;
+		el_controls.addEventListener('pick-color', evt => {
+			el_cubeUnfolded.selectedColor = evt.detail;
 		});
 
 	}
@@ -68,6 +64,9 @@ export class PageSetup extends HTMLElement {
 }
 
 customElements.define('m-page-setup', PageSetup);
+
+
+
 
 
 
