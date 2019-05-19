@@ -1,6 +1,17 @@
+import '../button/button.js';
+
 import t from './solution-controls.html';
 const template = document.createElement('template');
 template.innerHTML = t;
+
+
+// TODO:
+// when playing has ended (e.g. when pause has been pressed) it is easy to stop
+// the cube. but now solution-controls has to know on which move has playing ended.
+// to know that, one solution could be: on each turn (either at the beginning or end 
+// of turnanimation) cube3d should dispatch an event, and solution-controls should
+// count steps.
+
 
 class SolutionControls extends HTMLElement {
 	constructor() {
@@ -9,8 +20,43 @@ class SolutionControls extends HTMLElement {
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
+		this._el_playpause = this.shadowRoot.querySelector('.button-play-pause');
+		this._el_step = this.shadowRoot.querySelector('.button-step');
+
 		this._solution = null;
 		this._stepIndex = 0;
+		this._isPlaying = false;
+
+		this._el_playpause.textContent = this._isPlaying ? '||' : '>';
+
+		this._el_playpause.addEventListener('click', evt => {
+			if(this._isPlaying) {
+				this.setIsPlaying(false);
+				this.dispatchEvent(new CustomEvent('pause'));
+			} else {
+				if(this._stepIndex >= this._solution.length) return;
+				this.setIsPlaying(true);
+				let turns = this._solution.slice(this._stepIndex);
+				this._stepIndex = this._solution.length;
+				this.dispatchEvent(new CustomEvent('play', {detail: {turns}}));
+			}			
+		});
+
+		this._el_step.addEventListener('click', evt => {
+			if(this._stepIndex >= this._solution.length) return;
+			this._stepIndex++;
+			let turn = this._solution[this._stepIndex];
+			this.dispatchEvent(new CustomEvent('step', {detail: {turn}}));
+		});
+	}
+
+	setIsPlaying(x) {
+		this._isPlaying = x;
+		if(this._isPlaying) {
+			this._el_playpause.textContent = '||';
+		} else {
+			this._el_playpause.textContent = '>';
+		}
 	}
 
 	set solution(sol) {

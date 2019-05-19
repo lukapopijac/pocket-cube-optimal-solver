@@ -108,6 +108,10 @@ export class Cube3d extends HTMLElement {
 		}
 	}
 
+	async stop() {
+		if(this._anim) return this._anim.finishIn();
+	}
+
 	_updateCubies(turn) {
 		let slots = this.shadowRoot.querySelectorAll('[data-slot]');
 		let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
@@ -195,13 +199,13 @@ class Animate {
 		return new Promise(resolve => { this._resolve = resolve; });
 	}
 
-	stop(shouldComplete, shouldResolve) {
-		this._t_elapsed = performance.now() - this._t0;
-		cancelAnimationFrame(this._requestId);
-		this._requestId = null;
-		if(shouldComplete) this._onComplete();
-		if(shouldResolve) this._resolve();
-	}
+	// stop(shouldComplete, shouldResolve) {
+	// 	this._t_elapsed = performance.now() - this._t0;
+	// 	cancelAnimationFrame(this._requestId);
+	// 	this._requestId = null;
+	// 	if(shouldComplete) this._onComplete();
+	// 	if(shouldResolve) this._resolve();
+	// }
 	
 	run() {
 		this._t0 = performance.now() - this._t_elapsed;
