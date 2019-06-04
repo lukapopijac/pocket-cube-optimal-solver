@@ -17,7 +17,6 @@ class PageSolution extends HTMLElement {
 			this.dispatchEvent(new CustomEvent('back'));
 		});
 
-		// let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
 		let el_cube3d = new Cube3d();
 		this.shadowRoot.appendChild(el_cube3d);
 
@@ -38,14 +37,6 @@ class PageSolution extends HTMLElement {
 		let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
 		el_cube3d.po = {p, o};
 	}
-
-	connectedCallback() {
-		console.log('conneected pageSolution')
-	}
-	disconnectedCallback() {
-		console.log('disconnected pageSolution')
-	}
-
 }
 
 customElements.define('m-page-solution', PageSolution);

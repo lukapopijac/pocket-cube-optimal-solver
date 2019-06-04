@@ -12,8 +12,6 @@ export default class Cube3d extends HTMLElement {
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 		
 		this._el_cube = this.shadowRoot.querySelector('.cube');
-
-		this._moveBuffer = [];
 	}
 
 
@@ -30,7 +28,15 @@ export default class Cube3d extends HTMLElement {
 
 	}
 
+	disconnectedCallback() {
+		if(this._anim) this._anim.kill();
+		this._anim = null;
+	}
 
+	connectedCallback() {
+		let el_slots = this.shadowRoot.querySelectorAll('[data-slot]');
+		for(let el_slot of el_slots) el_slot.style.transform = null;
+	}
 
 	// make the turn. if other turn is in progress, first complete that turn instantly.
 	async move(turn, duration = 2000) {  // duration is number of ms
@@ -60,39 +66,8 @@ export default class Cube3d extends HTMLElement {
 		await this._anim.run();
 	}
 
-	async applyMoves(turns, turnDurations, smartReduce) {
-		// if buffer ends with moves that are reverse of new moves to add, remove those moves
-		if(smartReduce) {
-			while(turns.length > 0 && this._moveBuffer.length > 0) {
-				let a = turns[0];
-				let b = this._moveBuffer[this._moveBuffer.length - 1].turn;
-				if(a[0] != b[0] || +a[1] + (+b[1]) != 4 ) break;
-				this._moveBuffer.pop();
-				turns.shift();
-			}
-		}
-
-		// add new moves at the end of the buffer
-		this._moveBuffer.push(
-			...turns.map(turn => ({
-				turn,
-				duration: turn[1] == 2 ? turnDurations.half : turnDurations.quarter
-			}))
-		);
-
-		// Complete current turn animation. This will cause previous promise of the same animation
-		// to never settle, and consequently animations of the following moves will never run.
-		// That is what we want, because, below, we will run animations for the same uncompleted turns.
-		if(this._anim) await this._anim.finishIn();
-
-		while(this._moveBuffer.length > 0) {
-			let move = this._moveBuffer.shift();
-			await this.move(move.turn, move.duration);
-		}
-	}
-
 	async stop() {
-		if(this._anim) return this._anim.finishIn();
+		if(this._anim) return this._anim.stealResolve();
 	}
 
 	_updateCubies(turn) {
@@ -107,28 +82,11 @@ export default class Cube3d extends HTMLElement {
 			slot.appendChild(cubie);
 		}
 	}
-
-	connectedCallback() {
-		console.log('conneected cube3d')
-	}
-	disconnectedCallback() {
-		console.log('disconnected cube3d')
-	}
 }
 
 customElements.define('m-cube3d', Cube3d);
 
 
-
-
-
-
-
-function getNewPO(prevP, prevO, turn) {
-	let p = turn2p[turn][prevP];
-	let o = (prevO + turn2oAdd[turn][prevP]) % 3;
-	return {p, o};
-}
 
 
 const step2angle = [, 90, 180, -90];
@@ -143,37 +101,6 @@ const side2rotationVector = {
 	y: [ 0, -1,  0],
 	z: [ 0,  0,  1],
 };
-
-
-// console.time();
-// for(let i=-10; i<10; i++) {
-// 	for(let j=-10; j<10; j++) {
-// 		for(let k=-10; k<10; k++) {
-// 			for(let m=-10; m<10; m++) {
-// 				if(
-// 					m + i*1 + (j + 1*k)%4 == 1 &&
-// 					m + i*2 + (j + 2*k)%4 == 2 &&
-// 					m + i*3 + (j + 3*k)%4 == -1
-// 				) {
-// 					console.log(m, i, j, k)
-// 				}
-// 				// 0 0 8 -3    (8 - 3*x)%4 * 90
-// 				// -1 0 1 1
-
-
-
-
-// 			}
-// 		}
-// 	}
-// }
-// console.timeEnd();
-
-
-
-function getTurnParams(turn) {
-
-}
 
 
 const turn2p = {
@@ -199,13 +126,3 @@ const turn2oAdd = {
 	y1: [0,0,0,0,0,0,0,0], y2: [0,0,0,0,0,0,0,0], y3: [0,0,0,0,0,0,0,0],
 	z1: [2,1,1,2,1,2,2,1], z2: [0,0,0,0,0,0,0,0], z3: [2,1,1,2,1,2,2,1],
 };
-
-
-
-function runSoon(cb) {
-	requestAnimationFrame(_ =>
-		requestAnimationFrame(_ =>
-			cb()
-		)
-	);
-}

@@ -14,7 +14,8 @@ export default class SolutionControls extends HTMLElement {
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-		this._el_playpause = this.shadowRoot.querySelector('.button-play-pause');
+		this._el_play = this.shadowRoot.querySelector('.button-play');
+		this._el_pause = this.shadowRoot.querySelector('.button-pause');
 		this._el_step = this.shadowRoot.querySelector('.button-step');
 		this._el_progress = this.shadowRoot.querySelector('progress');
 
@@ -26,17 +27,25 @@ export default class SolutionControls extends HTMLElement {
 
 		this._progressAnimation = null;
 
-		this._setIsPlaying(false);
-
-		this._el_playpause.addEventListener('click', async evt => {
-			if(this._isPlaying) this._pause();
-			else this._play(this._solution.length);
+		this._el_play.addEventListener('click', evt => {
+			this._play(this._solution.length);
 		});
-		this._el_step.addEventListener('click', async evt => {
+		this._el_pause.addEventListener('click', evt => {
+			this._pause();
+		});
+		this._el_step.addEventListener('click', evt => {
 			this._step();
 		});
 	}
 
+	connectedCallback() {
+		this._setIsPlaying(false);
+	}
+
+	disconnectedCallback() {
+		if(this._progressAnimation) this._progressAnimation.kill();
+		this._progressAnimation = null;
+	}
 
 	async _play(toIdx) {
 		this._setIsPlaying(true);
@@ -86,9 +95,11 @@ export default class SolutionControls extends HTMLElement {
 	_setIsPlaying(x) {
 		this._isPlaying = x;
 		if(this._isPlaying) {
-			this._el_playpause.textContent = '||';
+			this._el_play.hidden = true;
+			this._el_pause.hidden = false;
 		} else {
-			this._el_playpause.textContent = '>';
+			this._el_play.hidden = false;
+			this._el_pause.hidden = true;
 		}
 	}
 
