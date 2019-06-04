@@ -1,19 +1,13 @@
 import '../button/button.js';
+import Animate from '../../animate.js';
+
 
 import t from './solution-controls.html';
 const template = document.createElement('template');
 template.innerHTML = t;
 
 
-// TODO:
-// when playing has ended (e.g. when pause has been pressed) it is easy to stop
-// the cube. but now solution-controls has to know on which move has playing ended.
-// to know that, one solution could be: on each turn (either at the beginning or end 
-// of turnanimation) cube3d should dispatch an event, and solution-controls should
-// count steps.
-
-
-class SolutionControls extends HTMLElement {
+export default class SolutionControls extends HTMLElement {
 	constructor() {
 		super();
 		
@@ -22,35 +16,74 @@ class SolutionControls extends HTMLElement {
 
 		this._el_playpause = this.shadowRoot.querySelector('.button-play-pause');
 		this._el_step = this.shadowRoot.querySelector('.button-step');
+		this._el_progress = this.shadowRoot.querySelector('progress');
 
 		this._solution = null;
 		this._stepIndex = 0;
 		this._isPlaying = false;
+		this._stepFn = _ => _;
+		this._stopFn = _ => _;
 
-		this._el_playpause.textContent = this._isPlaying ? '||' : '>';
+		this._progressAnimation = null;
 
-		this._el_playpause.addEventListener('click', evt => {
-			if(this._isPlaying) {
-				this.setIsPlaying(false);
-				this.dispatchEvent(new CustomEvent('pause'));
-			} else {
-				if(this._stepIndex >= this._solution.length) return;
-				this.setIsPlaying(true);
-				let turns = this._solution.slice(this._stepIndex);
-				this._stepIndex = this._solution.length;
-				this.dispatchEvent(new CustomEvent('play', {detail: {turns}}));
-			}			
+		this._setIsPlaying(false);
+
+		this._el_playpause.addEventListener('click', async evt => {
+			if(this._isPlaying) this._pause();
+			else this._play(this._solution.length);
 		});
-
-		this._el_step.addEventListener('click', evt => {
-			if(this._stepIndex >= this._solution.length) return;
-			this._stepIndex++;
-			let turn = this._solution[this._stepIndex];
-			this.dispatchEvent(new CustomEvent('step', {detail: {turn}}));
+		this._el_step.addEventListener('click', async evt => {
+			this._step();
 		});
 	}
 
-	setIsPlaying(x) {
+
+	async _play(toIdx) {
+		this._setIsPlaying(true);
+
+		// stop in case there is an active move
+		await this._stopFn();
+
+		let turns, direction, turnDuration;
+		if(toIdx >= this._stepIndex) {  // forward
+			direction = 1;
+			turns = this._solution.slice(this._stepIndex, toIdx);
+			turnDuration = { quarter: 350, half: 490 };
+		} else {  // backward
+			direction = -1;
+			turns = this._solution.slice(toIdx, this._stepIndex).reverse().map(t => t[0] + (4-t[1]));
+			turnDuration = { quarter: 100, half: 140 };
+		}
+
+		for(let turn of turns) {
+			let duration = turn[1] == 2 ? turnDuration.half : turnDuration.quarter;
+			this._updateProgress(direction, duration);
+			await this._stepFn(turn, duration);
+		}
+
+		this._setIsPlaying(false);
+	}
+
+	async _pause() {
+		this._setIsPlaying(false);
+		await this._stopFn();
+	}
+
+	async _step() {
+		this._setIsPlaying(false);
+		if(this._stepIndex >= this._solution.length) return;
+
+		// stop in case there is an active move
+		await this._stopFn();
+
+		let turn = this._solution[this._stepIndex];
+		let duration = turn[1] == 2 ? 700 : 500;
+
+		this._updateProgress(1, duration);
+		await this._stepFn(turn, duration);
+	}
+
+	_setIsPlaying(x) {
 		this._isPlaying = x;
 		if(this._isPlaying) {
 			this._el_playpause.textContent = '||';
@@ -59,10 +92,29 @@ class SolutionControls extends HTMLElement {
 		}
 	}
 
+	_updateProgress(step, duration) {
+		this._progressAnimation = new Animate({
+			duration,
+			startVal: this._stepIndex,
+			endVal: this._stepIndex + step,
+			updateFn: val => this._el_progress.value = val,
+			easing: x => x
+		});
+		this._stepIndex += step;
+		this._progressAnimation.run();
+	}
+
 	set solution(sol) {
 		this._solution = sol;
-		// this.shadowRoot.querySelector('div').textContent = this._formatSolution(sol);
 		this._setProgressControl();
+	}
+
+	set stepFunction(stepFn) {
+		this._stepFn = stepFn;
+	}
+
+	set stopFunction(stopFn) {
+		this._stopFn = stopFn;
 	}
 
 	_setProgressControl() {
@@ -76,40 +128,23 @@ class SolutionControls extends HTMLElement {
 			let turn = this._solution[i] || '';
 			
 			let b = document.createElement('button');
-			b.onclick = evt => {
-				let turns, direction;
-				if(i >= this._stepIndex) {
-					direction = 'forward';
-					turns = this._solution.slice(this._stepIndex, i);
-				} else {
-					direction = 'backward';
-					turns = this._solution
-						.slice(i, this._stepIndex)
-						.reverse()
-						.map(t => t[0] + (4-t[1]))
-					;
-				}
-				this._stepIndex = i;
-				this.shadowRoot.querySelector('progress').value = i;
-
-				this.dispatchEvent(new CustomEvent('change', {detail: {
-					turns,
-					direction
-				}}));
-			};
+			b.onclick = evt => { this._play(i); };
 			el.appendChild(b);
-			el.appendChild(document.createTextNode(this._formatTurn(turn)));
+
+			if(turn) {
+				let el_turn = document.createElement('span');
+				el_turn.textContent = this._formatTurn(turn);
+				el_turn.style.display = 'inline-block';
+				el_turn.style.width = '20px';
+				el.appendChild(el_turn);
+			}
 		}
 
-		let el_progress = this.shadowRoot.querySelector('progress')
-		el_progress.max = this._solution.length;
-		el_progress.value = 0;
-		el_progress.style.width = (el.getBoundingClientRect().width - 20) + 'px';
+		this._el_progress.max = this._solution.length;
+		this._el_progress.value = 0;
+		this._el_progress.style.width = (44 * this._solution.length) + 'px';
 	}
 
-	_reverseTurns(turns) {
-		return turns.slice().reverse().map(t => (t[0] + (4-t[1])));
-	}
 	_formatTurn(turn) {
 		return turn && turn[0] + [, '', '2', "'"][turn[1]];
 	}

@@ -1,13 +1,13 @@
 import '../button/button.js';
-import '../cube3d/cube3d.js';
-import '../solution-controls/solution-controls.js';
+import Cube3d from '../cube3d/cube3d.js';
+import SolutionControls from '../solution-controls/solution-controls.js';
 
 import t from './page-solution.html';
 const template = document.createElement('template');
 template.innerHTML = t;
 
 
-export class PageSolution extends HTMLElement {
+class PageSolution extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
@@ -17,37 +17,35 @@ export class PageSolution extends HTMLElement {
 			this.dispatchEvent(new CustomEvent('back'));
 		});
 
-		let el_solutionControls = this.shadowRoot.querySelector('m-solution-controls');
-		let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
+		// let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
+		let el_cube3d = new Cube3d();
+		this.shadowRoot.appendChild(el_cube3d);
 
-		el_solutionControls.addEventListener('change', evt => {
-			let {turns, direction} = evt.detail;
-			let turnDuration = direction == 'forward' ? { quarter: 350, half: 490 } : { quarter: 100, half: 140 };
-			el_cube3d.applyMoves(turns, turnDuration, true);
-		});
-		el_solutionControls.addEventListener('play', evt => {
-			let {turns} = evt.detail;
-			let turnDuration = { quarter: 350, half: 490 };
-			el_cube3d.applyMoves(turns, turnDuration, true);
-		});
-		el_solutionControls.addEventListener('pause', evt => {
-			el_cube3d.stop({ quarter: 70, half: 98 });
-		});
-		el_solutionControls.addEventListener('step', evt => {
-			let {turn} = evt.detail;
-			let turnDuration = { quarter: 500, half: 700 };
-			el_cube3d.applyMoves([turn], turnDuration, true);
-		});
+		this.shadowRoot.appendChild(document.createElement('br'));
+
+		this._el_solutionControls = new SolutionControls();
+		this.shadowRoot.appendChild(this._el_solutionControls);
+
+		this._el_solutionControls.stepFunction = el_cube3d.move.bind(el_cube3d);
+		this._el_solutionControls.stopFunction = el_cube3d.stop.bind(el_cube3d);
 	}
 
 	set solution(sol) {
-		this.shadowRoot.querySelector('m-solution-controls').solution = sol;
+		this._el_solutionControls.solution = sol;
 	}
 
 	set po({p, o}) {
 		let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
 		el_cube3d.po = {p, o};
 	}
+
+	connectedCallback() {
+		console.log('conneected pageSolution')
+	}
+	disconnectedCallback() {
+		console.log('disconnected pageSolution')
+	}
+
 }
 
 customElements.define('m-page-solution', PageSolution);

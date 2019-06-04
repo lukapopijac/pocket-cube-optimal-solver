@@ -1,9 +1,10 @@
 import t from './cube3d.html';
+import Animate from '../../animate.js';
 
 const template = document.createElement('template');
 template.innerHTML = t;
 
-export class Cube3d extends HTMLElement {
+export default class Cube3d extends HTMLElement {
 	constructor() {
 		super();
 		
@@ -13,19 +14,6 @@ export class Cube3d extends HTMLElement {
 		this._el_cube = this.shadowRoot.querySelector('.cube');
 
 		this._moveBuffer = [];
-		
-		// for debugging: start
-		this.shadowRoot.querySelectorAll('button:not(.special-button)')
-			.forEach(el => el.addEventListener('click', evt => {
-				let turn = evt.target.textContent;
-				this.move(turn);
-			}))
-		;
-		this.shadowRoot.querySelector('.special-button').onclick = async _ => {
-			await this._anim.finishIn(2000);
-			console.log('fin');
-		};
-		// for debugging: end
 	}
 
 
@@ -84,11 +72,6 @@ export class Cube3d extends HTMLElement {
 			}
 		}
 
-		// update durations of remaining animations - speed them up
-		// for(let move of this._moveBuffer) {
-		// 	move.duration = 300;
-		// }
-
 		// add new moves at the end of the buffer
 		this._moveBuffer.push(
 			...turns.map(turn => ({
@@ -126,10 +109,10 @@ export class Cube3d extends HTMLElement {
 	}
 
 	connectedCallback() {
-		console.log('conne')
+		console.log('conneected cube3d')
 	}
 	disconnectedCallback() {
-		console.log('disconn')
+		console.log('disconnected cube3d')
 	}
 }
 
@@ -137,82 +120,6 @@ customElements.define('m-cube3d', Cube3d);
 
 
 
-
-class Animate {
-	constructor({duration, updateFn, startVal = 0, endVal = 1, v0 = 0, onComplete}) {
-		this._t_elapsed = 0;
-		this._t0 = null;
-		this._y = null;
-		this._y0 = startVal;
-		this._y1 = endVal;
-		this._v0 = v0;
-		this._updateFn = updateFn;
-		this._duration = duration;
-		
-		this._step = this._step.bind(this);
-		this._requestId = null;
-		this._resolve = null;
-		this._onComplete = onComplete || (_ => _);
-	}
-	
-	_easing(x) {
-		let v = this._v0;
-		return (v-2)*x**3 + (3-2*v)*x**2 + v*x;
-	}
-
-	_getCurrentDerivative() {
-		let x = (performance.now() - this._t0) / this._duration;
-		let v = this._v0;
-		return 3*(v-2)*x*x + 2*(3-2*v)*x + v;
-	}
-
-	_step() {
-		let t = performance.now() - this._t0;
-
-		if(t < this._duration) {
-			this._y = this._y0 + (this._y1 - this._y0) * this._easing(t / this._duration);
-			this._requestId = requestAnimationFrame(this._step);
-		} else {
-			this._y = this._y1;
-			this._requestId = requestAnimationFrame(_ => {
-				this._onComplete();
-				console.log('move completed', performance.now())
-				this._resolve();
-			});
-		}		
-		
-		this._updateFn(this._y);
-	}
-
-	/** Restart animation starting from current point with new duration. Preserve current speed.
-	 *  This is used for slowing down or speeding up current animation.
-	 */
-	async finishIn(duration) {
-		if(duration > 0) {
-			let scaleFactor = (this._y1 - this._y0) / (this._y1 - this._y) * duration / this._duration;
-			this._v0 = this._getCurrentDerivative() * scaleFactor;
-			this._y0 = this._y;
-			this._duration = duration;
-			this._t_elapsed = 0;
-			this._t0 = performance.now();
-		}
-		return new Promise(resolve => { this._resolve = resolve; });
-	}
-
-	// stop(shouldComplete, shouldResolve) {
-	// 	this._t_elapsed = performance.now() - this._t0;
-	// 	cancelAnimationFrame(this._requestId);
-	// 	this._requestId = null;
-	// 	if(shouldComplete) this._onComplete();
-	// 	if(shouldResolve) this._resolve();
-	// }
-	
-	run() {
-		this._t0 = performance.now() - this._t_elapsed;
-		this._requestId = requestAnimationFrame(this._step);
-		return new Promise(resolve => { this._resolve = resolve; });
-	}
-}
 
 
 
