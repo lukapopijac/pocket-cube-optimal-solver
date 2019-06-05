@@ -17,13 +17,15 @@ class PageSolution extends HTMLElement {
 			this.dispatchEvent(new CustomEvent('back'));
 		});
 
-		let el_cube3d = new Cube3d();
-		this.shadowRoot.appendChild(el_cube3d);
+		this._el = this.shadowRoot.querySelector('div');
 
-		this.shadowRoot.appendChild(document.createElement('br'));
+		let el_cube3d = new Cube3d();
+		this._el.appendChild(el_cube3d);
+
+		this._el.appendChild(document.createElement('br'));
 
 		this._el_solutionControls = new SolutionControls();
-		this.shadowRoot.appendChild(this._el_solutionControls);
+		this._el.appendChild(this._el_solutionControls);
 
 		this._el_solutionControls.stepFunction = el_cube3d.move.bind(el_cube3d);
 		this._el_solutionControls.stopFunction = el_cube3d.stop.bind(el_cube3d);
@@ -36,6 +38,12 @@ class PageSolution extends HTMLElement {
 	set po({p, o}) {
 		let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
 		el_cube3d.po = {p, o};
+	}
+
+	connectedCallback() {
+		// setTimeout(_ => {
+		// 	this._el.style.visibility = 'visible';
+		// }, 1000);
 	}
 }
 

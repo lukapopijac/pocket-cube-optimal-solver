@@ -1,5 +1,4 @@
 import t from './cube-unfolded.html';
-
 const template = document.createElement('template');
 template.innerHTML = t;
 

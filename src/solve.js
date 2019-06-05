@@ -14,6 +14,9 @@ export default function(per, ori) {
 
 	let state = new CubeState(p2, p1, p0, o);
 	let normalize = state.normalize();
+	console.time('search');
 	let solution = search(state);
+	console.timeEnd('search');
+	
 	return {normalize, solution};
 };
