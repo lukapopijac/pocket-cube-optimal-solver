@@ -3,9 +3,8 @@ import '../page-solution/page-solution.js';
 
 import solve from '/solve.js';
 
-import t from './app.html';
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./app.html');
 
 export class App extends HTMLElement {
 	constructor() {

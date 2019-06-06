@@ -2,9 +2,8 @@ import '../button/button.js';
 import Cube3d from '../cube3d/cube3d.js';
 import SolutionControls from '../solution-controls/solution-controls.js';
 
-import t from './page-solution.html';
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./page-solution.html');
 
 
 class PageSolution extends HTMLElement {

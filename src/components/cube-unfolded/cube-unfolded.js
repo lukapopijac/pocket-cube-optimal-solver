@@ -1,6 +1,5 @@
-import t from './cube-unfolded.html';
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./cube-unfolded.html');
 
 export class CubeUnfolded extends HTMLElement {
 	constructor() {

@@ -1,4 +1,47 @@
-<link rel="stylesheet" type="text/css" href="color-pick.css">
+<style>
+    :host > div {
+        width: 45px;
+        height: 45px;
+        display: inline-block;
+        vertical-align: middle;
+        border: 2px solid #333;
+        border-radius: 6px;
+        position: relative;
+    }
+
+    :host > div[val="."] { background: #333; }
+    :host > div[val="l"] { background: blue; }
+    :host > div[val="b"] { background: orange; }
+    :host > div[val="d"] { background: white; }
+    :host > div[val="f"] { background: red; }
+    :host > div[val="r"] { background: green; }
+    :host > div[val="u"] { background: yellow; }
+
+    :host > div:not([selected]):hover {
+        cursor: pointer;
+        transform: scale(1.133);
+    }
+
+    :host > div[val="."] path, 
+    :host > div[val="l"] path, 
+    :host > div[val="f"] path, 
+    :host > div[val="r"] path {
+        fill: white;
+    }
+
+    :host svg {
+        position: absolute;
+        top: 9px;
+        left: 9px;
+    }
+
+    :host > div:not([selected]) svg {
+        display: none;
+    }
+</style>
 
 <div>
+    <svg width="30" height="26"> <!-- checkmark -->
+        <path d="M0 16c5.2 3.5 6.9 5.6 10.5 10C14 19.8 19.8 11.5 30 1.7L28.5 0a97 97 0 0 0-19 18 21.5 21.5 0 0 0-8.3-4.3z"/>
+    </svg>
 </div>

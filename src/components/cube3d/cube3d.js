@@ -1,8 +1,7 @@
-import t from './cube3d.html';
 import Animate from '../../animate.js';
 
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./cube3d.html');
 
 export default class Cube3d extends HTMLElement {
 	constructor() {

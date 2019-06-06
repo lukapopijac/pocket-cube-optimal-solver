@@ -1,11 +1,8 @@
 import '../button/button.js';
 import Animate from '../../animate.js';
 
-
-import t from './solution-controls.html';
 const template = document.createElement('template');
-template.innerHTML = t;
-
+template.innerHTML = require('./solution-controls.html');
 
 export default class SolutionControls extends HTMLElement {
 	constructor() {
@@ -30,12 +27,8 @@ export default class SolutionControls extends HTMLElement {
 		this._el_play.addEventListener('click', evt => {
 			this._play(this._solution.length);
 		});
-		this._el_pause.addEventListener('click', evt => {
-			this._pause();
-		});
-		this._el_step.addEventListener('click', evt => {
-			this._step();
-		});
+		this._el_pause.addEventListener('click', this._pause.bind(this));
+		this._el_step.addEventListener('click', this._step.bind(this));
 	}
 
 	connectedCallback() {

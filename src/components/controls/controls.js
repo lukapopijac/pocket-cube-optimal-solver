@@ -1,10 +1,8 @@
 import '../button/button.js';
 import '../color-pick/color-pick.js';
 
-import t from './controls.html';
-
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./controls.html');
 
 export class Controls extends HTMLElement {
 	constructor() {

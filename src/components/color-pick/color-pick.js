@@ -1,7 +1,5 @@
-import t from './color-pick.html';
-
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./color-pick.html');
 
 export class ColorPick extends HTMLElement {
 	constructor() {

@@ -1,7 +1,5 @@
-import t from './button.html';
-
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./button.html');
 
 export class Button extends HTMLElement {
 	constructor() {

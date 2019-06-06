@@ -1,9 +1,8 @@
 import '../cube-unfolded/cube-unfolded.js';
 import '../controls/controls.js';
 
-import t from './page-setup.html';
 const template = document.createElement('template');
-template.innerHTML = t;
+template.innerHTML = require('./page-setup.html');
 
 
 export class PageSetup extends HTMLElement {
