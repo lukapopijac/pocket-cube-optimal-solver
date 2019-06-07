@@ -27,8 +27,8 @@ export default class Animate {
 				this._onComplete();
 				this._resolve();
 			});
-		}		
-		
+		}
+
 		this._updateFn(this._y);
 	}
 

@@ -1,63 +1,42 @@
 <style>
-	:host > div {
-		display: inline-block;
-		vertical-align: bottom;
-		width: calc(70% + 84px);
-		max-width: 430px;
+	:host .row {
+		display: grid;
+		grid-template-columns: min-content;
+		justify-items: stretch;
+		justify-content: stretch;
 	}
 
-	:host > div .controls-row {
-		position: relative;
-		width: 100%;
-		padding: 2px 0px;
-		margin: 17px auto 0;
-		text-align: left;
-		font-size: 0; /* to remove space between blocks */
+	:host .row1 {
+		display: flex;
+		justify-content: space-between;
+		max-width: 500px;
 	}
 
-
-	.button-container {
-		position: absolute;
-		height: 100%;
-		right: 0;
-		top: 0;
+	:host m-colorpick[val="."] {
+		margin-left: 6%;
+		/* flex-grow: 2; */
 	}
 
-	.button-container .button {
-		position: relative;
-		top: 50%;
-		transform: translateY(-50%);
-		margin-left: 10px;
+	:host m-colorpick {
+		flex-grow: 1;
 	}
 
-
-	@media (min-width: 940px) {
-		.controls {
-			width: calc(15% + 195px);
-			max-width: 360px;
-			margin-bottom: 20px;
-		}
-	}
 </style>
 
 <div>
-	<div class="controls-row">
+	<div class="row1">
 		<m-colorpick val="l"></m-colorpick>
 		<m-colorpick val="b"></m-colorpick>
 		<m-colorpick val="d"></m-colorpick>
 		<m-colorpick val="f"></m-colorpick>
 		<m-colorpick val="r"></m-colorpick>
 		<m-colorpick val="u"></m-colorpick>
-	</div>
-	<div class="controls-row">
 		<m-colorpick val="." selected></m-colorpick>
-		<div class="button-container">
-			<m-button id="button-reset">Reset</m-button>
-			<m-button id="button-empty">Empty</m-button>
-			<m-button id="button-shuffle">Shuffle</m-button>
-		</div>
 	</div>
-	<div class="controls-row">
+	<!-- <div class="row">
+		<m-button id="button-reset">Reset</m-button>
+		<m-button id="button-empty">Empty</m-button>
+		<m-button id="button-shuffle">Shuffle</m-button>
 		<m-button id="button-solve" primary>Solve</m-button>
-	</div>
+	</div> -->
 </div>
