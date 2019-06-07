@@ -9,7 +9,7 @@ export class CubeUnfolded extends HTMLElement {
 
 		this._stickerValues = 'urfuflubrulbdfrdlfdrbdbl'.split('');
 
-		// sort just to be sure that this is independent from order in html,
+		// sort, just to be sure that this is independent from order in html,
 		// that's why every sticker has data-idx
 		this._stickerElementsSorted = Array.from(this.shadowRoot.querySelectorAll('.sticker'))
 			.sort((a, b) => a.dataset.idx - b.dataset.idx)

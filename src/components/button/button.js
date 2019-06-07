@@ -10,13 +10,11 @@ export class Button extends HTMLElement {
 	}
 
 	static get observedAttributes() {
-		return ['primary'];
+		return ['primary', 'stretch'];
 	}
 
 	attributeChangedCallback(attrName, oldVal, newVal) {
-		if(attrName == 'primary') {
-			this._button.setAttribute('primary', newVal);
-		}
+		this._button.setAttribute(attrName, newVal);
 	}
 }
 

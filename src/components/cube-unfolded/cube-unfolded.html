@@ -19,6 +19,10 @@
 		cursor: pointer;
 	}
 
+	:host > div .sticker {
+		-webkit-tap-highlight-color: transparent;  /* coz on some mobile phones sticker stays highlighted after click */
+	}
+
 	:host > div .sticker[data-val="."]  { fill: transparent; stroke: #111;}
 	:host > div .sticker[data-val="l"]  { fill: blue;    }
 	:host > div .sticker[data-val="b"]  { fill: orange;  }
