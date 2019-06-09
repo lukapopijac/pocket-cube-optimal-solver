@@ -3,50 +3,39 @@
 	*, *:before, *:after { box-sizing: inherit; }
 
 	:host {
-		position: relative;
 		max-width: 50px;
 		min-width: 35px;
 		height: 50px;
-	}
-
-	:host > div {
-		width: 100%;
-		height: 100%;
 		border: 2px solid #333;
 		border-radius: 6px;
+		display: grid;
+		place-items: center;
 	}
 
-	:host > div[val="."] { background: #333; }
-	:host > div[val="l"] { background: blue; }
-	:host > div[val="b"] { background: orange; }
-	:host > div[val="d"] { background: white; }
-	:host > div[val="f"] { background: red; }
-	:host > div[val="r"] { background: green; }
-	:host > div[val="u"] { background: yellow; }
+	:host([val="."]) { background: #333; }
+	:host([val="l"]) { background: blue; }
+	:host([val="b"]) { background: orange; }
+	:host([val="d"]) { background: white; }
+	:host([val="f"]) { background: red; }
+	:host([val="r"]) { background: green; }
+	:host([val="u"]) { background: yellow; }
 
-	:host > div:not([selected]):hover {
-		cursor: pointer;
-		transform: scale(1.13);
-	}
-
-	:host > [val="."] path, 
-	:host > [val="l"] path, 
-	:host > [val="f"] path, 
-	:host > [val="r"] path {
+	:host([val="."]) path,
+	:host([val="l"]) path,
+	:host([val="f"]) path,
+	:host([val="r"]) path {
 		fill: white;
 	}
 
-	:host svg {
-		transform: translateY(10px);
+	:host(:not([selected]):hover) {
+		cursor: pointer;
+		transform: scale(1.13);
 	}
-
-	:host > div:not([selected]) svg {
+	:host(:not([selected])) svg {
 		display: none;
 	}
 </style>
 
-<div>
-	<svg width="30" height="26">
-		<path d="M0 16c5.2 3.5 6.9 5.6 10.5 10C14 19.8 19.8 11.5 30 1.7L28.5 0a97 97 0 0 0-19 18 21.5 21.5 0 0 0-8.3-4.3z"/>
-	</svg>
-</div>
+<svg width="30" height="26"> <!-- checkmark -->
+	<path d="M0 16c5.2 3.5 6.9 5.6 10.5 10C14 19.8 19.8 11.5 30 1.7L28.5 0a97 97 0 0 0-19 18 21.5 21.5 0 0 0-8.3-4.3z"/>
+</svg>

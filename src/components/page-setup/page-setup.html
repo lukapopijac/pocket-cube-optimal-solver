@@ -21,12 +21,39 @@
 		color: white;
 	}
 
+	:host > div {
+		display: grid;
+		place-items: center;
+		grid-gap: 25px;
+		margin: 30px 8px 0;
+	}
+
+	/* TODO: grid max width, za ogromne rezolucije da ne bude sve rasireno */
+
+	m-cube-unfolded {
+		width: 100%;
+	}
+	m-controls {
+		width: 100%;
+	}
+
+	@media (min-width: 900px) {
+		:host > div {
+			grid-template-columns: 4fr 3fr;
+			justify-content: start;
+			margin: 80px 20px 0;
+		}
+
+		m-controls {
+			justify-self: start;
+		}
+	}
+
 </style>
 
-
-<m-cube-unfolded></m-cube-unfolded>
-<!-- <div style="margin: 0 auto; text-align: center; width: 100%; background: grey;"> -->
+<div>
+	<m-cube-unfolded></m-cube-unfolded>
 	<m-controls></m-controls>
-<!-- </div> -->
+</div>
 
 <div class="message hidden"></div>

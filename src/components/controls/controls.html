@@ -1,8 +1,11 @@
 <style>
+	:host {
+		max-width: 500px;
+	}
+
 	.row {
 		display: flex;
 		justify-content: space-between;
-		max-width: 500px;
 	}
 
 	m-colorpick {
@@ -16,8 +19,8 @@
 	m-button {
 		margin: 0 1px;
 		flex-grow: 1;
+		flex-shrink: 0;
 	}
-
 	m-button[primary] {
 		margin-left: 10%;
 	}
