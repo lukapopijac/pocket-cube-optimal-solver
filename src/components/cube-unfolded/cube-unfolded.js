@@ -23,7 +23,6 @@ export class CubeUnfolded extends HTMLElement {
 			if(isNaN(idx)) return;  // not clicked on sticker
 			this._stickerValues[idx] = this._getSelectedColor();
 			this._refresh();
-			this.dispatchEvent(new CustomEvent('click-sticker'));
 		});
 	}
 

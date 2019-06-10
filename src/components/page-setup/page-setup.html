@@ -24,11 +24,10 @@
 	:host > div {
 		display: grid;
 		place-items: center;
-		grid-gap: 25px;
+		grid-gap: 20px;
 		margin: 30px 8px 0;
+		max-width: 1500px;
 	}
-
-	/* TODO: grid max width, za ogromne rezolucije da ne bude sve rasireno */
 
 	m-cube-unfolded {
 		width: 100%;
@@ -40,7 +39,6 @@
 	@media (min-width: 900px) {
 		:host > div {
 			grid-template-columns: 4fr 3fr;
-			justify-content: start;
 			margin: 80px 20px 0;
 		}
 
@@ -56,4 +54,4 @@
 	<m-controls></m-controls>
 </div>
 
-<div class="message hidden"></div>
+<m-dialog-message hidden></m-dialog-message>

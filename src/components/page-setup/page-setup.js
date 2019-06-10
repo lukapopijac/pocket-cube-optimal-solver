@@ -1,5 +1,6 @@
 import '../cube-unfolded/cube-unfolded.js';
 import '../controls/controls.js';
+import '../dialog-message/dialog-message.js';
 
 const template = document.createElement('template');
 template.innerHTML = require('./page-setup.html');
@@ -13,53 +14,38 @@ export class PageSetup extends HTMLElement {
 
 		let el_cubeUnfolded = this.shadowRoot.querySelector('m-cube-unfolded');
 		let el_controls = this.shadowRoot.querySelector('m-controls');
+		this._el_message = this.shadowRoot.querySelector('m-dialog-message');
+
 
 		// prepare cubeUnfolded
 		setTimeout(_ => {
 			// for some reason a component doesn't have their methods ready right away
 			el_cubeUnfolded.getSelectedColor = _ => el_controls.selectedColor;
 		}, 0);
-		el_cubeUnfolded.addEventListener('click-sticker', _ => {
-			this._setMessage(null);
-		});
 
 		// prepare controls
 		el_controls.addEventListener('click-reset', _ => {
-			this._setMessage(null);
 			el_cubeUnfolded.setStickersToSolved();
 		});
 		el_controls.addEventListener('click-empty', _ => {
-			this._setMessage(null);
 			el_cubeUnfolded.setStickersToEmpty();
 		});
 		el_controls.addEventListener('click-shuffle', _ => {
-			this._setMessage(null);
 			let {p, o} = generateRandomPO();
 			el_cubeUnfolded.stickerValues = po2stickers(p, o);
 		});
 		el_controls.addEventListener('click-solve', _ => {
 			let po = stickers2po(el_cubeUnfolded.stickerValues);
-			if(!po) this._setMessage('Invalid or ambiguous state!', true);
+			if(!po) {
+				this._el_message.textContent = 'Invalid or ambiguous state!';
+				this._el_message.hidden = false;		
+			}
 			else this.dispatchEvent(new CustomEvent('solve', {detail: po}));
 		});
 		el_controls.addEventListener('pick-color', evt => {
 			el_cubeUnfolded.selectedColor = evt.detail;
 		});
-
 	}
-
-	_setMessage(text, isError) {
-		let msgElement = this.shadowRoot.querySelector('.message');
-
-		if(text == null) {
-			msgElement.classList.add('hidden');
-		} else {
-			msgElement.textContent = text;
-			msgElement.classList.remove('hidden');
-			if(isError) msgElement.classList.add('error');
-			else msgElement.classList.remove('error');
-		}
-	}	
 }
 
 customElements.define('m-page-setup', PageSetup);
