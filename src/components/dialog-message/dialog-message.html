@@ -1,21 +1,26 @@
 <style>
+	:host { box-sizing: border-box; }
+	*, *:before, *:after { box-sizing: inherit; }
+	
 	:host {
 		width: 100%;
 		height: 100%;
 		position: fixed;
 		top: 0;
+		background: #555a;
 	}
 
 	:host > div {
 		position: absolute;
 		top: 30%;
 	    left: 50%;
-    	transform: translate(-50%, -50%);
+    	transform: translateX(-50%);
+		min-width: 280px;
 
 		background: white;
 		color: black;
-		font: bold 18px sans-serif;
-		padding: 30px;
+		font: bold 17px sans-serif;
+		padding: 22px;
 		border-radius: 5px;
 		box-shadow: 0 0 20px 2px black;
 		cursor: pointer;
