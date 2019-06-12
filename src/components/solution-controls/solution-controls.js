@@ -1,8 +1,9 @@
 import '../button/button.js';
-import Animate from '../../animate.js';
+import '../solution-progress/solution-progress.js';
 
 const template = document.createElement('template');
 template.innerHTML = require('./solution-controls.html');
+
 
 export default class SolutionControls extends HTMLElement {
 	constructor() {
@@ -14,7 +15,7 @@ export default class SolutionControls extends HTMLElement {
 		this._el_play = this.shadowRoot.querySelector('.button-play');
 		this._el_pause = this.shadowRoot.querySelector('.button-pause');
 		this._el_step = this.shadowRoot.querySelector('.button-step');
-		this._el_progress = this.shadowRoot.querySelector('progress');
+		this._el_solutionProgress = this.shadowRoot.querySelector('m-solution-progress');
 
 		this._solution = null;
 		this._stepIndex = 0;
@@ -22,22 +23,17 @@ export default class SolutionControls extends HTMLElement {
 		this._stepFn = _ => _;
 		this._stopFn = _ => _;
 
-		this._progressAnimation = null;
-
 		this._el_play.addEventListener('click', evt => {
 			this._play(this._solution.length);
 		});
 		this._el_pause.addEventListener('click', this._pause.bind(this));
 		this._el_step.addEventListener('click', this._step.bind(this));
+
+		this._el_solutionProgress.addEventListener('set-index', evt => this._play(evt.detail));
 	}
 
 	connectedCallback() {
 		this._setIsPlaying(false);
-	}
-
-	disconnectedCallback() {
-		if(this._progressAnimation) this._progressAnimation.kill();
-		this._progressAnimation = null;
 	}
 
 	async _play(toIdx) {
@@ -59,7 +55,8 @@ export default class SolutionControls extends HTMLElement {
 
 		for(let turn of turns) {
 			let duration = turn[1] == 2 ? turnDuration.half : turnDuration.quarter;
-			this._updateProgress(direction, duration);
+			this._el_solutionProgress.updateProgress(this._stepIndex, direction, duration);
+			this._stepIndex += direction;
 			await this._stepFn(turn, duration);
 		}
 
@@ -81,7 +78,8 @@ export default class SolutionControls extends HTMLElement {
 		let turn = this._solution[this._stepIndex];
 		let duration = turn[1] == 2 ? 700 : 500;
 
-		this._updateProgress(1, duration);
+		this._el_solutionProgress.updateProgress(this._stepIndex, 1, duration);
+		this._stepIndex++;
 		await this._stepFn(turn, duration);
 	}
 
@@ -96,21 +94,10 @@ export default class SolutionControls extends HTMLElement {
 		}
 	}
 
-	_updateProgress(step, duration) {
-		this._progressAnimation = new Animate({
-			duration,
-			startVal: this._stepIndex,
-			endVal: this._stepIndex + step,
-			updateFn: val => this._el_progress.value = val,
-			easing: x => x
-		});
-		this._stepIndex += step;
-		this._progressAnimation.run();
-	}
-
 	set solution(sol) {
 		this._solution = sol;
-		this._setProgressControl();
+		this._el_solutionProgress.solution = sol;
+		this._stepIndex = 0;
 	}
 
 	set stepFunction(stepFn) {
@@ -119,41 +106,6 @@ export default class SolutionControls extends HTMLElement {
 
 	set stopFunction(stopFn) {
 		this._stopFn = stopFn;
-	}
-
-	_setProgressControl() {
-		this._stepIndex = 0;
-		let el = this.shadowRoot.querySelector('.turns');
-		
-		// remove all children
-		while(el.firstChild) el.removeChild(el.firstChild);
-
-		for(let i=0; i<=this._solution.length; i++) {
-			let turn = this._solution[i] || '';
-			
-			let b = document.createElement('button');
-			b.onclick = evt => { this._play(i); };
-			el.appendChild(b);
-
-			if(turn) {
-				let el_turn = document.createElement('span');
-				el_turn.textContent = this._formatTurn(turn);
-				el_turn.style.display = 'inline-block';
-				el_turn.style.width = '20px';
-				el.appendChild(el_turn);
-			}
-		}
-
-		this._el_progress.max = this._solution.length;
-		this._el_progress.value = 0;
-		this._el_progress.style.width = (44 * this._solution.length) + 'px';
-	}
-
-	_formatTurn(turn) {
-		return turn && turn[0] + [, '', '2', "'"][turn[1]];
-	}
-	_formatSolution(solution) {
-		return solution.map(x => x[1]=='1' ? x[0] : x[1]=='3' ? x[0]+"'" : x).join(' ')
 	}
 }
 

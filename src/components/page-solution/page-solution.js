@@ -16,18 +16,14 @@ class PageSolution extends HTMLElement {
 			this.dispatchEvent(new CustomEvent('back'));
 		});
 
-		this._el = this.shadowRoot.querySelector('div');
-
-		let el_cube3d = new Cube3d();
-		this._el.appendChild(el_cube3d);
-
-		this._el.appendChild(document.createElement('br'));
-
+		this._el_cube3d = new Cube3d();
 		this._el_solutionControls = new SolutionControls();
-		this._el.appendChild(this._el_solutionControls);
 
-		this._el_solutionControls.stepFunction = el_cube3d.move.bind(el_cube3d);
-		this._el_solutionControls.stopFunction = el_cube3d.stop.bind(el_cube3d);
+		this.shadowRoot.querySelector('.container').append(this._el_cube3d);
+		this.shadowRoot.querySelector('.container').append(this._el_solutionControls);
+
+		this._el_solutionControls.stepFunction = this._el_cube3d.move.bind(this._el_cube3d);
+		this._el_solutionControls.stopFunction = this._el_cube3d.stop.bind(this._el_cube3d);
 	}
 
 	set solution(sol) {
@@ -35,14 +31,7 @@ class PageSolution extends HTMLElement {
 	}
 
 	set po({p, o}) {
-		let el_cube3d = this.shadowRoot.querySelector('m-cube3d');
-		el_cube3d.po = {p, o};
-	}
-
-	connectedCallback() {
-		// setTimeout(_ => {
-		// 	this._el.style.visibility = 'visible';
-		// }, 1000);
+		this._el_cube3d.po = {p, o};
 	}
 }
 

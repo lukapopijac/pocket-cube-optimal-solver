@@ -1,36 +1,31 @@
 <style>
-	:host > div {
+	:host {
+		max-width: 600px;
 	}
 
-	.turns {
-		display: inline-block;
-		font: 16px sans-serif;
+	.row {
+		display: flex;
+		justify-content: space-between;
 	}
 
-	.turns button {
-		margin: 0 4px;
-		height: 15px;
-	}
-
-	progress {
-		position: relative;
-		left: -2px;
+	m-button {
+		margin: 0 1px;
+		flex-grow: 1;
+		flex-shrink: 0;
 	}
 </style>
 
-<div>
-	<m-button class="button-play">
+<div class="row">
+	<m-button stretch class="button-play">
 		<svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="white"/></svg>
 	</m-button>
-	<m-button class="button-pause">
+	<m-button stretch class="button-pause">
 		<svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="white"/></svg>
 	</m-button>
-	<m-button class="button-step">
+	<m-button stretch class="button-step">
 		<svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" fill="white"/></svg>
 	</m-button>
-	
-	<br>
-	<div class="turns"></div>
-	<br>
-	<progress value="" max=""></progress>
+</div>
+<div class="row">
+	<m-solution-progress></m-solution-progress>
 </div>

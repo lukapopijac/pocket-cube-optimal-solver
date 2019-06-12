@@ -1,5 +1,5 @@
-import '../cube-unfolded/cube-unfolded.js';
-import '../controls/controls.js';
+import CubeUnfolded from '../cube-unfolded/cube-unfolded.js';
+import '../setup-controls/setup-controls.js';
 import '../dialog-message/dialog-message.js';
 
 const template = document.createElement('template');
@@ -12,29 +12,27 @@ export class PageSetup extends HTMLElement {
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-		let el_cubeUnfolded = this.shadowRoot.querySelector('m-cube-unfolded');
-		let el_controls = this.shadowRoot.querySelector('m-controls');
+		let el_setupControls = this.shadowRoot.querySelector('m-setup-controls');
 		this._el_message = this.shadowRoot.querySelector('m-dialog-message');
-
-
+		let el_cubeUnfolded = new CubeUnfolded();  // create here, so its methods exist right away
+		
+		this.shadowRoot.querySelector('div').prepend(el_cubeUnfolded);
+		
 		// prepare cubeUnfolded
-		setTimeout(_ => {
-			// for some reason a component doesn't have their methods ready right away
-			el_cubeUnfolded.getSelectedColor = _ => el_controls.selectedColor;
-		}, 0);
+		el_cubeUnfolded.getSelectedColor = _ => el_setupControls.selectedColor;
 
 		// prepare controls
-		el_controls.addEventListener('click-reset', _ => {
+		el_setupControls.addEventListener('click-reset', _ => {
 			el_cubeUnfolded.setStickersToSolved();
 		});
-		el_controls.addEventListener('click-empty', _ => {
+		el_setupControls.addEventListener('click-empty', _ => {
 			el_cubeUnfolded.setStickersToEmpty();
 		});
-		el_controls.addEventListener('click-shuffle', _ => {
+		el_setupControls.addEventListener('click-shuffle', _ => {
 			let {p, o} = generateRandomPO();
 			el_cubeUnfolded.stickerValues = po2stickers(p, o);
 		});
-		el_controls.addEventListener('click-solve', _ => {
+		el_setupControls.addEventListener('click-solve', _ => {
 			let po = stickers2po(el_cubeUnfolded.stickerValues);
 			if(!po) {
 				this._el_message.textContent = 'Invalid or ambiguous state!';
@@ -42,7 +40,7 @@ export class PageSetup extends HTMLElement {
 			}
 			else this.dispatchEvent(new CustomEvent('solve', {detail: po}));
 		});
-		el_controls.addEventListener('pick-color', evt => {
+		el_setupControls.addEventListener('pick-color', evt => {
 			el_cubeUnfolded.selectedColor = evt.detail;
 		});
 	}

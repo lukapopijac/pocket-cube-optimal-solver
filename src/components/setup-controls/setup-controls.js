@@ -2,9 +2,9 @@ import '../button/button.js';
 import '../color-pick/color-pick.js';
 
 const template = document.createElement('template');
-template.innerHTML = require('./controls.html');
+template.innerHTML = require('./setup-controls.html');
 
-export class Controls extends HTMLElement {
+export class SetupControls extends HTMLElement {
 	constructor() {
 		super();
 		this.attachShadow({mode: 'open'});
@@ -43,4 +43,4 @@ export class Controls extends HTMLElement {
 	}
 }
 
-customElements.define('m-controls', Controls);
+customElements.define('m-setup-controls', SetupControls);
