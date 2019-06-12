@@ -12,6 +12,8 @@ export default class SolutionProgress extends HTMLElement {
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
 		this._el_progress = this.shadowRoot.querySelector('progress');
+		this._el_progress2 = this.shadowRoot.querySelector('.progress');
+		this._el_bar = this.shadowRoot.querySelector('.bar');
 
 		this._solution = null;
 		this._progressAnimation = null;
@@ -37,34 +39,49 @@ export default class SolutionProgress extends HTMLElement {
 		for(let i=0; i<=this._solution.length; i++) {
 			let turn = this._solution[i] || '';
 			
-			let b = document.createElement('button');
+			let b = document.createElement('div');
+			b.className = 'button';
 			b.onclick = evt => {
 				this.dispatchEvent(new CustomEvent('set-index', {detail: i}));
 			};
 			el.appendChild(b);
 
 			if(turn) {
-				let el_turn = document.createElement('span');
+				let el_turn = document.createElement('div');
+				el_turn.className = 'turn';
 				el_turn.textContent = this._formatTurn(turn);
-				el_turn.style.display = 'inline-block';
-				el_turn.style.width = '20px';
 				el.appendChild(el_turn);
 			}
 		}
 
 		this._el_progress.max = this._solution.length;
 		this._el_progress.value = 0;
+
+		this._el_bar.style.width = '0';
 	}
 
-	updateProgress(startVal, step, duration) {
+	updateProgress(startIndex, step, duration) {
 		this._progressAnimation = new Animate({
 			duration,
-			startVal: startVal,
-			endVal: startVal + step,
-			updateFn: val => this._el_progress.value = val,
+			startVal: startIndex/this._solution.length*100,
+			endVal: (startIndex + step)/this._solution.length*100,
+			updateFn: val => {
+				this._el_bar.style.width = val + '%';
+			},
 			easing: x => x
 		});
 		this._progressAnimation.run();
+	
+		let aa = new Animate({
+			duration,
+			startVal: startIndex,
+			endVal: startIndex + step,
+			updateFn: val => {
+				this._el_progress.value = val;
+			},
+			easing: x => x
+		});
+		aa.run();
 	}
 
 

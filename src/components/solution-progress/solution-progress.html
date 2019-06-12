@@ -1,20 +1,55 @@
 <style>
-	.turns {
-		display: inline-block;
-		font: 16px sans-serif;
+	:host { box-sizing: border-box; }
+	*, *:before, *:after { box-sizing: inherit; }
+
+	:host {
+		width: 100%;
 	}
 
-	.turns button {
-		margin: 0 4px;
-		height: 15px;
+	.turns {
+		display: flex;
+		justify-content: space-between;
+		font: 16px sans-serif;
+		width: calc(100% + 4px);
+		margin-left: -2px;
+	}
+
+	.turns .button {
+		width: 8px;
+		height: 20px;
+		background: red;
+		cursor: pointer;
+	}
+
+	.turns .turn {
+		flex-grow: 1;
+		flex-basis: 0;
+		text-align: center;
 	}
 
 	progress {
 		position: relative;
-		left: -2px;
+		width: 100%;
+	}
+
+	.progress {
+		width: 100%;
+		height: 45px;
+		background: grey;
+    	border: 3px solid grey;
+		border-radius: 4px;
+	}
+
+	.bar {
+		width: 1%;
+		height: 100%;
+		background: lightblue;
+		border-radius: 2px;
 	}
 </style>
 
 <div class="turns"></div>
-<br>
 <progress value="" max=""></progress>
+<div class="progress">
+	<div class="bar"></div>
+</div>
