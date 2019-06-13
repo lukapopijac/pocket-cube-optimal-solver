@@ -29,29 +29,31 @@ export default class SolutionControls extends HTMLElement {
 		this._el_pause   .addEventListener('click', _ => { this._pause() });
 		this._el_step    .addEventListener('click', _ => { this._step(1) });
 
-		this._el_solutionProgress.addEventListener('set-index', evt => this._play(evt.detail));
+		this._el_solutionProgress.addEventListener('set-index', evt => this._play(evt.detail, true));
 	}
 
 	connectedCallback() {
 		this._setIsPlaying(false);
 	}
 
-	async _play(toIdx) {
+	async _play(toIdx, fast) {  // fast is boolean
 		this._setIsPlaying(true);
 
 		// stop in case there is an active move
 		await this._stopFn();
 
-		let turns, direction, turnDuration;
+		let turns, direction;
 		if(toIdx >= this._stepIndex) {  // forward
 			direction = 1;
 			turns = this._solution.slice(this._stepIndex, toIdx);
-			turnDuration = { quarter: 350, half: 490 };
+			// turnDuration = { quarter: 350, half: 490 };
 		} else {  // backward
 			direction = -1;
 			turns = this._solution.slice(toIdx, this._stepIndex).reverse().map(t => t[0] + (4-t[1]));
-			turnDuration = { quarter: 100, half: 140 };
+			// turnDuration = { quarter: 100, half: 140 };
 		}
+
+		let turnDuration = fast ? { quarter: 100, half: 140 } : { quarter: 350, half: 490 };
 
 		for(let turn of turns) {
 			let duration = turn[1] == 2 ? turnDuration.half : turnDuration.quarter;
