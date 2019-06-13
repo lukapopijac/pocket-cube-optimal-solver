@@ -12,9 +12,10 @@ export default class SolutionControls extends HTMLElement {
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-		this._el_play = this.shadowRoot.querySelector('.button-play');
-		this._el_pause = this.shadowRoot.querySelector('.button-pause');
-		this._el_step = this.shadowRoot.querySelector('.button-step');
+		this._el_stepback = this.shadowRoot.querySelector('#button-stepback');
+		this._el_play = this.shadowRoot.querySelector('#button-play');
+		this._el_pause = this.shadowRoot.querySelector('#button-pause');
+		this._el_step = this.shadowRoot.querySelector('#button-step');
 		this._el_solutionProgress = this.shadowRoot.querySelector('m-solution-progress');
 
 		this._solution = null;
@@ -23,11 +24,10 @@ export default class SolutionControls extends HTMLElement {
 		this._stepFn = _ => _;
 		this._stopFn = _ => _;
 
-		this._el_play.addEventListener('click', evt => {
-			this._play(this._solution.length);
-		});
-		this._el_pause.addEventListener('click', this._pause.bind(this));
-		this._el_step.addEventListener('click', this._step.bind(this));
+		this._el_stepback.addEventListener('click', _ => { this._step(-1) });
+		this._el_play    .addEventListener('click', _ => { this._play(this._solution.length) });
+		this._el_pause   .addEventListener('click', _ => { this._pause() });
+		this._el_step    .addEventListener('click', _ => { this._step(1) });
 
 		this._el_solutionProgress.addEventListener('set-index', evt => this._play(evt.detail));
 	}
@@ -68,18 +68,24 @@ export default class SolutionControls extends HTMLElement {
 		await this._stopFn();
 	}
 
-	async _step() {
+	async _step(direction) {  // direction should be 1 or -1
 		this._setIsPlaying(false);
-		if(this._stepIndex >= this._solution.length) return;
+		if(direction == 1 && this._stepIndex >= this._solution.length) return;
+		if(direction == -1 && this._stepIndex == 0) return;
 
 		// stop in case there is an active move
 		await this._stopFn();
 
-		let turn = this._solution[this._stepIndex];
+		let turn;
+		if(direction == 1) turn = this._solution[this._stepIndex];
+		else {
+			turn = this._solution[this._stepIndex - 1];
+			turn = turn[0] + (4 - turn[1]);  // reverse
+		}
 		let duration = turn[1] == 2 ? 700 : 500;
 
-		this._el_solutionProgress.updateProgress(this._stepIndex, 1, duration);
-		this._stepIndex++;
+		this._el_solutionProgress.updateProgress(this._stepIndex, direction, duration);
+		this._stepIndex += direction;
 		await this._stepFn(turn, duration);
 	}
 

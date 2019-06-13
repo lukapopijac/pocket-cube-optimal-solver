@@ -14,7 +14,7 @@
 		-webkit-tap-highlight-color: transparent;  /* coz on some mobile phones it stays highlighted after click */
 	}
 
-	button[stretch] {
+	:host([stretch]) button {
 		width: 100%;
 		padding-left: 10px;
 		padding-right: 10px;
@@ -30,18 +30,18 @@
 		background-color: #00029a;
 		border-color: #000190;
 	}
-	button[primary] {
+	:host([primary]) button {
 		color: white;
 		background-image: linear-gradient(#ff1d1b, #cd0200 50%, #b90200);
 		border: 1px solid #9a0200;
 		background-color: #cd0200;
 	}
-	button[primary]:hover {
+	:host([primary]) button:hover {
 		background-image: linear-gradient(#ff0906, #b90200 50%, #a40200);
 		border: 1px solid #860100;
 		background-color: #9a0200;
 	}
-	button[primary]:active {
+	:host([primary]) button:active {
 		background-image: none;
 		background-color: #9a0200;
 		border-color: #900100;
