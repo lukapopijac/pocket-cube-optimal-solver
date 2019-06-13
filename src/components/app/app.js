@@ -15,23 +15,8 @@ export class App extends HTMLElement {
 		this._el_pageSetup = document.createElement('m-page-setup');
 		this._el_pageSolution = document.createElement('m-page-solution');
 		this._el.appendChild(this._el_pageSetup);
-		
-		
-		
-		// // debugging
-		// this._el.appendChild(this._el_pageSolution);
-		// let solution = ["x3", "y1", "U1", "R1", "F3", "R2"];//, "U2", "F1", "U3", "F3", "L2"];
-		// let po =  {
-		// 	o: [2, 1, 1, 2, 0, 0, 0, 0],
-		// 	p: [2, 7, 0, 5, 3, 6, 1, 4]
-		// };
-		// this._el_pageSolution.solution = solution;
-		// this._el_pageSolution.po = po;
-		// // debugging end
 
 
-
-		// attach events
 		this._el_pageSetup.addEventListener('solve', evt => {
 			let po = evt.detail;
 
@@ -40,8 +25,6 @@ export class App extends HTMLElement {
 
 			this._el.replaceChild(this._el_pageSolution, this._el_pageSetup);
 
-			console.log(solution)
-			console.log(po);
 			this._el_pageSolution.solution = solution;
 			this._el_pageSolution.po = po;
 		});
