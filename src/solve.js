@@ -1,5 +1,6 @@
 import CubeState from './cubestate.js'
 import search from './search.js';
+import {removeCubeRotationAt} from './moves-editor.js';
 
 export default function(per, ori) {
 	let [p2, p1, p0, o] = [0, 0, 0, 0];
@@ -18,5 +19,15 @@ export default function(per, ori) {
 	let solution = search(state);
 	console.timeEnd('search');
 	
-	return {normalize, solution};
+	let s = normalize.concat(solution);
+
+	console.log(s);
+	s = removeCubeRotationAt(s, 0) || s;
+	console.log(s);
+	s = removeCubeRotationAt(s, 0) || s;
+	console.log(s);
+
+
+	return {normalize: [], solution: s};
+	// return {normalize, solution};
 };

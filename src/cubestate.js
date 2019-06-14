@@ -24,12 +24,11 @@ Codes for orientations 0,1,2 are 00,01,11. The reason is to be able to determine
 is cubie correctly oriented only by looking at one bit, the right one.
 */
 
-'use strict';
 const transforms = require('./transforms.js');
 let transP = transforms.p;
 let transO = transforms.o;
 
-class CubeState {
+export default class CubeState {
 	constructor(p2, p1, p0, o) {
 		this.p2 = p2 || 0b11110000;
 		this.p1 = p1 || 0b11001100;
@@ -114,6 +113,3 @@ class CubeState {
 	}
 	
 }
-
-
-module.exports = CubeState;
