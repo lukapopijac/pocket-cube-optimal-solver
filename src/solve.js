@@ -1,6 +1,6 @@
 import CubeState from './cubestate.js'
 import search from './search.js';
-import {removeCubeRotationAt} from './moves-editor.js';
+import {removeCubeRotations, addRandomCubeRotations} from './moves-editor.js';
 
 export default function(per, ori) {
 	let [p2, p1, p0, o] = [0, 0, 0, 0];
@@ -15,19 +15,14 @@ export default function(per, ori) {
 
 	let state = new CubeState(p2, p1, p0, o);
 	let normalize = state.normalize();
+
 	console.time('search');
 	let solution = search(state);
 	console.timeEnd('search');
-	
-	let s = normalize.concat(solution);
 
-	console.log(s);
-	s = removeCubeRotationAt(s, 0) || s;
-	console.log(s);
-	s = removeCubeRotationAt(s, 0) || s;
-	console.log(s);
+	solution = normalize.concat(solution);
+	solution = addRandomCubeRotations(solution, 4);
+	solution = removeCubeRotations(solution);
 
-
-	return {normalize: [], solution: s};
-	// return {normalize, solution};
+	return solution;
 };

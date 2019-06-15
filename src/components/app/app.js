@@ -19,14 +19,11 @@ export class App extends HTMLElement {
 
 		this._el_pageSetup.addEventListener('solve', evt => {
 			let po = evt.detail;
-
-			let data = solve(po.p, po.o);
-			let solution = data.normalize.concat(data.solution);
+			let solution = solve(po.p, po.o);
 
 			this._el.replaceChild(this._el_pageSolution, this._el_pageSetup);
-
 			this._el_pageSolution.solution = solution;
-			this._el_pageSolution.po = po;
+			this._el_pageSolution.po = po;			
 		});
 
 		this._el_pageSolution.addEventListener('back', evt => {
