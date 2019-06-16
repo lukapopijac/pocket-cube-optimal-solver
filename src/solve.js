@@ -17,10 +17,10 @@ export default function(per, ori) {
 	let normalize = state.normalize();
 
 	console.time('search');
-	let solution = search(state);
+	let solutionAfterNormalize = search(state);
 	console.timeEnd('search');
 
-	solution = normalize.concat(solution);
+	let solution = normalize.concat(solutionAfterNormalize);
 	solution = addRandomCubeRotations(solution, 4);
 	solution = removeCubeRotations(solution);
 
