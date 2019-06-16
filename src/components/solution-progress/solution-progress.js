@@ -11,16 +11,13 @@ export default class SolutionProgress extends HTMLElement {
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-		this._el_bar = this.shadowRoot.querySelector('#bar');
-
 		this._solution = null;
 	}
 
 	set solution(sol) {
 		this._solution = sol;
 
-		this._el_bar.style.transitionDuration = null;
-		this._el_bar.style.width = 0;
+		this.shadowRoot.host.style.backgroundPositionX = 0;
 
 		this._setTurns();
 		this._setIndexButtons();
@@ -57,8 +54,9 @@ export default class SolutionProgress extends HTMLElement {
 	}
 
 	updateProgress(startIndex, step, duration) {
-		this._el_bar.style.transitionDuration = duration + 'ms';
-		this._el_bar.style.width = ((startIndex + step)/this._solution.length*100) + '%';
+		let hostStyle = this.shadowRoot.host.style;
+		hostStyle.transitionDuration = duration + 'ms';
+		hostStyle.backgroundPositionX = ((startIndex + step)/this._solution.length*100) + '%';
 	}
 }
 
