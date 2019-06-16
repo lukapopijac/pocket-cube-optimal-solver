@@ -1,5 +1,3 @@
-import Animate from '../../animate.js';
-
 const template = document.createElement('template');
 template.innerHTML = require('./solution-progress.html');
 

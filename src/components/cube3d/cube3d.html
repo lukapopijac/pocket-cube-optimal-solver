@@ -54,6 +54,12 @@
 	}
 
 
+	[data-slot] {
+		/* transition-duration: 1s; */
+		transition-timing-function: linear;
+		transition-property: transform;
+	}
+
 	/* outer (main) side of each face */
 	.face {
 		display: flex;
@@ -62,7 +68,7 @@
 		position: absolute;
 		width: calc(2 * var(--a));
 		height: calc(2 * var(--a));
-		background-color: rgba(0,30,60,0.2);
+		/* background-color: rgba(0,30,60,0.2); */
 		background-color: #111;
 		backface-visibility: hidden;
 		border-radius: calc(.25 * var(--a));

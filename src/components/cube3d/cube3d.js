@@ -59,7 +59,8 @@ export default class Cube3d extends HTMLElement {
 			onComplete: _ => {
 				this._anim = null;
 				this._updateCubies(turn);
-			}
+			},
+			slots: el_slots
 		});
 
 		await this._anim.run();
