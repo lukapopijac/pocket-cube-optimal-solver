@@ -13,24 +13,17 @@ export default class Cube3d extends HTMLElement {
 		this._el_cube = this.shadowRoot.querySelector('.cube');
 
 		this._el_cube.addEventListener('transitionend', evt => {
-			let el_slot = evt.target;
-			el_slot.style.transform = null;
-			el_slot.style.transitionDuration = null;
+			let el_turnLayer = evt.target;
+			el_turnLayer.parentNode.append(...el_turnLayer.children);
+			el_turnLayer.remove();
 
-			if(this._animTurn) {
-				this._updateCubies(this._animTurn);
-				this._animTurn = null;
-				this._animRequestId = requestAnimationFrame(_ => {
-					this._animRequestId = requestAnimationFrame(_ => {
-						this._animResolve();
-					});
-				});
-			}
+			this._updateCubies(this._animTurn);
+			this._animTurn = null;
+			this._animResolve();
 		});
 
 		this._animTurn = null;
 		this._animResolve = null;
-		this._animRequestId = null;
 	}
 
 
@@ -48,10 +41,9 @@ export default class Cube3d extends HTMLElement {
 	}
 
 	disconnectedCallback() {
-		cancelAnimationFrame(this._animRequestId);
 		this._animTurn = null;
-		// el_slot.style.transform = null;
-		// el_slot.style.transitionDuration = null;
+		let el_turnLayer = this.shadowRoot.querySelector('.turn-layer');
+		if(el_turnLayer) el_turnLayer.remove();
 	}
 
 	connectedCallback() {
@@ -59,18 +51,26 @@ export default class Cube3d extends HTMLElement {
 		for(let el_slot of el_slots) el_slot.style.transform = null;
 	}
 
-	// make the turn. if other turn is in progress, first complete that turn instantly.
+
 	async move(turn, duration = 2000) {  // duration is number of ms
 		let rotationVector = side2rotationVector[turn[0]];
 		let finalAngle = step2angle[turn[1]];
 
-		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
-
 		this._animTurn = turn;
-		for(let el of el_slots) {
-			el.style.transitionDuration = duration + 'ms';
-			el.style.transform = `rotate3d(${rotationVector}, ${finalAngle}deg)`;
-		}
+
+		let el_turnLayer = document.createElement('div');
+		el_turnLayer.className = 'turn-layer';
+
+		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
+		el_turnLayer.append(...el_slots);
+		this._el_cube.append(el_turnLayer);
+		
+		// the following line logically does nothing, but it forces browser to do reflow,
+		// so it can detect the change in css variable `transform` and therefore do animation
+		window.getComputedStyle(el_turnLayer).getPropertyValue('transform');
+
+		el_turnLayer.style.transitionDuration = duration + 'ms';
+		el_turnLayer.style.transform = `rotate3d(${rotationVector}, ${finalAngle}deg)`;
 
 		return new Promise(resolve => { this._animResolve = resolve; });
 	}
@@ -80,18 +80,15 @@ export default class Cube3d extends HTMLElement {
 	}
 
 	_updateCubies(turn) {
-		let slots = [...this.shadowRoot.querySelectorAll('[data-slot]')];
+		let el_slots = [...this.shadowRoot.querySelectorAll('[data-slot]')];
+		el_slots.sort((a, b) => +a.dataset.slot.split('-')[0] - (+b.dataset.slot.split('-')[0]));
 
-		slots.sort((a, b) => +a.dataset.slot.split('-')[0] - (+b.dataset.slot.split('-')[0]));
-
-		// let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
 		for(let i=0; i<8; i++) {
-			let cubie = slots[i].firstElementChild;
-			cubie.dataset.o = (cubie.dataset.o + turn2oAdd[turn][i]) % 3;
-			let el_slot = slots[turn2p[turn][i]];
-			el_slot.appendChild(cubie);
+			let el_cubie = el_slots[i].firstElementChild;
+			el_cubie.dataset.o = (el_cubie.dataset.o + turn2oAdd[turn][i]) % 3;
+			let el_slot = el_slots[turn2p[turn][i]];
+			el_slot.appendChild(el_cubie);
 		}
-
 	}
 }
 
