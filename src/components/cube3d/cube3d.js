@@ -11,6 +11,26 @@ export default class Cube3d extends HTMLElement {
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 		
 		this._el_cube = this.shadowRoot.querySelector('.cube');
+
+		this._el_cube.addEventListener('transitionend', evt => {
+			let el_slot = evt.target;
+			el_slot.style.transform = null;
+			el_slot.style.transitionDuration = null;
+
+			if(this._animTurn) {
+				this._updateCubies(this._animTurn);
+				this._animTurn = null;
+				this._animRequestId = requestAnimationFrame(_ => {
+					this._animRequestId = requestAnimationFrame(_ => {
+						this._animResolve();
+					});
+				});
+			}
+		});
+
+		this._animTurn = null;
+		this._animResolve = null;
+		this._animRequestId = null;
 	}
 
 
@@ -28,8 +48,10 @@ export default class Cube3d extends HTMLElement {
 	}
 
 	disconnectedCallback() {
-		if(this._anim) this._anim.kill();
-		this._anim = null;
+		cancelAnimationFrame(this._animRequestId);
+		this._animTurn = null;
+		// el_slot.style.transform = null;
+		// el_slot.style.transitionDuration = null;
 	}
 
 	connectedCallback() {
@@ -39,48 +61,37 @@ export default class Cube3d extends HTMLElement {
 
 	// make the turn. if other turn is in progress, first complete that turn instantly.
 	async move(turn, duration = 2000) {  // duration is number of ms
-		// wind-up any current turn animation
-		// this._turnAnimationWindUp();
-		if(this._anim) this._anim.stop(true, false);
 		let rotationVector = side2rotationVector[turn[0]];
 		let finalAngle = step2angle[turn[1]];
 
 		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
 
-		this._anim = new Animate({
-			duration,
-			updateFn: angle => {
-				for(let el of el_slots) {
-					el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
-				}
-			},
-			startVal: 0,
-			endVal: finalAngle,
-			onComplete: _ => {
-				this._anim = null;
-				this._updateCubies(turn);
-			},
-			slots: el_slots
-		});
+		this._animTurn = turn;
+		for(let el of el_slots) {
+			el.style.transitionDuration = duration + 'ms';
+			el.style.transform = `rotate3d(${rotationVector}, ${finalAngle}deg)`;
+		}
 
-		await this._anim.run();
+		return new Promise(resolve => { this._animResolve = resolve; });
 	}
 
 	async stop() {
-		if(this._anim) return this._anim.stealResolve();
+		if(this._animTurn) return new Promise(resolve => { this._animResolve = resolve; });
 	}
 
 	_updateCubies(turn) {
-		let slots = this.shadowRoot.querySelectorAll('[data-slot]');
-		let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
+		let slots = [...this.shadowRoot.querySelectorAll('[data-slot]')];
 
+		slots.sort((a, b) => +a.dataset.slot.split('-')[0] - (+b.dataset.slot.split('-')[0]));
+
+		// let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
 		for(let i=0; i<8; i++) {
-			let cubie = cubies[i];
+			let cubie = slots[i].firstElementChild;
 			cubie.dataset.o = (cubie.dataset.o + turn2oAdd[turn][i]) % 3;
-			let slot = slots[turn2p[turn][i]];
-			slot.style.transform = null;
-			slot.appendChild(cubie);
+			let el_slot = slots[turn2p[turn][i]];
+			el_slot.appendChild(cubie);
 		}
+
 	}
 }
 

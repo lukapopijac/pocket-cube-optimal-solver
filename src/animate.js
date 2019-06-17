@@ -1,20 +1,21 @@
-export class Animate2 {
-	constructor({duration, updateFn, startVal = 0, endVal = 1, onComplete, easing, slots}) {
+export default class Animate2 {
+	constructor({duration, updateFn, startVal = 0, endVal = 1, onComplete, easing, slots, rotationVector}) {
 		// this._t0 = null;
 		// this._y = null;
 		// this._y0 = startVal;
 		this._y1 = endVal;
-		this._updateFn = updateFn;
+		// this._updateFn = updateFn;
 		this._duration = duration;
-		
+
 		// this._step = this._step.bind(this);
 		// this._requestId = null;
 		this._resolve = null;
 		this._onComplete = onComplete || (_ => _);
-		
+
 		this.slots = slots;
 		this.endVal = endVal;
-        
+		this.rotationVector = rotationVector;
+
         // this._easing = easing || (x => 3*x**2 - 2*x**3);
 	}
 
@@ -50,11 +51,11 @@ export class Animate2 {
 	
 	run() {
 		for(let el of this.slots) {
-			el.style.transitionDuration = (6*this._duration) + 'ms';
-			// el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
+			el.style.transitionDuration = (3*this._duration) + 'ms';
+			el.style.transform = `rotate3d(${this.rotationVector}, ${this.endVal}deg)`;
 		}
 
-		this._updateFn(this.endVal);
+		// this._updateFn(this.endVal);
 
 		// this._requestId = requestAnimationFrame(_ => {
 		// 	this._onComplete();
@@ -69,7 +70,19 @@ export class Animate2 {
 }
 
 
-export default class Animate {
+
+
+
+
+
+
+
+
+
+
+
+/*
+export class Animate {
 	constructor({duration, updateFn, startVal = 0, endVal = 1, onComplete, easing}) {
 		this._t0 = null;
 		this._y = null;
@@ -121,3 +134,4 @@ export default class Animate {
 		return new Promise(resolve => { this._resolve = resolve; });
 	}
 }
+*/
