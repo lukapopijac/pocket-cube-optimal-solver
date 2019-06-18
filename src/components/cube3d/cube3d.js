@@ -25,10 +25,6 @@ export default class Cube3d extends HTMLElement {
 		}
 	}
 
-	get po() {
-
-	}
-
 	disconnectedCallback() {
 		if(this._anim) this._anim.kill();
 		this._anim = null;
@@ -57,11 +53,18 @@ export default class Cube3d extends HTMLElement {
 			}
 		});
 
-		return await this._anim.run();
+		let stop = await this._anim.run();
+
+
+		return stop;
 	}
 
 	async stop() {
-		if(this._anim) return this._anim.stealResolve();
+		if(this._anim) {
+			return await this._anim.wait(true);  // stop = true
+		}
+		
+		// if(this._anim) return this._anim.stealResolve();
 	}
 
 	_updateCubies(turn) {

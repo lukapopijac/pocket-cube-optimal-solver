@@ -35,6 +35,8 @@ export default class Animate {
 		this._step = this._step.bind(this);
 		this._requestId = null;
 		this._resolve = null;
+		this._resolveVal = null;
+		this._promise = null;
         this._onComplete = onComplete || (_ => _);
 
         this._easing = easing || (x => 3*x**2 - 2*x**3);
@@ -49,8 +51,8 @@ export default class Animate {
 		} else {
 			this._updateFn(1);
 			this._requestId = requestAnimationFrame(_ => {
+				this._resolve(this._resolveVal);
 				this._onComplete();
-				this._resolve();
 			});
 		}		
 	}
@@ -61,7 +63,8 @@ export default class Animate {
 	run() {
 		this._t0 = performance.now();
 		this._requestId = requestAnimationFrame(this._step);
-		return new Promise(resolve => { this._resolve = resolve; });
+		this._promise = new Promise(resolve => { this._resolve = resolve; });
+		return this._promise;
 	}
 
     async stealResolve() {
@@ -73,6 +76,11 @@ export default class Animate {
 
 		this._resolve(true);  // stopped = true
 		return new Promise(resolve => { this._resolve = resolve; });
+	}
+
+	async wait(resolveVal) {
+		this._resolveVal = resolveVal;
+		return this._promise;
 	}
 
     kill() {
