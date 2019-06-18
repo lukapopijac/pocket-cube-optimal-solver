@@ -53,17 +53,24 @@
 		transform: var(--transform-p) var(--transform-o) translate3d(var(--a), var(--b), var(--a));
 	}
 
-
-	[data-slot] {
-		/* transition-duration: 1s; */
-		transition-timing-function: ease-in-out;
-		transition-property: transform;
+	[data-turn] { animation-name: turn; }
+	@keyframes turn {
+		to { transform: var(--turn); } 
 	}
+	[data-turn$="1"] { --turn-angle:  90deg; }
+	[data-turn$="2"] { --turn-angle: 180deg; }
+	[data-turn$="3"] { --turn-angle: -90deg; }
+	[data-turn^="U"] { --turn: rotate3d( 0, -1,  0, var(--turn-angle)); }
+	[data-turn^="R"] { --turn: rotate3d( 1,  0,  0, var(--turn-angle)); }
+	[data-turn^="F"] { --turn: rotate3d( 0,  0,  1, var(--turn-angle)); }
+	[data-turn^="L"] { --turn: rotate3d(-1,  0,  0, var(--turn-angle)); }
+	[data-turn^="B"] { --turn: rotate3d( 0,  0, -1, var(--turn-angle)); }
+	[data-turn^="D"] { --turn: rotate3d( 0,  1,  0, var(--turn-angle)); }
+	[data-turn^="x"] { --turn: rotate3d( 1,  0,  0, var(--turn-angle)); }
+	[data-turn^="y"] { --turn: rotate3d( 0, -1,  0, var(--turn-angle)); }
+	[data-turn^="z"] { --turn: rotate3d( 0,  0,  1, var(--turn-angle)); }
 
-	.turn-layer {
-		transition-timing-function: ease-in-out;
-		transition-property: transform;
-	}
+
 
 	/* outer (main) side of each face */
 	.face {
