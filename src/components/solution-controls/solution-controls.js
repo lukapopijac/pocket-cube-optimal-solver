@@ -5,6 +5,13 @@ const template = document.createElement('template');
 template.innerHTML = require('./solution-controls.html');
 
 
+const turnDuration = {
+	play:  [600, 400],  // half-turn, quarter-turn
+	step:  [750, 500],
+	quick: [150, 100]
+};
+
+
 export default class SolutionControls extends HTMLElement {
 	constructor() {
 		super();
@@ -36,7 +43,7 @@ export default class SolutionControls extends HTMLElement {
 		this._setIsPlaying(false);
 	}
 
-	async _play(toIdx, fast) {  // fast is boolean
+	async _play(toIdx, quick) {  // quick is boolean
 		this._setIsPlaying(true);
 
 		// stop in case there is an active move
@@ -46,20 +53,17 @@ export default class SolutionControls extends HTMLElement {
 		if(toIdx >= this._stepIndex) {  // forward
 			direction = 1;
 			turns = this._solution.slice(this._stepIndex, toIdx);
-			// turnDuration = { quarter: 350, half: 490 };
 		} else {  // backward
 			direction = -1;
 			turns = this._solution.slice(toIdx, this._stepIndex).reverse().map(t => t[0] + (4-t[1]));
-			// turnDuration = { quarter: 100, half: 140 };
 		}
 
-		let turnDuration = fast ? { quarter: 100, half: 140 } : { quarter: 350, half: 490 };
-
 		for(let turn of turns) {
-			let duration = turn[1] == 2 ? turnDuration.half : turnDuration.quarter;
+			let duration = turnDuration[quick ? 'quick' : 'play'][turn[1]%2]
 			this._el_solutionProgress.updateProgress(this._stepIndex, direction, duration);
 			this._stepIndex += direction;
-			await this._stepFn(turn, duration);
+			let stopped = await this._stepFn(turn, duration);
+			if(stopped) break;
 		}
 
 		this._setIsPlaying(false);
@@ -84,7 +88,7 @@ export default class SolutionControls extends HTMLElement {
 			turn = this._solution[this._stepIndex - 1];
 			turn = turn[0] + (4 - turn[1]);  // reverse
 		}
-		let duration = turn[1] == 2 ? 700 : 500;
+		let duration = turnDuration.step[turn[1]%2];
 
 		this._el_solutionProgress.updateProgress(this._stepIndex, direction, duration);
 		this._stepIndex += direction;

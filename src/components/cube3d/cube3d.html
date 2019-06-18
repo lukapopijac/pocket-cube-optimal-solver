@@ -54,11 +54,21 @@
 	}
 
 
-	[data-slot] {
-		/* transition-duration: 1s; */
-		transition-timing-function: linear;
-		transition-property: transform;
-	}
+	/* for animation in JS, --coef should be changed from 0 to 1 */
+	[data-turn$="1"] { --angle: calc(var(--coef) *  90deg); }
+	[data-turn$="2"] { --angle: calc(var(--coef) * 180deg); }
+	[data-turn$="3"] { --angle: calc(var(--coef) * -90deg); }
+	[data-turn^="U"] { transform: rotate3d( 0, -1,  0, var(--angle)); }
+	[data-turn^="R"] { transform: rotate3d( 1,  0,  0, var(--angle)); }
+	[data-turn^="F"] { transform: rotate3d( 0,  0,  1, var(--angle)); }
+	[data-turn^="L"] { transform: rotate3d(-1,  0,  0, var(--angle)); }
+	[data-turn^="B"] { transform: rotate3d( 0,  0, -1, var(--angle)); }
+	[data-turn^="D"] { transform: rotate3d( 0,  1,  0, var(--angle)); }
+	[data-turn^="x"] { transform: rotate3d( 1,  0,  0, var(--angle)); }
+	[data-turn^="y"] { transform: rotate3d( 0, -1,  0, var(--angle)); }
+	[data-turn^="z"] { transform: rotate3d( 0,  0,  1, var(--angle)); }
+
+
 
 	/* outer (main) side of each face */
 	.face {

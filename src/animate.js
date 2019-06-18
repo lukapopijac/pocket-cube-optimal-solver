@@ -1,88 +1,42 @@
-export class Animate2 {
-	constructor({duration, updateFn, startVal = 0, endVal = 1, onComplete, easing, slots}) {
-		// this._t0 = null;
-		// this._y = null;
-		// this._y0 = startVal;
-		this._y1 = endVal;
-		this._updateFn = updateFn;
-		this._duration = duration;
-		
-		// this._step = this._step.bind(this);
-		// this._requestId = null;
-		this._resolve = null;
-		this._onComplete = onComplete || (_ => _);
-		
-		this.slots = slots;
-		this.endVal = endVal;
-        
-        // this._easing = easing || (x => 3*x**2 - 2*x**3);
-	}
+let _easing = x => 3*x**2 - 2*x**3;
 
-	// _step() {
-	// 	let t = performance.now() - this._t0;
+export function animate({duration, updateFn, onComplete}) {
+	let _t0 = performance.now();
+	let _requestId = requestAnimationFrame(step);
+	let _resolve = null;
+	return new Promise(resolve => { _resolve = resolve });	
 
-	// 	if(t < this._duration) {
-	// 		this._y = this._y0 + (this._y1 - this._y0) * this._easing(t / this._duration);
-	// 		this._requestId = requestAnimationFrame(this._step);
-	// 	} else {
-	// 		this._y = this._y1;
-	// 		this._requestId = requestAnimationFrame(_ => {
-	// 			this._onComplete();
-	// 			this._resolve();
-	// 		});
-	// 	}
+	function step() {
+		let t = performance.now() - _t0;
 
-	// 	this._updateFn(this._y);
-	// }
-
-    async stealResolve() {
-        // result of this: if there was defined chain of animations such that each 
-        // animation starts after previous one gets resolved, this will break the chain.
-        // only the current active animation will be completed.
-	
-		// return new Promise(resolve => { this._resolve = resolve; });
-	}
-
-    kill() {
-        // cancelAnimationFrame(this._requestId);
-        // this._requestId = null;
-    }
-	
-	run() {
-		for(let el of this.slots) {
-			el.style.transitionDuration = (6*this._duration) + 'ms';
-			// el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
+		if(t < duration) {
+			updateFn(_easing(t / duration));
+			_requestId = requestAnimationFrame(this._step);
+		} else {
+			updateFn(1);
+			_requestId = requestAnimationFrame(_ => {
+				this._onComplete();
+				this._resolve();
+			});
 		}
-
-		this._updateFn(this.endVal);
-
-		// this._requestId = requestAnimationFrame(_ => {
-		// 	this._onComplete();
-		// 	this._resolve();
-		// });
-
-		// this._t0 = performance.now();
-		// this._requestId = requestAnimationFrame(this._step);
-
-		return new Promise(resolve => { this._resolve = resolve; });
 	}
 }
 
 
+
+
+
 export default class Animate {
-	constructor({duration, updateFn, startVal = 0, endVal = 1, onComplete, easing}) {
+	constructor({duration, updateFn, onComplete, easing}) {
 		this._t0 = null;
-		this._y = null;
-		this._y0 = startVal;
-		this._y1 = endVal;
 		this._updateFn = updateFn;
 		this._duration = duration;
-		
+
 		this._step = this._step.bind(this);
 		this._requestId = null;
 		this._resolve = null;
         this._onComplete = onComplete || (_ => _);
-        
+
         this._easing = easing || (x => 3*x**2 - 2*x**3);
 	}
 
@@ -90,34 +44,39 @@ export default class Animate {
 		let t = performance.now() - this._t0;
 
 		if(t < this._duration) {
-			this._y = this._y0 + (this._y1 - this._y0) * this._easing(t / this._duration);
+			this._updateFn(this._easing(t / this._duration));
 			this._requestId = requestAnimationFrame(this._step);
 		} else {
-			this._y = this._y1;
+			this._updateFn(1);
 			this._requestId = requestAnimationFrame(_ => {
 				this._onComplete();
 				this._resolve();
 			});
-		}
+		}		
+	}
 
-		this._updateFn(this._y);
+	// TODO: remove onComplete, make promise to be rejected or resolved
+	// (maybe reject when somebody stealsResolve)
+
+	run() {
+		this._t0 = performance.now();
+		this._requestId = requestAnimationFrame(this._step);
+		return new Promise(resolve => { this._resolve = resolve; });
 	}
 
     async stealResolve() {
-        // result of this: if there was defined chain of animations such that each 
-        // animation starts after previous one gets resolved, this will break the chain.
-        // only the current active animation will be completed.
+        // result of this: If there was a chain of animations such that each 
+		// animation starts after previous one gets resolved, one can break the chain
+		// by calling this function, and in the chain observing the return value
+		// of the promise (stopped = true), and stop executing the rest if return
+		// value is true. The active animation will still complete.
+
+		this._resolve(true);  // stopped = true
 		return new Promise(resolve => { this._resolve = resolve; });
 	}
 
     kill() {
         cancelAnimationFrame(this._requestId);
         this._requestId = null;
-    }
-	
-	run() {
-		this._t0 = performance.now();
-		this._requestId = requestAnimationFrame(this._step);
-		return new Promise(resolve => { this._resolve = resolve; });
-	}
+    }	
 }

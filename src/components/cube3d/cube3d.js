@@ -11,6 +11,8 @@ export default class Cube3d extends HTMLElement {
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 		
 		this._el_cube = this.shadowRoot.querySelector('.cube');
+
+		this._anim = null;
 	}
 
 
@@ -37,33 +39,25 @@ export default class Cube3d extends HTMLElement {
 		for(let el_slot of el_slots) el_slot.style.transform = null;
 	}
 
-	// make the turn. if other turn is in progress, first complete that turn instantly.
 	async move(turn, duration = 2000) {  // duration is number of ms
-		// wind-up any current turn animation
-		// this._turnAnimationWindUp();
-		if(this._anim) this._anim.stop(true, false);
-		let rotationVector = side2rotationVector[turn[0]];
-		let finalAngle = step2angle[turn[1]];
-
 		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
+		let el_turnLayer = document.createElement('div');
+		el_turnLayer.dataset.turn = turn;
+		el_turnLayer.append(...el_slots);
+		this._el_cube.append(el_turnLayer);
 
 		this._anim = new Animate({
 			duration,
-			updateFn: angle => {
-				for(let el of el_slots) {
-					el.style.transform = `rotate3d(${rotationVector}, ${angle}deg)`;
-				}
-			},
-			startVal: 0,
-			endVal: finalAngle,
+			updateFn: val => el_turnLayer.style.setProperty('--coef', val),
 			onComplete: _ => {
 				this._anim = null;
+				el_turnLayer.parentNode.append(...el_turnLayer.children);
+				el_turnLayer.remove();
 				this._updateCubies(turn);
-			},
-			slots: el_slots
+			}
 		});
 
-		await this._anim.run();
+		return await this._anim.run();
 	}
 
 	async stop() {
@@ -71,15 +65,13 @@ export default class Cube3d extends HTMLElement {
 	}
 
 	_updateCubies(turn) {
-		let slots = this.shadowRoot.querySelectorAll('[data-slot]');
-		let cubies = this.shadowRoot.querySelectorAll('[data-slot] > div');
+		let el_cubies = this.shadowRoot.querySelectorAll('[data-p][data-o]');
 
-		for(let i=0; i<8; i++) {
-			let cubie = cubies[i];
-			cubie.dataset.o = (cubie.dataset.o + turn2oAdd[turn][i]) % 3;
-			let slot = slots[turn2p[turn][i]];
-			slot.style.transform = null;
-			slot.appendChild(cubie);
+		for(let el_cubie of el_cubies) {
+			let slotIdx = +el_cubie.parentNode.dataset.slot.split('-')[0];
+			el_cubie.dataset.o = (el_cubie.dataset.o + turn2oAdd[turn][slotIdx]) % 3;
+			let el_newSlot = this.shadowRoot.querySelector(`[data-slot|="${turn2p[turn][slotIdx]}"]`);
+			el_newSlot.appendChild(el_cubie);
 		}
 	}
 }
@@ -87,20 +79,6 @@ export default class Cube3d extends HTMLElement {
 customElements.define('m-cube3d', Cube3d);
 
 
-
-
-const step2angle = [, 90, 180, -90];
-const side2rotationVector = {
-	U: [ 0, -1,  0],
-	R: [ 1,  0,  0],
-	F: [ 0,  0,  1],
-	L: [-1,  0,  0],
-	B: [ 0,  0, -1],
-	D: [ 0,  1,  0],
-	x: [ 1,  0,  0],
-	y: [ 0, -1,  0],
-	z: [ 0,  0,  1],
-};
 
 
 const turn2p = {
