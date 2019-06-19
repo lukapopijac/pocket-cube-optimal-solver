@@ -59,6 +59,10 @@ export default class Animate {
 
 	// TODO: remove onComplete, make promise to be rejected or resolved
 	// (maybe reject when somebody stealsResolve)
+	// Also important: in the cube3d, when someone calls `move`, there should
+	// be checking if some move is already in progress; cube3d should
+	// make sure that the state is always ok regardles of how many times
+	// somebody calls its methods.
 
 	run() {
 		this._t0 = performance.now();
@@ -74,13 +78,8 @@ export default class Animate {
 		// of the promise (stopped = true), and stop executing the rest if return
 		// value is true. The active animation will still complete.
 
-		this._resolve(true);  // stopped = true
+		// this._resolve(true);  // stopped = true
 		return new Promise(resolve => { this._resolve = resolve; });
-	}
-
-	async wait(resolveVal) {
-		this._resolveVal = resolveVal;
-		return this._promise;
 	}
 
     kill() {

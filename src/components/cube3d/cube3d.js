@@ -53,18 +53,11 @@ export default class Cube3d extends HTMLElement {
 			}
 		});
 
-		let stop = await this._anim.run();
-
-
-		return stop;
+		await this._anim.run();
 	}
 
 	async stop() {
-		if(this._anim) {
-			return await this._anim.wait(true);  // stop = true
-		}
-		
-		// if(this._anim) return this._anim.stealResolve();
+		if(this._anim) return this._anim.stealResolve();
 	}
 
 	_updateCubies(turn) {
