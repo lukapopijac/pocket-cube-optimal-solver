@@ -35,8 +35,6 @@ export default class Animate {
 		this._step = this._step.bind(this);
 		this._requestId = null;
 		this._resolve = null;
-		this._resolveVal = null;
-		this._promise = null;
         this._onComplete = onComplete || (_ => _);
 
         this._easing = easing || (x => 3*x**2 - 2*x**3);
@@ -51,34 +49,15 @@ export default class Animate {
 		} else {
 			this._updateFn(1);
 			this._requestId = requestAnimationFrame(_ => {
-				this._resolve(this._resolveVal);
+				this._resolve();
 				this._onComplete();
 			});
 		}		
 	}
 
-	// TODO: remove onComplete, make promise to be rejected or resolved
-	// (maybe reject when somebody stealsResolve)
-	// Also important: in the cube3d, when someone calls `move`, there should
-	// be checking if some move is already in progress; cube3d should
-	// make sure that the state is always ok regardles of how many times
-	// somebody calls its methods.
-
 	run() {
 		this._t0 = performance.now();
 		this._requestId = requestAnimationFrame(this._step);
-		this._promise = new Promise(resolve => { this._resolve = resolve; });
-		return this._promise;
-	}
-
-    async stealResolve() {
-        // result of this: If there was a chain of animations such that each 
-		// animation starts after previous one gets resolved, one can break the chain
-		// by calling this function, and in the chain observing the return value
-		// of the promise (stopped = true), and stop executing the rest if return
-		// value is true. The active animation will still complete.
-
-		// this._resolve(true);  // stopped = true
 		return new Promise(resolve => { this._resolve = resolve; });
 	}
 

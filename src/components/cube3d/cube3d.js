@@ -28,11 +28,11 @@ export default class Cube3d extends HTMLElement {
 	disconnectedCallback() {
 		if(this._anim) this._anim.kill();
 		this._anim = null;
-	}
-
-	connectedCallback() {
-		let el_slots = this.shadowRoot.querySelectorAll('[data-slot]');
-		for(let el_slot of el_slots) el_slot.style.transform = null;
+		let el_turnLayer = this.shadowRoot.querySelector('[data-turn]');
+		if(el_turnLayer) {
+			el_turnLayer.parentNode.append(...el_turnLayer.children);
+			el_turnLayer.remove();
+		}
 	}
 
 	async move(turn, duration = 2000) {  // duration is number of ms
@@ -54,10 +54,6 @@ export default class Cube3d extends HTMLElement {
 		});
 
 		await this._anim.run();
-	}
-
-	async stop() {
-		if(this._anim) return this._anim.stealResolve();
 	}
 
 	_updateCubies(turn) {

@@ -23,7 +23,6 @@ class PageSolution extends HTMLElement {
 		this.shadowRoot.querySelector('.container').append(this._el_solutionControls);
 
 		this._el_solutionControls.stepFunction = this._el_cube3d.move.bind(this._el_cube3d);
-		this._el_solutionControls.stopFunction = this._el_cube3d.stop.bind(this._el_cube3d);
 	}
 
 	set solution(sol) {
