@@ -1,4 +1,4 @@
-import Animate from '../../animate.js';
+import animate from '../../animate.js';
 
 const template = document.createElement('template');
 template.innerHTML = require('./cube3d.html');
@@ -9,12 +9,7 @@ export default class Cube3d extends HTMLElement {
 		
 		this.attachShadow({mode: 'open'});
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
-		
-		this._el_cube = this.shadowRoot.querySelector('.cube');
-
-		this._anim = null;
 	}
-
 
 	set po({p, o}) {
 		for(let i=0; i<8; i++) {
@@ -26,34 +21,27 @@ export default class Cube3d extends HTMLElement {
 	}
 
 	disconnectedCallback() {
-		if(this._anim) this._anim.kill();
-		this._anim = null;
-		let el_turnLayer = this.shadowRoot.querySelector('[data-turn]');
-		if(el_turnLayer) {
-			el_turnLayer.parentNode.append(...el_turnLayer.children);
-			el_turnLayer.remove();
-		}
+		let el_turnLayer = this.shadowRoot.querySelector(`[data-turn]`);
+		if(el_turnLayer) delete el_turnLayer.dataset.turn;
 	}
 
-	async move(turn, duration = 2000) {  // duration is number of ms
+	async animateTurn(turn, duration = 2000) {  // duration is number of ms
 		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
 		let el_turnLayer = document.createElement('div');
 		el_turnLayer.dataset.turn = turn;
 		el_turnLayer.append(...el_slots);
-		this._el_cube.append(el_turnLayer);
+		this.shadowRoot.querySelector('.cube').append(el_turnLayer);
 
-		this._anim = new Animate({
-			duration,
-			updateFn: val => el_turnLayer.style.setProperty('--coef', val),
-			onComplete: _ => {
-				this._anim = null;
-				el_turnLayer.parentNode.append(...el_turnLayer.children);
-				el_turnLayer.remove();
-				this._updateCubies(turn);
+		await animate(duration,
+			val => {
+				if(el_turnLayer.dataset.turn) el_turnLayer.style.setProperty('--coef', val);
+				else return true;
 			}
-		});
+		);
 
-		await this._anim.run();
+		el_turnLayer.parentNode.append(...el_turnLayer.children);
+		el_turnLayer.remove();
+		this._updateCubies(turn);
 	}
 
 	_updateCubies(turn) {
