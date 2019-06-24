@@ -25,7 +25,7 @@ export default class Cube3d extends HTMLElement {
 		if(el_turnLayer) delete el_turnLayer.dataset.turn;
 	}
 
-	async animateTurn(turn, duration = 2000) {  // duration is number of ms
+	async animateTurn(turn, duration) {
 		let el_slots = this.shadowRoot.querySelectorAll(`[data-slot*="${turn[0]}"]`);
 		let el_turnLayer = document.createElement('div');
 		el_turnLayer.dataset.turn = turn;

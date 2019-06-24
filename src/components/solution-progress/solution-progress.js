@@ -1,3 +1,5 @@
+import animate from '../../animate.js';
+
 const template = document.createElement('template');
 template.innerHTML = require('./solution-progress.html');
 
@@ -10,6 +12,7 @@ export default class SolutionProgress extends HTMLElement {
 		this.shadowRoot.appendChild(template.content.cloneNode(true));
 
 		this._solution = null;
+		this._shouldAnimStop = null;
 	}
 
 	set solution(sol) {
@@ -51,10 +54,25 @@ export default class SolutionProgress extends HTMLElement {
 		}
 	}
 
+	connectedCallback() {
+		this._shouldAnimStop = false;
+	}
+	disconnectedCallback() {
+		this._shouldAnimStop = true;
+	}
+
 	updateProgress(startIndex, step, duration) {
 		let hostStyle = this.shadowRoot.host.style;
-		hostStyle.transitionDuration = duration + 'ms';
-		hostStyle.backgroundPositionX = ((startIndex + step)/this._solution.length*100) + '%';
+		let p0 = startIndex / this._solution.length * 100;
+		let p1 = (startIndex + step) / this._solution.length * 100;
+
+		animate(duration,
+			t => {
+				hostStyle.backgroundPositionX = (p0 + (p1-p0) * t) + '%';
+				return this._shouldAnimStop;
+			},
+			x => x
+		);
 	}
 }
 
