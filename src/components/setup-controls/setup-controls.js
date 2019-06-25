@@ -33,11 +33,6 @@ export class SetupControls extends HTMLElement {
 		});
 	}
 
-	// TODO: remove this
-	getSelectedColor() {
-		return this.shadowRoot.querySelector('m-colorpick[selected]').getAttribute('val');
-	}
-
 	get selectedColor() {
 		return this.shadowRoot.querySelector('m-colorpick[selected]').getAttribute('val');
 	}

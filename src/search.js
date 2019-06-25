@@ -1,10 +1,9 @@
 import heuristics from './heuristics.js';
 import SearchState from './searchstate.js';
-SearchState.setPatternDatabase(heuristics);
 
 export default function cubeSearch(startState) {
 	let startNode = new SearchState(startState);
-	let maxDepth = startNode.heuristics();
+	let maxDepth = heuristics(startState);
 	while(maxDepth<=11) {  // 11 moves is the worst case solution
 		let t = search(startNode, 0, maxDepth);
 		if(typeof t != 'number') return t;  // success!
@@ -14,7 +13,7 @@ export default function cubeSearch(startState) {
 }
 
 function search(node, depth, maxDepth) {
-	let h = node.heuristics();
+	let h = heuristics(node.state);
 	if(depth + h > maxDepth) return h;
 	if(node.isGoal()) return node.getMoves();
 	let successors = node.expand();
