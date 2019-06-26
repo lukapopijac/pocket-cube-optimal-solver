@@ -23,7 +23,15 @@ exports.hash7 = function({p2, p1, p0, o}) { //avg 3.677734375    len 512 512
 };
 
 exports.hash8 = function({p2, p1, p0, o}) {
-	return hashes.hash5({p2, p1, p0, o});
+	let v = o - ((o & 0b1010101010101010) >> 1);
+
+	return (p2&0b1111 | (p1&0b11110)<<3 | (p0&0b111100)<<6) * 729 +
+		(v&0b11) + 
+		(v&0b1100)*3/4 + 
+		(v&0b110000)*9/16 + 
+		(v&0b11000000)*27/64 + 
+		(v&0b1100000000)*81/256 + 
+		(v&0b110000000000)*243/1024;
 };
 
 exports.hash9 = function({p2, p1, p0, o}) {

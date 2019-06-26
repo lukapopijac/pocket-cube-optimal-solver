@@ -43,6 +43,22 @@ export class PageSetup extends HTMLElement {
 		el_setupControls.addEventListener('pick-color', evt => {
 			el_cubeUnfolded.selectedColor = evt.detail;
 		});
+
+		// // test for some 11-step solution
+		// let el_test = document.createElement('button');
+		// el_test.textContent = 'test';
+		// el_test.onclick = _ => {
+		// 	this.dispatchEvent(new CustomEvent('solve', 
+		// 		{
+		// 			detail: {
+		// 				p: [4,1,2,3,0,5,6,7],
+		// 				o: [0,0,0,0,0,0,0,0]
+		// 			}
+		// 		}
+		// 	));
+		// }
+		// el_setupControls.parentNode.appendChild(el_test);
+		// // test end
 	}
 }
 

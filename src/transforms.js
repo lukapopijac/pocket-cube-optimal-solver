@@ -114,9 +114,7 @@ function generateOTransforms() {
 }
 
 
-// TODO: call this lazily after intial load
 generatePTransforms();
 generateOTransforms();
-
 
 module.exports = {p: transP, o: transO};
