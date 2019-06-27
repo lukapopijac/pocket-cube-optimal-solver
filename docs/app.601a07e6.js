@@ -96,4 +96,4 @@ module.exports=function(t){return fetch(t).then(function(t){return t.text()})};
 },{}],0:[function(require,module,exports) {
 var b=require("21/1");b.register("html",require("A3BY"));b.load([["cube-unfolded.2ac97335.html","HI4/"],["button.4f23c894.html","tM4Z"],["color-pick.14611531.html","1aga"],["setup-controls.16fd0310.html","vl6l"],["dialog-message.4168d84a.html","vhk9"],["page-setup.2c1b8993.html","o23X"],["cube3d.8c9615af.html","G1q7"],["solution-progress.f7f0a63b.html","zYER"],["solution-controls.9f2e0cf9.html","qr6K"],["page-solution.a14504ad.html","KBXN"],["app.d83ee97a.html","fCkp"]]).then(function(){require("5jWW");});
 },{}]},{},[0], null)
-//# sourceMappingURL=/app.de3720c4.js.map
+//# sourceMappingURL=/app.601a07e6.js.map

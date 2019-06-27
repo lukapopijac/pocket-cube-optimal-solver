@@ -1,7 +1,7 @@
 Pocket Cube Optimal Solver
 ==========================
 
-_This readme describes version 2 of the project. For version 1 refer to brach `v1`._
+_This readme describes version 2 of the project. For version 1 refer to brach TODO `v1`._
 
 This is an optimal solver for the [Pocket Cube][1] (2x2 Rubik's cube). For a
 given state of the cube, the application shows how to solve it optimally
