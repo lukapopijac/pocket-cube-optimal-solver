@@ -4,18 +4,23 @@
   "description": "Optimal solver for pocket cube.",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html --out-dir build"
+    "build": "parcel build src/index.html --out-dir build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:lukapopijac/pocket-cube-optimal-solver.git"
+    "url": "https://github.com/lukapopijac/pocket-cube-optimal-solver.git"
   },
   "author": "Luka Popijac",
   "license": "MIT",
-  "homepage": "https://github.com/lukapopijac/pocket-cube-optimal-solver",
+  "homepage": "https://lukapopijac.github.io/pocket-cube-optimal-solver",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "parcel-bundler": "^1.12.3"
+  },
+  "dependencies": {
+    "gh-pages": "^2.0.1"
   }
 }
