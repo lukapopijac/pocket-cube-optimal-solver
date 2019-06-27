@@ -36,9 +36,11 @@ export class PageSetup extends HTMLElement {
 			let po = stickers2po(el_cubeUnfolded.stickerValues);
 			if(!po) {
 				this._el_message.textContent = 'Invalid or ambiguous state!';
-				this._el_message.hidden = false;		
-			}
-			else this.dispatchEvent(new CustomEvent('solve', {detail: po}));
+				this._el_message.hidden = false;
+			} else if(po.p.join('')=='01234567' && po.o.join('')=='00000000') {
+				this._el_message.textContent = 'Solved!';
+				this._el_message.hidden = false;
+			} else this.dispatchEvent(new CustomEvent('solve', {detail: po}));
 		});
 		el_setupControls.addEventListener('pick-color', evt => {
 			el_cubeUnfolded.selectedColor = evt.detail;
