@@ -4,9 +4,7 @@
   "description": "Optimal solver for pocket cube.",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html --out-dir build",
-    "start": "node server.js",
-    "test": "mocha test --colors"
+    "build": "parcel build src/index.html --out-dir build"
   },
   "repository": {
     "type": "git",
@@ -18,7 +16,6 @@
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-transform-runtime": "^7.4.4",
-    "mocha": "^6.1.4",
     "parcel-bundler": "^1.12.3"
   }
 }
