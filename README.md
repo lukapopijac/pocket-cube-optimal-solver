@@ -1,7 +1,8 @@
 Pocket Cube Optimal Solver
 ==========================
 
-_This readme describes version 2 of the project. For version 1 refer to brach TODO `v1`._
+_This document describes version 2 of the project. For version 1 refer to
+branch [v1](https://github.com/lukapopijac/pocket-cube-optimal-solver/tree/v1)._
 
 This is an optimal solver for the [Pocket Cube][1] (2x2 Rubik's cube). For a
 given state of the cube, the application shows how to solve it optimally
@@ -9,6 +10,7 @@ given state of the cube, the application shows how to solve it optimally
 
 ![Screenshot page 1](/screenshot/screenshot-a-small-tiny.png "Screenshot page 1") 
 ![Screenshot page 2](/screenshot/screenshot-b-small-tiny.png "Screenshot page 2")
+
 
 
 Try It Yourself
@@ -155,14 +157,17 @@ it improves the effectiveness of pruning mechanism.
 Some Results
 ------------
 
+_Note: results below refer to version 1. This version (v2) uses smaller pattern
+database to reduce the size of the app, as the whole app runs in the browser._
+
 The number of moves needed to solve the Pocket Cube is 11 in the worst case.
 For such cases, this app written in JavaScript, finds an optimal solution in 
 less than 10ms on my modest laptop from 2011. In other cases it works much 
 faster, as expected. It uses pattern database which compressed has size 109KB.
 
 The implemented search algorithm is about 30% faster than standard IDA* search.
-Implementation of both algorithms can be found in files [search.js](/search/search.js)
-and [search_idastar.js](/search/search_idastar.js).
+Implementation of both algorithms can be found in files [search.js](/src/search.js)
+and [search_idastar.js](/src/research/search_idastar.js).
 
 
 
