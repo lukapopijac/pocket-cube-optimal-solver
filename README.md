@@ -13,28 +13,13 @@ given state of the cube, the application shows how to solve it optimally
 
 Try It Yourself
 ---------------
-TODO
-[pocketcubesolver.lukapopijac.com](http://pocketcubesolver.lukapopijac.com/)
+[https://lukapopijac.github.io/pocket-cube-optimal-solver/](https://lukapopijac.github.io/pocket-cube-optimal-solver/)
 
 
 
-How to Set Up
--------------
-
-Install:
-```
-npm install
-```
-
-Develop:
-```
-npm run dev
-```
-
-Build for production:
-```
-npm run build
-```
+How to Set Up for Development
+-----------------------------
+Please, take a look at [src/README.md](src/README.md)
 
 
 
