@@ -1,53 +1,40 @@
 Pocket Cube Optimal Solver
 ==========================
 
-This is an optimal solver for the [Pocket Cube][1] (2x2 Rubik's cube). It
-defines Web API written with Node.js and Express. For a given state of the 
-cube, the service returns a list of moves which solves the cube optimally 
-(with the minimum number of moves possible).
+_This readme describes version 2 of the project. For version 1 refer to brach `v1`._
 
-To make it easier to try the service for solving a real cube, a simple
-UI was created. One can try the application at 
-[pocketcubesolver.lukapopijac.com](http://pocketcubesolver.lukapopijac.com/).
+This is an optimal solver for the [Pocket Cube][1] (2x2 Rubik's cube). For a
+given state of the cube, the application shows how to solve it optimally
+(with minimum number of moves possible), with step-by-step 3D animations.
+
+![Screenshot page 1](/screenshot/screenshot-a-small-tiny.png "Screenshot page 1") 
+![Screenshot page 2](/screenshot/screenshot-b-small-tiny.png "Screenshot page 2")
+
+
+Try It Yourself
+---------------
+TODO
+[pocketcubesolver.lukapopijac.com](http://pocketcubesolver.lukapopijac.com/)
+
 
 
 How to Set Up
 -------------
 
-You need to have `Node.js` and `npm` installed. Then, to install all the 
-dependencies, just run
+Install:
 ```
 npm install
 ```
 
-To start local server run
+Develop:
 ```
-npm start
-```
-
-To run the application, just navigate to `http://localhost:3000` in your browser.
-
-You can use API directly. For example, try this GET call:
-```
-http://localhost:3000/solve?p=31605472&o=10022022
-```
-It will return JSON string:
-```
-{
-	"normalize": ["x1","y2"],
-	"solution": ["U1","F1","U1","R3","U1","F1","R1","U3"]
-}
+npm run dev
 ```
 
-Parameters `p=31605472` and `o=10022022` represent cubie permutation 
-`[3,1,6,0,5,4,7,2]` and cubie orientation `[1,0,0,2,2,0,2,2]`. More details
-about this can be found in [cubestate.js](/search/cubestate.js).
-
-Returned JSON object contains `normalize` and `solution` properties.
-`normalize` is a list of moves required to rotate the whole cube in space to 
-set the cubie number 7 into its correct position and orientation. These moves 
-are just a preparation for the search. After applying `normalize` moves, list
-of moves in `solution` will solve the cube optimally.
+Build for production:
+```
+npm run build
+```
 
 
 
@@ -56,14 +43,17 @@ Motivation
 
 This project is made as an exercise with several different goals in mind:
  
- - Experimenting with different search algorithms: DFS, BFS, A\*, IDA\*
- - Experimenting with heuristics and pruning tables
+ - Experimenting with different search algorithms: DFS, BFS, A\*, IDA\*.
+ - Experimenting with heuristics and pruning tables.
  - Tweaking the search to optimize the performance while minimizing the 
    memory usage. In general, those two goals contradict each other, so the 
    satisfying compromise was to be found.
- - Writing REST API with `Node.js` and `Express`
+ - Writing REST API with `Node.js` and `Express`, and deploying to AWS
+   (only version 1).
+ - Exploring Web Components for building UI.
+ - Exploring 3D graphics and animation with pure CSS.
  - Preparing for the bigger challenge in the future project: Optimal
-   solver for standard Rubik's Cube
+   solver for standard Rubik's Cube.
 
 
 
