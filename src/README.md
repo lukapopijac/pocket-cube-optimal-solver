@@ -19,7 +19,7 @@ Build for production
 npm run build
 ```
 
-Publish to GihtHun Pages
+Publish to GitHub Pages
 ------------------------
 ```
 npm run gh-pages
