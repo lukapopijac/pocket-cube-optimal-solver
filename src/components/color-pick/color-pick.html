@@ -27,12 +27,12 @@
 	}
 
 	:host([val="."]) { background: #111; }
-	:host([val="l"]) { background: blue; }
-	:host([val="b"]) { background: orange; }
-	:host([val="d"]) { background: white; }
-	:host([val="f"]) { background: red; }
-	:host([val="r"]) { background: green; }
-	:host([val="u"]) { background: yellow; }
+	:host([val="l"]) { background: var(--sticker-color-l); }
+	:host([val="b"]) { background: var(--sticker-color-b); }
+	:host([val="d"]) { background: var(--sticker-color-d); }
+	:host([val="f"]) { background: var(--sticker-color-f); }
+	:host([val="r"]) { background: var(--sticker-color-r); }
+	:host([val="u"]) { background: var(--sticker-color-u); }
 
 	:host([val="."]) path,
 	:host([val="l"]) path,

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "parcel src/index.html",
     "build": "parcel build src/index.html --out-dir build",
-    "gh-pages": "parcel build src/index.html --out-dir docs --public-url ."
+    "gh-pages": "parcel build src/index.html --out-dir docs --public-url .",
+    "gh-pages2": "parcel build src/index2.html --out-dir docs/2 --out-file index.html --public-url ."
   },
   "repository": {
     "type": "git",
